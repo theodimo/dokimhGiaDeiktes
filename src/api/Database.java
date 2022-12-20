@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import api.DataStructures.AVL;
+import api.DataStructures.AVLnode;
 
 //a class that holds the data of our app while its running
 public class Database {
@@ -32,6 +34,29 @@ public class Database {
         } catch(Exception e) {
             System.out.println(e);
         }
+
+        AVL myAVL = new AVL();
+        AVLnode n1 = new AVLnode("H", 5);
+        AVLnode n2 = new AVLnode("D", 6);
+        AVLnode n3 = new AVLnode("A", 3);
+        AVLnode n4 = new AVLnode("A", 1);
+        AVLnode n5 = new AVLnode("A", 2);
+        AVLnode n6 = new AVLnode("K", 1);
+        AVLnode n7 = new AVLnode("K", 5);
+        AVLnode n8 = new AVLnode("J", 6);
+        AVLnode n9 = new AVLnode("I", 8);
+
+        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n1));
+        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n2));
+        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n3));
+        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n4));
+        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n5));
+        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n6));
+        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n7));
+        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n8));
+        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n9));
+
+        myAVL.printTree(myAVL.getRoot());
     }
 
     //getters
@@ -138,6 +163,10 @@ public class Database {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    public static void main(String[] args) {
+        Database db = new Database();
     }
 }
 
