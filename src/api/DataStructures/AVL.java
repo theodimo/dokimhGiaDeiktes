@@ -1,5 +1,7 @@
 package api.DataStructures;
 
+import java.util.ArrayList;
+
 public class AVL {
     //properties
     private AVLnode root;
@@ -146,6 +148,29 @@ public class AVL {
         return temp;
     }
 
+    public ArrayList<Integer> find(AVLnode root, String word) {
+        if (root == null) {
+            return null;
+        } else {
+            ArrayList<Integer> leftSubTreeResults = this.find(root.getLeftChild(), word);
+            ArrayList<Integer> rightSubTreeResults = this.find(root.getRightChild(), word);
+            ArrayList<Integer> currentSubTreeResults = new ArrayList<>();
+            if (root.getData().equals(word)) {
+                currentSubTreeResults.add(root.getId());
+            }
+            if (leftSubTreeResults != null) {
+                for (Integer id: leftSubTreeResults) {
+                    currentSubTreeResults.add(id);
+                }
+            }
+            if (rightSubTreeResults != null) {
+                for (Integer id: rightSubTreeResults) {
+                    currentSubTreeResults.add(id);
+                }
+            }
+            return currentSubTreeResults;
+        }
+    }
 
     public void printTree(AVLnode node) {
         if (node == null) {

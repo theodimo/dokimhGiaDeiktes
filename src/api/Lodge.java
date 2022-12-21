@@ -2,8 +2,9 @@ package api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
-public class Lodge implements java.io.Serializable {
+public class Lodge extends StringEditor implements java.io.Serializable {
     // fields of Lodge class
     private String name;
     private String type;
@@ -109,4 +110,42 @@ public class Lodge implements java.io.Serializable {
         Reviews.add(reviews);
     }
 
+    //functions
+     /**
+     * This function gathers all words that exist in a lodge inside an ArrayList. Specifically, these words can be found
+     * at name, address, city, accommodations and all other lodge fields.
+     * @return then ArrayList
+     */
+    public ArrayList<String> getAllWords() {
+        //initialization
+        ArrayList<String> finalWords = new ArrayList<>();
+        ArrayList<String> words;
+
+        //name decomposition
+        words = this.decompose(this.name);
+        finalWords = this.concatenate(finalWords, words);
+
+        //address decomposition
+        words = this.decompose(this.address);
+        finalWords = this.concatenate(finalWords, words);
+
+        //description decomposition
+        words = this.decompose(this.description);
+        finalWords = this.concatenate(finalWords, words);
+
+        //accommodations decomposition
+        for (String accommodationCategory: this.Accommodations.keySet()) {
+            for (String accommodationName: this.Accommodations.get(accommodationCategory)) {
+                words = this.decompose(accommodationName);
+                finalWords = this.concatenate(finalWords, words);
+            }
+        }
+
+        //add one-word fields
+        finalWords.add(this.type);
+        finalWords.add(this.city);
+        finalWords.add(this.zipCode + "");
+
+        return finalWords;
+    }
 }

@@ -35,28 +35,24 @@ public class Database {
             System.out.println(e);
         }
 
+        //create AVL. It will be used for the searching
         AVL myAVL = new AVL();
-        AVLnode n1 = new AVLnode("H", 5);
-        AVLnode n2 = new AVLnode("D", 6);
-        AVLnode n3 = new AVLnode("A", 3);
-        AVLnode n4 = new AVLnode("A", 1);
-        AVLnode n5 = new AVLnode("A", 2);
-        AVLnode n6 = new AVLnode("K", 1);
-        AVLnode n7 = new AVLnode("K", 5);
-        AVLnode n8 = new AVLnode("J", 6);
-        AVLnode n9 = new AVLnode("I", 8);
+        int i = 0;
+        ArrayList<String> words;
+        for (Lodge lodge: this.lodges) {
+            words = lodge.getAllWords();
+            System.out.println(words);
+            for (String word: words) {
+                AVLnode newNode = new AVLnode(word, i);
+                myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), newNode));
+            }
+            i += 1;
+        }
 
-        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n1));
-        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n2));
-        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n3));
-        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n4));
-        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n5));
-        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n6));
-        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n7));
-        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n8));
-        myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), n9));
+        ArrayList<Integer> resultIds = myAVL.find(myAVL.getRoot(), "cozy");
+        System.out.println(resultIds);
 
-        myAVL.printTree(myAVL.getRoot());
+
     }
 
     //getters
