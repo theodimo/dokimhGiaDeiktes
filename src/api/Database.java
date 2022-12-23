@@ -3,14 +3,16 @@ package api;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
 import api.DataStructures.AVL;
 import api.DataStructures.AVLnode;
 
 //a class that holds the data of our app while its running
-public class Database {
+public class Database extends StringEditor{
     private ArrayList<User> users;
     private ArrayList<Lodge> lodges;
+    private AVL myAVL;
 
     public Database() {
         //initialization of the objects
@@ -36,7 +38,7 @@ public class Database {
         }
 
         //create AVL. It will be used for the searching
-        AVL myAVL = new AVL();
+        myAVL = new AVL();
         int i = 0;
         ArrayList<String> words;
         for (Lodge lodge: this.lodges) {
@@ -48,10 +50,6 @@ public class Database {
             }
             i += 1;
         }
-
-        ArrayList<Integer> resultIds = myAVL.find(myAVL.getRoot(), "cozy");
-        System.out.println(resultIds);
-
 
     }
 
@@ -159,6 +157,27 @@ public class Database {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    /**
+     * Performs searching based on the text that user gives. The searching
+     * in the AVL that contains all the words for each registered Lodge
+     *
+     * @param text: the text that we need to perform the search for
+     * @return a HashSet of the ids of the Lodges that match the given text
+     */
+    public HashSet<Integer> performSearch(String text){
+        ArrayList<String> WordsForSearching = this.decompose(text);
+        HashSet<Integer> resultIds = new HashSet<>();
+
+        for (String word : WordsForSearching) {
+            ArrayList<Integer> results = myAVL.find(myAVL.getRoot(), word);
+
+            resultIds.addAll(results);
+        }
+        System.out.println(resultIds);
+
+        return resultIds;
     }
 
     public static void main(String[] args) {

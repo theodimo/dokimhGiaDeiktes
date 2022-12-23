@@ -1,5 +1,6 @@
 package gui.screens;
 
+import api.Database;
 import api.Lodge;
 import api.User;
 import gui.components.Button;
@@ -15,14 +16,18 @@ import static gui.bootstrap.Colors.*;
 
 public class SearchScreen extends JFrame {
     User currentUser;
-    ArrayList<Lodge> recentSearches = new ArrayList<>();
+    ArrayList<Integer> searchedLodges;
 
     TextField searchBar;
     Button searchButton;
+    Button logoutButton;
 
     public SearchScreen(User currentUser){
-        this.currentUser = currentUser;
+        this.searchedLodges = new ArrayList<>();
+        //this.currentUser = currentUser;
         //this.currentUser.addRecentlyWatchedLodge(new Lodge("Blue Ocean","House", "Olympou 1","Thessaloniki",54365,"hello there"));
+        //this.currentUser.addRecentlyWatchedLodge(new Lodge("Red Velvet","Maisonette", "Agiou Dimitriou 15","Thessaloniki",54365,"hello there"));
+        //this.currentUser.addRecentlyWatchedLodge(new Lodge("The Shire","House", "unknown","Mordor",66666,"My precious"));
         //this.recentSearches = currentUser.getSearchingHistory();
 
         //initialization of Panels
@@ -30,7 +35,6 @@ public class SearchScreen extends JFrame {
         searchPanel.setPreferredSize(new Dimension(1080,250));
         searchPanel.setBackground(Color.orange);
         this.add(searchPanel,BorderLayout.CENTER);
-
 
         JPanel recentSearchesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,35));
         recentSearchesPanel.setPreferredSize(new Dimension(1080,470));
@@ -45,22 +49,46 @@ public class SearchScreen extends JFrame {
 
         //initialization of components
         searchBar = new TextField(500,50,Color.white,secondaryColor,accentColor,secondaryColor,"Search");
-        searchButton = new Button("Search",100,50,characterColor,secondaryColor);
 
-        MinimizedLodge lodge1 = new MinimizedLodge(800,60,"Blue Ocean","Hotel","Kalamaria",
+        searchButton = new Button("Search",100,50,characterColor,secondaryColor);
+        searchButton.addActionListener(e -> {
+            System.out.println(searchBar.getText());
+            new Database().performSearch(searchBar.getText());
+        });
+
+        logoutButton = new Button("Log out", 100,50,characterColor,secondaryColor);
+        logoutButton.addActionListener(e -> {
+            new LogInScreen();
+            this.dispose();
+        });
+
+        /*
+        MinimizedLodge lodge1 = new MinimizedLodge(800,60, new Lodge("Lodge1", "tsantiri", "Siatistis 6", "Larissa", 41335, "hello"),
                 Color.white, secondaryColor,accentColor);
-        MinimizedLodge lodge2 = new MinimizedLodge(800,60,"To tsantiri tou mitsou","Rooms to let","Platamon",
+        lodge1.addMaximizeButton();
+        lodge1.maximizeButton.addActionListener(e -> {
+            //new MaximizedLodge();
+            this.dispose();
+        });
+        MinimizedLodge lodge2 = new MinimizedLodge(800,60, new Lodge("Lodge2", "tsantiri", "Siatistis 6", "Larissa", 41335, "hello"),
                 Color.white, secondaryColor,accentColor);
-        MinimizedLodge lodge3 = new MinimizedLodge(800,60,"H paragka tou Dimou","House","Velika",
+        lodge2.addMaximizeButton();
+        MinimizedLodge lodge3 = new MinimizedLodge(800,60, new Lodge("Lodge3", "tsantiri", "Siatistis 6", "Larissa", 41335, "hello"),
                 Color.white, secondaryColor,accentColor);
+        lodge3.addMaximizeButton();
+        */
 
         //adding components to the frame
         searchPanel.add(searchBar);
         searchPanel.add(searchButton);
+        searchPanel.add(logoutButton);
 
+        /*
         minimizedLodgesContainer.add(lodge1);
         minimizedLodgesContainer.add(lodge2);
         minimizedLodgesContainer.add(lodge3);
+
+         */
 
 
         this.getRootPane().setDefaultButton(searchButton); //this will automatically listen to the "Enter" key
