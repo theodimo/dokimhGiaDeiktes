@@ -14,10 +14,11 @@ import gui.screens.Accommodations;
 //    --Accommodation1  ----->       --Θέα σε πισίνα
 //    --Accommodation2               --Θέα σε βουνό
 //each accommodation will be an instance of the class AccommodationWithIcon. It will display an icon and the name of the accommodation
-public class AccommodationsContainer extends JPanel {
+public class AccommodationsContainer extends JPanel implements ScrollableElement {
     //properties
     private String categoryTitle; //the title of the accommodation category
     private String[] accommodations; //the names of all accommodations that belong to this category
+    private int verticalGap; //the space between each component inside mainPanel. Used at resizing
 
     //components
     Panel titlePanel; //the panel that will wrap the title of the category
@@ -29,13 +30,14 @@ public class AccommodationsContainer extends JPanel {
         //initialization
         this.categoryTitle = categoryTitle;
         this.accommodations = accommodations;
+        this.verticalGap = 20;
 
         //components initialization
         this.titlePanel = new Panel(width, 40, null, "preferredSize");
         this.mainPanel = new Panel(width, this.computeMainPanelHeight(20), null, "preferredSize");
-        this.titleLabel = new Label(this.categoryTitle, 200, 20, false);
+        this.titleLabel = new Label(this.categoryTitle, 200, this.verticalGap, false);
 
-        this.mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 20));
+        this.mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, this.verticalGap));
         for (String accommodationName: accommodations) {
             AccommodationWithIcon accommodation = new AccommodationWithIcon(accommodationName);
             this.mainPanel.add(accommodation);
@@ -93,4 +95,10 @@ public class AccommodationsContainer extends JPanel {
         return totalHeight;
     }
 
+    @Override
+    public int computeHeight() {
+        int height = this.computeMainPanelHeight(20);
+        height += this.titlePanel.getPreferredSize().getHeight();
+        return height;
+    }
 }

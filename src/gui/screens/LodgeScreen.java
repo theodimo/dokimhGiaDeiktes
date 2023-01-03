@@ -4,6 +4,7 @@ import api.Lodge;
 
 import api.Review;
 import api.User;
+import static api.StringEditor.*;
 import gui.components.*;
 import gui.components.Label;
 import gui.components.Panel;
@@ -11,11 +12,12 @@ import gui.components.Button2;
 
 import static gui.bootstrap.Fonts.*;
 
-import javax.print.attribute.standard.PrinterMakeAndModel;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 //this screen is responsible for displaying the information about a Lodge
 public class LodgeScreen extends JFrame {
@@ -92,7 +94,7 @@ public class LodgeScreen extends JFrame {
         this.ownerLabel = new Label("owned by Dimos Theocharis", 250, 30, false);
         this.locationLabel = new Label(this.lodge.getCity() + "," + this.lodge.getAddress() + ", " + this.lodge.getZipCode(), 300, 20, false);
         this.descriptionTitleLabel = new Label("Description", 1000, 40, false);
-        this.descriptionLabel = new Label(this.transformToHtml(this.lodge.getDescription()), 960, (int) (this.descriptionPanel.getPreferredSize().getHeight() - this.descriptionTitleLabel.getHeight()), false);
+        this.descriptionLabel = new Label(transformToHtml(this.lodge.getDescription(), 180), 960, (int) (this.descriptionPanel.getPreferredSize().getHeight() - this.descriptionTitleLabel.getHeight()), false);
         this.accommodationsTitleLabel = new Label("What this lodge provides", 1000, 40, false);
         this.reviewsLabel = new Label("Reviews (4.5)", 1000, 40, false);
 
@@ -181,47 +183,37 @@ public class LodgeScreen extends JFrame {
 
         //listeners
         this.seeMoreAccommodationsButton.addActionListener(e -> {
-            Accommodations acco = new Accommodations();
-
-            AccommodationWithIcon accom = new AccommodationWithIcon("Θέα στο δρόμο");
-            System.out.println("hi");
-            AccommodationsContainer container = (AccommodationsContainer) acco.mainPanel.getComponent(0);
-            container.mainPanel.add(accom);
-            container.setPreferredSize(new Dimension((int) container.getPreferredSize().getWidth(), (int ) (container.getPreferredSize().getHeight() + accom.getPreferredSize().getHeight() + 10)));
-            acco.mainPanel.add(container, 0);
-            acc.revalidate();
-            acc.repaint();
+            HashMap<String, String[]> accommodations = new HashMap<>() {
+                {
+                    put("Θέα", new String[]{"Θέα σε πισίνα", "Θέα στο βουνό", "Θέα στο λιμάνι", "Θέα σε παραλία"});
+                    put("Θέρμανση & Κλιματισμός", new String[]{"Εσωτερικό τζάκι", "Κεντρική Θέρμανση"});
+                    put("Κουζίνα & Τραπεζαρία", new String[]{"Κουζίνα", "Πιάτα και Μαχαιροπίρουνα", "Ψυγείο", "Πλυντήριο Πιάτων"});
+                }
+            };
+            Accommodations acco = new Accommodations(accommodations);
         });
+
+        this.seeMoreReviewsButton.addActionListener(e -> {
+            User dimos = new User("Dimos", "Theocharis", "thanatopios7", "1234", "en");
+            User dimitris = new User("Dimitris", "Tzikas", "tzikaman", "2345", "en");
+
+            Review rev1 = new Review(dimos, transformToHtml("Poly kalo diamerisma", 50), (float) 4.4, "2/1/2023");
+            Review rev2 = new Review(dimitris, transformToHtml("Den mou arese poly. Einai kryo", 50), (float) 2.3, "3/1/2023");
+            Review rev3 = new Review(dimos, transformToHtml("Telika einai akoma kalytero. Megalo katharo, prosbasimo. Aneto, ston 2o orofo, me zesto nero kai proteines sthn kouzina", 50), (float) 4.8, "3/1/2023");
+            Review rev4 = new Review(dimitris, transformToHtml("Kalo mwre, konta sta panepisthmia. Aneto gia fai", 50), (float) 3.6, "3/1/2023");
+
+
+            ArrayList<Review> reviews = new ArrayList<>();
+            reviews.add(rev1);
+            reviews.add(rev2);
+            reviews.add(rev3);
+            reviews.add(rev4);
+
+            new Reviews(reviews);
+        });
+
     }
 
-
-    /**
-     * Splits the given text into lines of words, (each line has 180 characters), and adds <html>, </html> tags at start and
-     * end of text. Lastly, it forces the text to continue at the next line when it reaches the end of the panel, by inserting
-     * <br> after each line.
-     * @param text the text that is going to be splitted and put in html tags
-     * @return the formated text
-     */
-    private String transformToHtml(String text) {
-        int lineLength = text.length() > 180 ? 180 : text.length();
-        int totalLines = text.length() / 100 + 1;
-        String currentLine;
-        String newText = "<html>";
-
-        int i;
-        for (i = 0; i < totalLines - 1; i++) {
-            currentLine = text.substring(i * lineLength, (i + 1) * lineLength);
-            newText += currentLine;
-            newText += "<br>";
-        }
-
-        //append the last not entire line
-        currentLine = text.substring(i * lineLength, text.length());
-        newText += currentLine;
-        newText += "</html>";
-
-        return newText;
-    }
 
     public static void main(String[] args) {
         new LodgeScreen(new Lodge("Διώροφο στη Ροτόντα", "Διαμέρισμα", "Ολύμπου 122", "Θεσσαλονίκη", 45630, "Το συγκεκριμένο σπίτι βρίσκεται στον 2ο όροφο, στην περιχοή Ροτόντα της Θεσσαλονίκης. Είναι διαμπερές, φωτεινό και ευρύχωρο. Βρίσκεται κοντά στον Οδυσσέα και στον Πολυνίκη."));

@@ -10,7 +10,7 @@ import java.awt.*;
 
 //this class is responsible for displaying a review. Specifically, it is a panel that provides information about
 //the author, the rating, the date and the review itself
-public class ReviewUi extends JPanel {
+public class ReviewUi extends JPanel implements ScrollableElement {
     //properties
     private Review review; //the review that is being displayed
 
@@ -78,5 +78,10 @@ public class ReviewUi extends JPanel {
 
         this.revalidate();
         this.repaint();
+    }
+
+    @Override
+    public int computeHeight() {
+        return (int) this.getPreferredSize().getHeight();
     }
 }
