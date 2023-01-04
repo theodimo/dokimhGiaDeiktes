@@ -10,9 +10,9 @@ public abstract class StringEditor {
     /**
      * Splits the text into words. The splitting is done when we find '.' or ',' or ' '
      * @param text the string which we want to split into words
-     * @return an arrayList containing the words that compose the givent ext
+     * @return an arrayList containing the words that compose the given ext
      */
-    protected ArrayList<String> decompose(String text) {
+    public static ArrayList<String> decompose(String text) {
         ArrayList<String> words = new ArrayList<>();
         String word = "";
         char letter;
@@ -42,11 +42,40 @@ public abstract class StringEditor {
      * @param s2 the second array list
      * @return the result array list
      */
-    protected ArrayList<String> concatenate(ArrayList<String> s1, ArrayList<String> s2) {
+    public static ArrayList<String> concatenate(ArrayList<String> s1, ArrayList<String> s2) {
         ArrayList<String> words = s1;
         for (String word: s2) {
             words.add(word);
         }
         return words;
+    }
+
+    /**
+     * Splits the given text into lines of words, (each line has 180 characters), and adds <html>, </html> tags at start and
+     * end of text. Lastly, it forces the text to continue at the next line when it reaches the end of the panel, by inserting
+     * <br> after each line.
+     * @param text the text that is going to be splitted and put in html tags
+     * @param letters the size we want each line to be
+     * @return the formated text
+     */
+    public static String transformToHtml(String text, int letters) {
+        int lineLength = text.length() > letters ? letters : text.length();
+        int totalLines = text.length() / lineLength + 1;
+        String currentLine;
+        String newText = "<html>";
+
+        int i;
+        for (i = 0; i < totalLines - 1; i++) {
+            currentLine = text.substring(i * lineLength, (i + 1) * lineLength);
+            newText += currentLine;
+            newText += "<br>";
+        }
+
+        //append the last not entire line
+        currentLine = text.substring(i * lineLength, text.length());
+        newText += currentLine;
+        newText += "</html>";
+
+        return newText;
     }
 }
