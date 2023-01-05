@@ -76,7 +76,7 @@ public class LodgeScreen extends JFrame {
         this.lodge = lodge;
         this.setSize(this.width, this.height);
         this.setTitle("Lodge Screen");
-        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(this.HIDE_ON_CLOSE);
         this.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 8));
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -90,8 +90,8 @@ public class LodgeScreen extends JFrame {
         this.reviewsPanel = new Panel(1000, 245, primaryColor, "preferredSize");
         this.reviewsButtonContainer = new Panel(1000, 50, primaryColor, "preferredSize");
 
-        this.titleLabel = new Label(this.lodge.getName().toUpperCase(), 400, 30, false);
-        this.ownerLabel = new Label("owned by Dimos Theocharis", 250, 30, false);
+        this.titleLabel = new Label(this.lodge.getName().toUpperCase(), 700, 30, false);
+        this.ownerLabel = new Label( "Owner: " + this.lodge.getOwner().getName() + " " + this.lodge.getOwner().getSurname(), 250, 30, false);
         this.locationLabel = new Label(this.lodge.getCity() + "," + this.lodge.getAddress() + ", " + this.lodge.getZipCode(), 300, 20, false);
         this.descriptionTitleLabel = new Label("Description", 1000, 40, false);
         this.descriptionLabel = new Label(transformToHtml(this.lodge.getDescription(), 180), 960, (int) (this.descriptionPanel.getPreferredSize().getHeight() - this.descriptionTitleLabel.getHeight()), false);
@@ -102,9 +102,14 @@ public class LodgeScreen extends JFrame {
         this.seeMoreReviewsButton = new Button2("See all reviews", 250, 40);
 
 
-        AccommodationWithIcon acc = new AccommodationWithIcon("Θέα στο βουνό");
-        AccommodationWithIcon acc1 = new AccommodationWithIcon("Αυλή");
-        AccommodationWithIcon acc2 = new AccommodationWithIcon("Κεντρική Θέρμανση");
+        ArrayList<AccommodationWithIcon> AccommodationsToShow  = new ArrayList<>();
+
+        for (String key : lodge.getAccommodations().keySet()) {
+            for (String value : lodge.getAccommodations().get(key)) {
+                AccommodationsToShow.add(new AccommodationWithIcon(value));
+            }
+        }
+
 
         User u1 = new User("Dimos", "Theocharis", "thanatopios7", "1234", "en");
 
@@ -133,9 +138,9 @@ public class LodgeScreen extends JFrame {
         this.accommodationsTitleLabel.style(primaryColor, dark, bigFont);
         this.reviewsLabel.style(primaryColor, dark, bigFont);
 
-        acc.style(secondaryColor, accentColor, mainFont);
-        acc1.style(secondaryColor, accentColor, mainFont);
-        acc2.style(secondaryColor, accentColor, mainFont);
+        for (AccommodationWithIcon acc : AccommodationsToShow) {
+            acc.style(secondaryColor, accentColor, mainFont);
+        }
 
         r1.style(primaryColor, secondaryColor, dark, gray, accentColor, dark, inputLabel, smallFont, mainFont, inputLabel);
 
@@ -159,9 +164,9 @@ public class LodgeScreen extends JFrame {
         this.descriptionPanel.add(this.descriptionTitleLabel, BorderLayout.NORTH);
         this.descriptionPanel.add(this.descriptionLabel, BorderLayout.CENTER);
 
-        this.accommodationsContainer.add(acc);
-        this.accommodationsContainer.add(acc1);
-        this.accommodationsContainer.add(acc2);
+        for (AccommodationWithIcon acc : AccommodationsToShow) {
+            this.accommodationsContainer.add(acc);
+        }
 
         this.accommodationsButtonContainer.add(this.seeMoreAccommodationsButton);
         this.reviewsButtonContainer.add(this.seeMoreReviewsButton);
@@ -183,14 +188,7 @@ public class LodgeScreen extends JFrame {
 
         //listeners
         this.seeMoreAccommodationsButton.addActionListener(e -> {
-            HashMap<String, String[]> accommodations = new HashMap<>() {
-                {
-                    put("Θέα", new String[]{"Θέα σε πισίνα", "Θέα στο βουνό", "Θέα στο λιμάνι", "Θέα σε παραλία"});
-                    put("Θέρμανση & Κλιματισμός", new String[]{"Εσωτερικό τζάκι", "Κεντρική Θέρμανση"});
-                    put("Κουζίνα & Τραπεζαρία", new String[]{"Κουζίνα", "Πιάτα και Μαχαιροπίρουνα", "Ψυγείο", "Πλυντήριο Πιάτων"});
-                }
-            };
-            Accommodations acco = new Accommodations(accommodations);
+            Accommodations acco = new Accommodations(this.lodge.getAccommodations());
         });
 
         this.seeMoreReviewsButton.addActionListener(e -> {
@@ -216,6 +214,6 @@ public class LodgeScreen extends JFrame {
 
 
     public static void main(String[] args) {
-        new LodgeScreen(new Lodge("Διώροφο στη Ροτόντα", "Διαμέρισμα", "Ολύμπου 122", "Θεσσαλονίκη", 45630, "Το συγκεκριμένο σπίτι βρίσκεται στον 2ο όροφο, στην περιχοή Ροτόντα της Θεσσαλονίκης. Είναι διαμπερές, φωτεινό και ευρύχωρο. Βρίσκεται κοντά στον Οδυσσέα και στον Πολυνίκη."));
+        //new LodgeScreen(new Lodge("Διώροφο στη Ροτόντα", "Διαμέρισμα", "Ολύμπου 122", "Θεσσαλονίκη", 45630, "Το συγκεκριμένο σπίτι βρίσκεται στον 2ο όροφο, στην περιχοή Ροτόντα της Θεσσαλονίκης. Είναι διαμπερές, φωτεινό και ευρύχωρο. Βρίσκεται κοντά στον Οδυσσέα και στον Πολυνίκη."));
     }
 }
