@@ -3,6 +3,8 @@ package gui.components;
 import javax.swing.*;
 
 import api.Database;
+import api.Lodge;
+import api.User;
 import gui.bootstrap.Colors;
 import gui.components.TextField;
 
@@ -69,12 +71,12 @@ public class LodgeProducer extends JFrame implements ActionListener {
 
     Button2 addAccommodationButton; //a button that is used to add the selected accommodation to the selectedAccommodationsPanel
 
-    public LodgeProducer() {
+    public LodgeProducer(User currentUser) {
         int i;
         //initialization of the jdialog
         this.setSize(this.width, this.height);
         this.setLayout(new BorderLayout());
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(HIDE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setFocusable(true);
         this.accommodations = new HashMap<>();
@@ -216,8 +218,8 @@ public class LodgeProducer extends JFrame implements ActionListener {
             String description = this.descriptionField.getText();
 
 
-            this.db.createLodge(name, type, address, city, zipcode, description, selectedAccommodations);
-
+            currentUser.addEntry(this.db.createLodge(currentUser,name, type, address, city, zipcode, description, selectedAccommodations));
+            this.dispose();
 
         });
 
@@ -372,7 +374,7 @@ public class LodgeProducer extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        LodgeProducer l = new LodgeProducer();
+        LodgeProducer l = new LodgeProducer((User) null);
     }
 
     /**

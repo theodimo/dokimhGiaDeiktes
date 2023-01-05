@@ -81,6 +81,8 @@ public abstract class ScrollableDialog extends JDialog {
     }
 
     public static void main(String[] args) {
-        new ScrollableDialog("Accommodations", "What this lodge provides");
+        //the ScrollableDialog is an interface, and therefore it cannot be instanced
+        //you can delete this main now as it's of no use
+        //new ScrollableDialog("Accommodations", "What this lodge provides");
     }
 }
