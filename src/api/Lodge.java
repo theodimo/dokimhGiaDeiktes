@@ -2,7 +2,6 @@ package api;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class Lodge extends StringEditor implements java.io.Serializable {
     // fields of Lodge class
@@ -12,7 +11,6 @@ public class Lodge extends StringEditor implements java.io.Serializable {
     private String city;
     private int zipCode;
     private String description;
-
     private User owner;
     private HashMap<String, String[]> Accommodations;
     private ArrayList<String> Reviews;
@@ -26,26 +24,44 @@ public class Lodge extends StringEditor implements java.io.Serializable {
         this.city = city;
         this.zipCode = zipCode;
         this.description = description;
-        this.owner = null;
+        this.Accommodations = new HashMap<>();
+        this.Reviews = new ArrayList<>();
+    }
+    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description) {
+        this.owner = owner;
+        this.name = name;
+        this.type = type;
+        this.address = address;
+        this.city = city;
+        this.zipCode = zipCode;
+        this.description = description;
         this.Accommodations = new HashMap<>();
         this.Reviews = new ArrayList<>();
     }
 
-    public Lodge(String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations){
-        this(name, type, address, city, zipCode, description);
+    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations){
+        this(owner,name, type, address, city, zipCode, description);
         this.Accommodations = Accommodations;
     }
-    public Lodge(String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, ArrayList<String> Reviews){
-        this(name, type, address, city, zipCode, description, Accommodations);
+    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, ArrayList<String> Reviews){
+        this(owner,name, type, address, city, zipCode, description, Accommodations);
         this.Reviews = Reviews;
     }
 
-    public Lodge(String name, String type, String address, String city, int zipCode, String description, User user, HashMap<String,String[]> Accommodations, ArrayList<String> Reviews){
-        this(name, type, address, city, zipCode, description, Accommodations, Reviews);
+    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, User user, HashMap<String,String[]> Accommodations, ArrayList<String> Reviews){
+        this(owner,name, type, address, city, zipCode, description, Accommodations, Reviews);
         this.owner = user;
     }
 
     // setters & getters of every field
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public User getOwner() {
+        return this.owner;
+    }
+
     public void setName(String name){
         this.name = name;
     }

@@ -8,6 +8,7 @@ public class Icons {
     public static ImageIcon pencil = new ImageIcon("src/gui/bootstrap/pencil.png");
     public static ImageIcon trashCan = new ImageIcon("src/gui/bootstrap/trashCan.png");
     public static ImageIcon placeholder = new ImageIcon("src/gui/bootstrap/smallPlaceholder.png");
+    public static ImageIcon maximize = new ImageIcon("src/gui/bootstrap/maximize.png");
     public ImageIcon house = new ImageIcon();
 
     public static HashMap<String, String> accommodationIcons = new HashMap<>() {

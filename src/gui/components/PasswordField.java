@@ -6,6 +6,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Objects;
 
+import static gui.bootstrap.Fonts.*;
+
 /**
  * This is a custom class that extends JPasswordField and
  * implements FocusListener. It initializes and customizes
@@ -42,7 +44,7 @@ public class PasswordField extends JPasswordField implements FocusListener {
         this.setText(defaultMessage);
         this.setCaretColor(focusBorderColor);
 
-        this.setFont(new Font("Rapor",Font.PLAIN,height*2/5));
+        this.setFont(mainFont);
         this.setPreferredSize(new Dimension(width, height));
         this.addFocusListener(this);
     }

@@ -77,7 +77,7 @@ public class Database extends StringEditor{
      * @param username: The name of the user we want to check his existence
      * @return An integer that represents the position of the user in the database. If user does not exist, return -1
      */
-    private int validateUsername(String username) {
+    public int validateUsername(String username) {
         boolean found = false;
         int foundPosition = -1, i = 0;
         String currentUsername;
@@ -146,8 +146,8 @@ public class Database extends StringEditor{
         }
     }
 
-    public void createLodge(String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations) {
-        Lodge newLodge = new Lodge(name, type, address, city, zipCode, description, Accommodations);
+    public Lodge createLodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations) {
+        Lodge newLodge = new Lodge(owner, name, type, address, city, zipCode, description, Accommodations);
         this.lodges.add(newLodge);
 
         try {
@@ -156,6 +156,24 @@ public class Database extends StringEditor{
             out.close();
         } catch (Exception e) {
             System.out.println(e);
+        }
+
+        return newLodge;
+    }
+
+    public void deleteLodge(Lodge lodgeForDeleting){
+        System.out.println(lodgeForDeleting.getAddress());
+
+        System.out.println(this.lodges.remove(lodgeForDeleting));
+
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/database/Lodges.dat"));
+            out.writeObject(this.lodges);
+            out.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+
         }
     }
 
