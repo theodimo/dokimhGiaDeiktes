@@ -44,10 +44,10 @@ public abstract class SignTemplate extends JFrame {
         this.setLocationRelativeTo(null);
 
         //components
-        this.titlePanel = new Panel(this.width / 2, this.height * 1 / 2, Colors.secondaryColor, 0, "size");
+        this.titlePanel = new Panel(this.width / 2, this.height * 1 / 2, Colors.secondaryColor, "size");
         this.titlePanel.setLayout(new BorderLayout());
-        this.fieldsPanel = new Panel(this.titlePanel.getWidth(), this.titlePanel.getHeight() * 2 / 3, accentColor, 10, "preferredSize");
-        this.buttonsPanel = new Panel(this.titlePanel.getWidth(), this.titlePanel.getHeight() * 1 / 3, secondaryColor, 0, "preferredSize");
+        this.fieldsPanel = new Panel(this.titlePanel.getWidth(), this.titlePanel.getHeight() * 2 / 3, accentColor, "preferredSize");
+        this.buttonsPanel = new Panel(this.titlePanel.getWidth(), this.titlePanel.getHeight() * 1 / 3, secondaryColor, "preferredSize");
         this.titleLabel = new Label(title, 450, 40, true);
 
         this.fieldsPanel.setLayout(null);

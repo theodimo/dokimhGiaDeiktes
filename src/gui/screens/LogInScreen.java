@@ -5,6 +5,7 @@ import api.User;
 import gui.components.Button;
 import gui.components.PasswordField;
 import gui.components.TextField;
+import gui.components.TitledTextField;
 
 import static gui.bootstrap.Colors.*;
 
@@ -18,16 +19,16 @@ import static gui.bootstrap.Colors.*;
  * @author tzikaman
  */
 public class LogInScreen extends SignTemplate {
-    private final TextField usernameField;
-    private final PasswordField passwordField;
+    private final TitledTextField usernameField;
+    private final TitledTextField passwordField;
     private Button logInButton;
     private Button backButton;
     public LogInScreen() {
         super("Log In",5);
 
         //initializing the components
-        usernameField = new TextField(fieldsWidth,fieldsHeight,primaryColor,secondaryColor,accentColor,secondaryColor,"username");
-        passwordField = new PasswordField(fieldsWidth,fieldsHeight,primaryColor,secondaryColor,accentColor,secondaryColor,"password");
+        usernameField = new TitledTextField("Username","username","This username doesn't exist",false);
+        passwordField = new TitledTextField("Password","password","Wrong password",true);
 
         logInButton = new Button("Log In",buttonsWidth,buttonsHeight,characterColor,secondaryColor);
         backButton = new Button("Back",buttonsWidth,buttonsHeight,characterColor,secondaryColor);
@@ -49,17 +50,28 @@ public class LogInScreen extends SignTemplate {
         logInButton.addActionListener(e -> {
 
             String username = usernameField.getText();
-            String password = String.valueOf(passwordField.getPassword());
+            String password = passwordField.getText();
 
+            if(api.validateUsername(username) == -1){
+                usernameField.showErrorMessage(true);
+                passwordField.showErrorMessage(false);
+            }
+            else{
+                try{
+                    User user = api.getUser(api.validateSignInCredentials(username,password));
+                    System.out.println("Hello " + user.getName() + " " + user.getSurname());
 
-            User user = api.getUser(api.validateSignInCredentials(username,password));
-            System.out.println("Hello " + user.getName() + " " + user.getSurname());
+                    System.out.println(usernameField.getText());
+                    System.out.println(passwordField.getText());
 
-            System.out.println(usernameField.getText());
-            System.out.println(String.valueOf(passwordField.getPassword()));
+                    new SearchScreen(user);
+                    dispose();
+                }catch (Exception ex) {
+                    usernameField.showErrorMessage(false);
+                    passwordField.showErrorMessage(true);
+                }
+            }
 
-            new SearchScreen(user);
-            dispose();
         });
         this.buttonsPanel.add(logInButton);
 
