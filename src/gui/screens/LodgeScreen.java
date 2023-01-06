@@ -72,7 +72,7 @@ public class LodgeScreen extends JFrame {
 
 
     //constructor
-    public LodgeScreen(Lodge lodge) {
+    public LodgeScreen(Database db, Lodge lodge) {
         //initialization
         this.lodge = lodge;
         this.setSize(this.width, this.height);
@@ -175,7 +175,7 @@ public class LodgeScreen extends JFrame {
 
         this.reviewsPanel.add(this.reviewsLabel, BorderLayout.NORTH);
 
-        if(lodge.getReviews().isEmpty()){
+        if(lodge.getReviewsIndexes().isEmpty()){
             JLabel noReviewsLabel = new JLabel("There are no reviews yet");
             noReviewsLabel.setFont(mainFont);
             noReviewsLabel.setForeground(Color.white);
@@ -183,8 +183,7 @@ public class LodgeScreen extends JFrame {
         }else {
             //this.reviewsPanel.removeAll();
 
-            System.out.println("reviews" + lodge.getReviews());
-            Review R1 = lodge.getReviews().get(0);
+            Review R1 = db.getReview(lodge.getReviewsIndexes().get(0));
             ReviewUi r1 = new ReviewUi(R1, 1000, 120);
 
             r1.style(primaryColor, secondaryColor, dark, gray, accentColor, dark, inputLabel, smallFont, mainFont, inputLabel);
@@ -206,36 +205,18 @@ public class LodgeScreen extends JFrame {
         });
 
         this.seeMoreReviewsButton.addActionListener(e -> {
-
-            //ArrayList<Review> reviews = new ArrayList<>(lodge.getReviews());
-            ArrayList<Review> reviews = new ArrayList<>(new Database().getReviews());
-
-            /*
-            User dimos = new User("Dimos", "Theocharis", "thanatopios7", "1234", "en");
-            User dimitris = new User("Dimitris", "Tzikas", "tzikaman", "2345", "en");
-
-            Review rev1 = new Review(dimos, transformToHtml("Poly kalo diamerisma", 50), 4, "2/1/2023");
-            Review rev2 = new Review(dimitris, transformToHtml("Den mou arese poly. Einai kryo", 50), 2, "3/1/2023");
-            Review rev3 = new Review(dimos, transformToHtml("Telika einai akoma kalytero. Megalo katharo, prosbasimo. Aneto, ston 2o orofo, me zesto nero kai proteines sthn kouzina", 50), 5, "3/1/2023");
-            Review rev4 = new Review(dimitris, transformToHtml("Kalo mwre, konta sta panepisthmia. Aneto gia fai", 50), 3, "3/1/2023");
-
-            reviews.add(rev1);
-            reviews.add(rev2);
-            reviews.add(rev3);
-            reviews.add(rev4);
-             */
-
+            ArrayList<Review> reviews = new ArrayList<>();
+            System.out.println("eee");
+            System.out.println(this.lodge.getReviewsIndexes());
+            for (Integer index: this.lodge.getReviewsIndexes()) {
+                reviews.add(db.getReview(index));
+            }
             new Reviews(reviews);
         });
 
         this.addReviewButton.addActionListener(e -> {
-            new ReviewProducer(lodge);
+            new ReviewProducer(db, lodge);
         });
 
-    }
-
-
-    public static void main(String[] args) {
-        //new LodgeScreen(new Lodge("Διώροφο στη Ροτόντα", "Διαμέρισμα", "Ολύμπου 122", "Θεσσαλονίκη", 45630, "Το συγκεκριμένο σπίτι βρίσκεται στον 2ο όροφο, στην περιχοή Ροτόντα της Θεσσαλονίκης. Είναι διαμπερές, φωτεινό και ευρύχωρο. Βρίσκεται κοντά στον Οδυσσέα και στον Πολυνίκη."));
     }
 }

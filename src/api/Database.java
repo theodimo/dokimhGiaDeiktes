@@ -50,7 +50,10 @@ public class Database extends StringEditor {
         //fetch reviews
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/database/Reviews.dat"));
-            this.reviews = (ArrayList<Review>) in.readObject();
+            ArrayList<Review> oldReviews = (ArrayList<Review>) in.readObject();
+            for (Review review: oldReviews) {
+                this.reviews.add(review.getCopy());
+            }
             in.close();
         } catch(Exception e) {
             System.out.println(e);
@@ -93,6 +96,8 @@ public class Database extends StringEditor {
         return this.reviews;
     }
 
+
+    //functions
      /**
      * Checks if a user with the given username exists in the database
      * @param username: The name of the user we want to check his existence
@@ -172,14 +177,7 @@ public class Database extends StringEditor {
         Lodge newLodge = new Lodge(owner, name, type, address, city, zipCode, description, Accommodations, this.lodges.size());
         this.lodges.add(newLodge);
 
-        try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/database/Lodges.dat"));
-            out.writeObject(this.lodges);
-            out.close();
-        } catch (Exception e) {
-            System.out.println("error ftiaxnontas to neo lodge");
-            System.out.println(e);
-        }
+        this.saveLodges();
 
         //put the words of the new lodge to the avl tree
         ArrayList<String> words = newLodge.getAllWords();
@@ -195,13 +193,7 @@ public class Database extends StringEditor {
         Review newReview = new Review(author, reviewText, rating, date);
         this.reviews.add(newReview);
 
-        try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/database/Reviews.dat"));
-            out.writeObject(this.reviews);
-            out.close();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        this.saveReviews();
 
         return newReview;
     }
@@ -294,6 +286,19 @@ public class Database extends StringEditor {
         }
     }
 
+    /**
+     * Saves the object "this.reviews" inside database at the file Reviews.dat
+     */
+    public void saveReviews() {
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/database/Reviews.dat", false));
+            out.writeObject(this.reviews);
+            out.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
      /**
      * Creates the avl tree. The nodes of avl will be words that describe a lodge. These words exist in lodge's properties, ie
      * title, address, city, description etc
@@ -313,10 +318,17 @@ public class Database extends StringEditor {
     }
 
     /**
-     * @return the number or lodges registered in database
+     * @return the number of lodges registered in database
      */
     public int getLodgesCount() {
         return this.lodges.size();
+    }
+
+    /**
+     * @return the number of reviews registered in database
+     */
+    public int getReviewsCount() {
+        return this.reviews.size();
     }
 
     public static void main(String[] args) {

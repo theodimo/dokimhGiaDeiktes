@@ -13,9 +13,8 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
     private String description;
     private User owner;
     private HashMap<String, String[]> Accommodations;
-    private ArrayList<Review> Reviews;
+    private ArrayList<Integer> reviewsIndexes; //a list with the positions of the lodge's reviews inside 'reviews' property of database class
     private float totalRating;
-
     private int index; //the position of this lodge inside the "lodges" property of database object
 
     // constructors of Lodge
@@ -31,14 +30,14 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
         this.Accommodations = Accommodations;
         this.index = index;
 
-        this.Reviews = new ArrayList<>();
+        this.reviewsIndexes = new ArrayList<>();
         this.totalRating = -1;
     }
-    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, ArrayList<Review> Reviews, int index){
+    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, ArrayList<Integer> reviewsIndexes, int index, float totalRating){
         this(owner,name, type, address, city, zipCode, description, Accommodations, index);
 
-        this.Reviews = Reviews;
-        this.totalRating = this.calculateTotalRating(this.Reviews);
+        this.reviewsIndexes = reviewsIndexes;
+        this.totalRating = totalRating;
     }
 
     // setters & getters of every field
@@ -106,27 +105,29 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
         this.Accommodations = accommodations;
     }
 
-    public ArrayList<Review> getReviews() {
-        return Reviews;
+    public ArrayList<Integer> getReviewsIndexes() {
+        return reviewsIndexes;
     }
 
-    public void addReview(Review reviews) {
-        this.Reviews.add(reviews);
-        this.totalRating = calculateTotalRating(Reviews);
+    public void addReviewIndex(int index, Database db) {
+        this.reviewsIndexes.add(index);
+        this.totalRating = calculateTotalRating(db, this.reviewsIndexes);
     }
 
     public float getTotalRating(){
         return totalRating;
     }
 
-    public float calculateTotalRating(ArrayList<Review> reviews){
+    public float calculateTotalRating(Database db, ArrayList<Integer> reviewsIndexes){
         int sum = 0;
         int count = 0;
+        int i = 0;
 
-        if(reviews.size() == 0)
+        if(reviewsIndexes.size() == 0)
             return -1;
 
-        for (Review rev : reviews) {
+        for (Integer index: this.reviewsIndexes) {
+            Review rev = db.getReview(index);
             sum += rev.getRating();
             count++;
         }
@@ -184,6 +185,7 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
         this.index -= 1;
     }
 
+
     /**
      * Creates and returns a copy of the lodge. With "copy" we mean a new lodge with the identical properties & values
      * @return
@@ -191,7 +193,7 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
     @Override
     public Lodge getCopy() {
         User newUser = this.owner.getCopy();
-        Lodge newLodge = new Lodge(newUser, this.name, this.type, this.address, this.city, this.zipCode, this.description, this.Accommodations, this.Reviews, this.index);
+        Lodge newLodge = new Lodge(newUser, this.name, this.type, this.address, this.city, this.zipCode, this.description, this.Accommodations, this.reviewsIndexes, this.index, this.totalRating);
         return newLodge;
     }
 }

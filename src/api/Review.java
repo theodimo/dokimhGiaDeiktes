@@ -4,7 +4,7 @@ import api.User;
 
 import java.io.Serializable;
 
-public class Review implements java.io.Serializable {
+public class Review implements java.io.Serializable, Element<Review> {
     //properties
     private User author; //the user that wrote this particular review
     private String text; //the review text
@@ -40,5 +40,11 @@ public class Review implements java.io.Serializable {
 
     public String getDate() {
         return this.date;
+    }
+
+    @Override
+    public Review getCopy() {
+        Review newReview = new Review(this.author, this.text, this.rating, this.date);
+        return newReview;
     }
 }

@@ -2,6 +2,8 @@ package gui.screens;
 
 import api.Database;
 import api.Lodge;
+import api.Review;
+import api.User;
 import gui.components.Button2;
 import gui.components.TextArea;
 
@@ -16,7 +18,7 @@ public class ReviewProducer extends JDialog {
     String reviewText;
     int rating;
 
-    public ReviewProducer(Lodge lodge){
+    public ReviewProducer(Database db, Lodge lodge){
         this.setModal(true);
         this.setLayout(new BorderLayout());
         this.setTitle("Add Review");
@@ -100,8 +102,14 @@ public class ReviewProducer extends JDialog {
         submitButton.style(secondaryColor,Color.lightGray,Color.gray,buttonFont);
         submitButton.addActionListener(e -> {
             this.reviewText = textArea.getText();
+            User owner = lodge.getOwner();
+            owner.addReviewIndex(db.getReviewsCount()); //add the position of the review to the user's review positions
 
-            new Database().createReview(lodge.getOwner(),reviewText,this.rating,"12/12/2012");
+            Review review = db.createReview(owner,reviewText,this.rating,"12/12/2012"); //create the review
+
+            lodge.addReviewIndex(db.getReviewsCount() - 1, db); //add the position of the review to the lodge's reviews indexes
+
+            db.saveLodges();
 
             this.dispose();
         });
