@@ -9,7 +9,7 @@ import api.DataStructures.AVL;
 import api.DataStructures.AVLnode;
 
 //a class that holds the data of our app while its running
-public class Database extends StringEditor{
+public class Database extends StringEditor {
     private ArrayList<User> users;
     private ArrayList<Lodge> lodges;
     private ArrayList<Review> reviews;
@@ -208,21 +208,40 @@ public class Database extends StringEditor{
 
 
 
-    public void deleteLodge(Lodge lodgeForDeleting){
-        System.out.println(lodgeForDeleting.getAddress());
-
-        System.out.println(this.lodges.remove(lodgeForDeleting));
-
-        try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/database/Lodges.dat"));
-            out.writeObject(this.lodges);
-            out.close();
-
-        } catch (Exception e) {
-            System.out.println("error diagrafontas to lodge");
-            System.out.println(e);
-
+    /**
+     * Deletes the lodge from the local object database and from the files
+     * @param lodgeForDeleting
+     * @param owner
+     */
+    public void deleteLodge(Lodge lodgeForDeleting, User owner){
+        //firstly, we want the lodges to have an ascending index with step 1. By removing a lodge, we should decrease the
+        //index of all lodges with bigger index, in order to maintain the order
+        int deletedIndex = lodgeForDeleting.getIndex();
+        for (int i = deletedIndex + 1; i < this.lodges.size(); i++) {
+            this.lodges.get(i).decreaseIndex();
         }
+
+        //then, delete the lodge from the lodges property
+        this.lodges.remove(lodgeForDeleting);
+
+        //furthermore, decrease the indexes of all owner's lodges that have index higher that deletedIndex, for every user
+        //to understand it better lets say that User1 and User2 have lodges at indexes:
+        //User1 -> 0, 1
+        //User2 -> 2
+        //if User1 deletes his first lodge, we want the new data to be:
+        //User1 -> 0
+        //User2 -> 1
+        //cause the lodges had indexes 0 1 2 and after the deletion they have 0 1
+        for (User user: this.users) {
+            user.decreaseIndexes(deletedIndex);
+        }
+
+        //after that, remove the index of the lodge from owner's lodgeIndexes
+        owner.removeLodgeIndex(deletedIndex);
+
+        //save the changes to database files
+        this.saveLodges();
+        this.saveUsers();
     }
 
     /**

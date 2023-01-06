@@ -16,6 +16,8 @@ public class MinimizedLodge extends JPanel {
     //properties
     User currentUser;
 
+    Lodge lodge;
+
     Database db;
     public JButton maximizeButton = new JButton();
     public JButton editButton = new JButton();
@@ -28,6 +30,7 @@ public class MinimizedLodge extends JPanel {
         this.setForeground(foregroundColor);
         this.currentUser = currentUser;
         this.db = db;
+        this.lodge = lodge;
         //this.setBorder(new RoundedLineBorder(borderColor, 1, 10, true));
 
         JLabel lodgeName = createNewLabel(lodge.getName(), buttonFont, 300, 30, Color.white, secondaryColor);
@@ -59,9 +62,6 @@ public class MinimizedLodge extends JPanel {
         deleteButton.setIcon(trashCan);
         deleteButton.setBackground(primaryColor);
         deleteButton.setPreferredSize(new Dimension(40,40));
-        deleteButton.addActionListener(e -> {
-            new Database().deleteLodge(lodge);
-        });
 
 
         nameAndLocationPanel.add(lodgeName,BorderLayout.NORTH);
@@ -92,5 +92,9 @@ public class MinimizedLodge extends JPanel {
     public void addEditButtons(){
         this.add(editButton);
         this.add(deleteButton);
+    }
+
+    public Lodge getLodge() {
+        return this.lodge;
     }
 }

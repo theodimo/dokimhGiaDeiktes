@@ -65,6 +65,21 @@ public class ViewEntries extends JFrame {
         buttonsPanel.add(newEntryButton);
 
         for (MinimizedLodge lodgeToAdd : entries) {
+            //add listener to delete the lodge
+            lodgeToAdd.deleteButton.addActionListener(e -> {
+                //delete the lodge from the database
+                this.db.deleteLodge(lodgeToAdd.getLodge(), currentUser);
+
+                //build again the avl tree cause we don't longer want the words of the deleted lodge to be there
+                this.db.createAVL();
+
+                //when deleting a lodge, make sure to remove its minimizedLodge from entriesPanel
+                entriesPanel.remove(lodgeToAdd);
+
+                //refresh the frame
+                revalidate();
+                repaint();
+            });
             entriesPanel.add(lodgeToAdd);
         }
 

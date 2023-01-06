@@ -49,6 +49,8 @@ public class User implements java.io.Serializable, Element<User> {
     public String getType() {
         return this.type;
     }
+
+    //Functions
     public void addEntry(Lodge lodge){
         this.lodgeEntries.add(lodge);
     }
@@ -69,8 +71,32 @@ public class User implements java.io.Serializable, Element<User> {
         this.lodgeIndexes.add(index);
     }
 
+    /**
+     * Remove the id of a lodge from lodgesIndexes property
+     * @param index the id of the lodge we want to remove
+     */
+    public void removeLodgeIndex(int index) {
+        this.lodgeIndexes.remove(index);
+    }
+
     public ArrayList<Integer> getLodgeIndexes() {
         return this.lodgeIndexes;
+    }
+
+
+     /**
+     * This function sets every number inside lodgeIndexes to be one less. The result of this function is to set the lodges that
+     * owner have, to be at one place left-more
+     * @param index
+     */
+    public void decreaseIndexes(int index) {
+        int i = 0;
+        for (Integer currentIndex: this.lodgeIndexes) {
+            if (currentIndex > index) {
+                this.lodgeIndexes.set(i, currentIndex - 1);
+            }
+            i += 1;
+        }
     }
 
     /**

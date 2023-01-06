@@ -139,7 +139,7 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
     }
 
     //functions
-     /**
+    /**
      * This function gathers all words that exist in a lodge inside an ArrayList. Specifically, these words can be found
      * at name, address, city, accommodations and all other lodge fields.
      * @return then ArrayList
@@ -175,6 +175,13 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
         finalWords.add(this.zipCode + "");
 
         return finalWords;
+    }
+
+    /**
+     * Sets the position of the lodge inside lodges property of database to be one less
+     */
+    public void decreaseIndex() {
+        this.index -= 1;
     }
 
     /**
