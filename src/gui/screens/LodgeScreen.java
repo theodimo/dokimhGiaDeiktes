@@ -1,9 +1,10 @@
 package gui.screens;
 
+import api.Database;
 import api.Lodge;
 
 import api.Review;
-import api.User;
+
 import static api.StringEditor.*;
 import gui.components.*;
 import gui.components.Label;
@@ -15,9 +16,7 @@ import static gui.bootstrap.Fonts.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 //this screen is responsible for displaying the information about a Lodge
 public class LodgeScreen extends JFrame {
@@ -65,9 +64,11 @@ public class LodgeScreen extends JFrame {
     Label reviewsLabel; //a title that displays "Reviews"
 
     //buttons
-    Button2 seeMoreAccommodationsButton; //a button which opens a jdialog that displays all accommodatios of the lodge
+    Button2 seeMoreAccommodationsButton; //a button which opens a JDialog that displays all accommodations of the lodge
 
-    Button2 seeMoreReviewsButton; //a button which opens a jdialog that displays all reviews of the lodge
+    Button2 seeMoreReviewsButton; //a button which opens a JDialog that displays all reviews of the lodge
+
+    Button2 addReviewButton; //a button which opens a JDialog that lets you write a review for the Lodge
 
 
     //constructor
@@ -96,10 +97,11 @@ public class LodgeScreen extends JFrame {
         this.descriptionTitleLabel = new Label("Description", 1000, 40, false);
         this.descriptionLabel = new Label(transformToHtml(this.lodge.getDescription(), 180), 960, (int) (this.descriptionPanel.getPreferredSize().getHeight() - this.descriptionTitleLabel.getHeight()), false);
         this.accommodationsTitleLabel = new Label("What this lodge provides", 1000, 40, false);
-        this.reviewsLabel = new Label("Reviews (4.5)", 1000, 40, false);
+        this.reviewsLabel = new Label("Reviews " + lodge.getTotalRating(), 1000, 40, false);
 
         this.seeMoreAccommodationsButton = new Button2("See all accommodations", 250, 40);
         this.seeMoreReviewsButton = new Button2("See all reviews", 250, 40);
+        this.addReviewButton = new Button2("Add Review",250, 40);
 
 
         ArrayList<AccommodationWithIcon> AccommodationsToShow  = new ArrayList<>();
@@ -109,13 +111,6 @@ public class LodgeScreen extends JFrame {
                 AccommodationsToShow.add(new AccommodationWithIcon(value));
             }
         }
-
-
-        User u1 = new User("Dimos", "Theocharis", "thanatopios7", "1234", "en");
-
-        Review R1 = new Review(u1, "Poly kalo diamerisma", (float) 4.4, "2/1/2023");
-        ReviewUi r1 = new ReviewUi(R1, 1000, 120);
-
 
 
         //layouts
@@ -142,7 +137,6 @@ public class LodgeScreen extends JFrame {
             acc.style(secondaryColor, accentColor, mainFont);
         }
 
-        r1.style(primaryColor, secondaryColor, dark, gray, accentColor, dark, inputLabel, smallFont, mainFont, inputLabel);
 
         this.titleLabel.setBounds(10, 10, this.titleLabel.getWidth(), this.titleLabel.getHeight());
         this.ownerLabel.setBounds(1040 - this.ownerLabel.getWidth(), 10, this.ownerLabel.getWidth(), this.ownerLabel.getHeight());
@@ -152,8 +146,11 @@ public class LodgeScreen extends JFrame {
 
         this.seeMoreAccommodationsButton.style(accentColor, secondaryColor, paleBlue, inputLabel);
         this.seeMoreReviewsButton.style(accentColor, secondaryColor, paleBlue, inputLabel);
+        this.addReviewButton.style(accentColor, secondaryColor, paleBlue, inputLabel);
+
         this.seeMoreAccommodationsButton.setFocusPainted(false);
         this.seeMoreReviewsButton.setFocusPainted(false);
+        this.addReviewButton.setFocusPainted(false);
 
 
         //components addition
@@ -170,13 +167,30 @@ public class LodgeScreen extends JFrame {
 
         this.accommodationsButtonContainer.add(this.seeMoreAccommodationsButton);
         this.reviewsButtonContainer.add(this.seeMoreReviewsButton);
+        this.reviewsButtonContainer.add(this.addReviewButton);
 
         this.accommodationsPanel.add(this.accommodationsTitleLabel, BorderLayout.NORTH);
         this.accommodationsPanel.add(this.accommodationsContainer, BorderLayout.CENTER);
         this.accommodationsPanel.add(this.accommodationsButtonContainer, BorderLayout.SOUTH);
 
         this.reviewsPanel.add(this.reviewsLabel, BorderLayout.NORTH);
-        this.reviewsPanel.add(r1, BorderLayout.CENTER);
+
+        if(lodge.getReviews().isEmpty()){
+            JLabel noReviewsLabel = new JLabel("There are no reviews yet");
+            noReviewsLabel.setFont(mainFont);
+            noReviewsLabel.setForeground(Color.white);
+            this.reviewsPanel.add(noReviewsLabel, BorderLayout.CENTER);
+        }else {
+            //this.reviewsPanel.removeAll();
+
+            System.out.println("reviews" + lodge.getReviews());
+            Review R1 = lodge.getReviews().get(0);
+            ReviewUi r1 = new ReviewUi(R1, 1000, 120);
+
+            r1.style(primaryColor, secondaryColor, dark, gray, accentColor, dark, inputLabel, smallFont, mainFont, inputLabel);
+            this.reviewsPanel.add(r1, BorderLayout.CENTER);
+        }
+
         this.reviewsPanel.add(this.reviewsButtonContainer, BorderLayout.SOUTH);
 
         this.add(this.identityPanel);
@@ -188,26 +202,34 @@ public class LodgeScreen extends JFrame {
 
         //listeners
         this.seeMoreAccommodationsButton.addActionListener(e -> {
-            Accommodations acco = new Accommodations(this.lodge.getAccommodations());
+            new Accommodations(this.lodge.getAccommodations());
         });
 
         this.seeMoreReviewsButton.addActionListener(e -> {
+
+            //ArrayList<Review> reviews = new ArrayList<>(lodge.getReviews());
+            ArrayList<Review> reviews = new ArrayList<>(new Database().getReviews());
+
+            /*
             User dimos = new User("Dimos", "Theocharis", "thanatopios7", "1234", "en");
             User dimitris = new User("Dimitris", "Tzikas", "tzikaman", "2345", "en");
 
-            Review rev1 = new Review(dimos, transformToHtml("Poly kalo diamerisma", 50), (float) 4.4, "2/1/2023");
-            Review rev2 = new Review(dimitris, transformToHtml("Den mou arese poly. Einai kryo", 50), (float) 2.3, "3/1/2023");
-            Review rev3 = new Review(dimos, transformToHtml("Telika einai akoma kalytero. Megalo katharo, prosbasimo. Aneto, ston 2o orofo, me zesto nero kai proteines sthn kouzina", 50), (float) 4.8, "3/1/2023");
-            Review rev4 = new Review(dimitris, transformToHtml("Kalo mwre, konta sta panepisthmia. Aneto gia fai", 50), (float) 3.6, "3/1/2023");
+            Review rev1 = new Review(dimos, transformToHtml("Poly kalo diamerisma", 50), 4, "2/1/2023");
+            Review rev2 = new Review(dimitris, transformToHtml("Den mou arese poly. Einai kryo", 50), 2, "3/1/2023");
+            Review rev3 = new Review(dimos, transformToHtml("Telika einai akoma kalytero. Megalo katharo, prosbasimo. Aneto, ston 2o orofo, me zesto nero kai proteines sthn kouzina", 50), 5, "3/1/2023");
+            Review rev4 = new Review(dimitris, transformToHtml("Kalo mwre, konta sta panepisthmia. Aneto gia fai", 50), 3, "3/1/2023");
 
-
-            ArrayList<Review> reviews = new ArrayList<>();
             reviews.add(rev1);
             reviews.add(rev2);
             reviews.add(rev3);
             reviews.add(rev4);
+             */
 
             new Reviews(reviews);
+        });
+
+        this.addReviewButton.addActionListener(e -> {
+            new ReviewProducer(lodge);
         });
 
     }

@@ -35,7 +35,7 @@ public class SignUpScreen extends SignTemplate{
     Button backButton;
 
         public SignUpScreen(Database api) {
-            super("Sign Up",5);
+            super("Sign Up");
 
             nameField = new TextField(fieldsWidth/2,fieldsHeight,primaryColor,secondaryColor,accentColor,secondaryColor,"name");
             surnameField = new TextField(fieldsWidth/2,fieldsHeight,primaryColor,secondaryColor,accentColor,secondaryColor,"surname");

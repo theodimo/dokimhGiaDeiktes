@@ -13,36 +13,32 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
     private String description;
     private User owner;
     private HashMap<String, String[]> Accommodations;
-    private ArrayList<String> Reviews;
+    private ArrayList<Review> Reviews;
+    private float totalRating;
 
     private int index; //the position of this lodge inside the "lodges" property of database object
 
     // constructors of Lodge
-    public Lodge(String name, String type, String address, String city, int zipCode, String description) {
-        //the minimal constructor
+    public Lodge(User owner, String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, int index){
+        this.owner = owner;
         this.name = name;
         this.type = type;
         this.address = address;
         this.city = city;
         this.zipCode = zipCode;
         this.description = description;
-        this.Accommodations = new HashMap<>();
-        this.Reviews = new ArrayList<>();
-        this.index = 0;
-    }
-    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description) {
-        this(name, type, address, city, zipCode, description);
-        this.owner = owner;
-    }
 
-    public Lodge(User owner, String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, int index){
-        this(owner,name, type, address, city, zipCode, description);
         this.Accommodations = Accommodations;
         this.index = index;
+
+        this.Reviews = new ArrayList<>();
+        this.totalRating = -1;
     }
-    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, ArrayList<String> Reviews, int index){
+    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, ArrayList<Review> Reviews, int index){
         this(owner,name, type, address, city, zipCode, description, Accommodations, index);
+
         this.Reviews = Reviews;
+        this.totalRating = this.calculateTotalRating(this.Reviews);
     }
 
     // setters & getters of every field
@@ -110,12 +106,32 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
         this.Accommodations = accommodations;
     }
 
-    public ArrayList<String> getReviews() {
+    public ArrayList<Review> getReviews() {
         return Reviews;
     }
 
-    public void setReviews(String reviews) {
-        Reviews.add(reviews);
+    public void addReview(Review reviews) {
+        this.Reviews.add(reviews);
+        this.totalRating = calculateTotalRating(Reviews);
+    }
+
+    public float getTotalRating(){
+        return totalRating;
+    }
+
+    public float calculateTotalRating(ArrayList<Review> reviews){
+        int sum = 0;
+        int count = 0;
+
+        if(reviews.size() == 0)
+            return -1;
+
+        for (Review rev : reviews) {
+            sum += rev.getRating();
+            count++;
+        }
+
+        return (float) sum / (float) count;
     }
 
     public int getIndex() {

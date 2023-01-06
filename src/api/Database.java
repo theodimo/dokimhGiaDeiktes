@@ -12,12 +12,14 @@ import api.DataStructures.AVLnode;
 public class Database extends StringEditor{
     private ArrayList<User> users;
     private ArrayList<Lodge> lodges;
+    private ArrayList<Review> reviews;
     private AVL myAVL;
 
     public Database() {
         //initialization of the objects
         this.users = new ArrayList<>();
         this.lodges = new ArrayList<>();
+        this.reviews = new ArrayList<>();
 
         //fetch users
         try {
@@ -45,6 +47,15 @@ public class Database extends StringEditor{
             System.out.println(e);
         }
 
+        //fetch reviews
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/database/Reviews.dat"));
+            this.reviews = (ArrayList<Review>) in.readObject();
+            in.close();
+        } catch(Exception e) {
+            System.out.println(e);
+        }
+
         //create AVL. It will be used for the searching
         this.createAVL();
 
@@ -67,6 +78,19 @@ public class Database extends StringEditor{
      */
     public Lodge getLodge(int index) {
         return this.lodges.get(index);
+    }
+
+    /**
+     * Returns the review at the position: index
+     * @param index the position of the review in the database
+     * @return the review
+     */
+    public Review getReview(int index) {
+        return this.reviews.get(index);
+    }
+
+    public ArrayList<Review> getReviews() {
+        return this.reviews;
     }
 
      /**
@@ -166,6 +190,23 @@ public class Database extends StringEditor{
 
         return newLodge;
     }
+
+    public Review createReview(User author,String reviewText, int rating, String date) {
+        Review newReview = new Review(author, reviewText, rating, date);
+        this.reviews.add(newReview);
+
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/database/Reviews.dat"));
+            out.writeObject(this.reviews);
+            out.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return newReview;
+    }
+
+
 
     public void deleteLodge(Lodge lodgeForDeleting){
         System.out.println(lodgeForDeleting.getAddress());

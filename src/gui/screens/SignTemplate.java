@@ -1,13 +1,8 @@
 package gui.screens;
 
-import gui.bootstrap.Colors;
-import gui.components.Panel;
-import gui.components.Label;
-
 import javax.swing.*;
 import java.awt.*;
 
-import static gui.bootstrap.Colors.*;
 import static gui.bootstrap.Fonts.*;
 
 /**This class is a template that will be used by the ui classes SignUpScreen & SignInScreen
@@ -35,45 +30,7 @@ public abstract class SignTemplate extends JFrame {
     public JPanel fieldsPanel; //the panel that contains all fields and their labels
     public JPanel buttonsPanel; //the panel that contains the buttons, such as Sign Up etc
 
-
     public SignTemplate(String title){
-        //initialization
-        this.setSize(this.width, this.height);
-        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
-        this.setLayout(null);
-        this.setLocationRelativeTo(null);
-
-        //components
-        this.titlePanel = new Panel(this.width / 2, this.height * 1 / 2, Colors.secondaryColor, "size");
-        this.titlePanel.setLayout(new BorderLayout());
-        this.fieldsPanel = new Panel(this.titlePanel.getWidth(), this.titlePanel.getHeight() * 2 / 3, accentColor, "preferredSize");
-        this.buttonsPanel = new Panel(this.titlePanel.getWidth(), this.titlePanel.getHeight() * 1 / 3, secondaryColor, "preferredSize");
-        this.titleLabel = new Label(title, 450, 40, true);
-
-        this.fieldsPanel.setLayout(null);
-        this.buttonsPanel.setLayout(new FlowLayout());
-
-        //styling
-        this.getContentPane().setBackground(Colors.primaryColor);
-        //this.titleLabel.style(Colors.accentColor, Colors.secondaryColor, Fonts.titleFont);
-
-        //additions
-        this.getContentPane().add(this.titlePanel);
-        this.getContentPane().add(this.titleLabel);
-        this.titlePanel.add(this.fieldsPanel, BorderLayout.NORTH);
-        this.titlePanel.add(this.buttonsPanel, BorderLayout.SOUTH);
-
-
-        this.setVisible(true);
-
-        //other functionality
-        //this.container.center(this);
-        //this.titleLabel.centerX(this, (this.container.getY() - this.getContentPane().getY() - this.titleLabel.getHeight()) / 2);
-    }
-
-
-
-    public SignTemplate(String title,int dummie){
         //initialization of Frame
         this.setSize(width, height);
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
@@ -86,7 +43,7 @@ public abstract class SignTemplate extends JFrame {
         titlePanel = new JPanel(new FlowLayout(FlowLayout.LEADING,50,50));
         titlePanel.setPreferredSize(new Dimension(width, 100));
 
-        fieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,10,25));
+        fieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,10,5));
         fieldsPanel.setPreferredSize(new Dimension(width, 350));
 
         buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,20,50));

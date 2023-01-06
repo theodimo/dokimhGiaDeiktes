@@ -3,8 +3,6 @@ package gui.screens;
 import api.Database;
 import api.User;
 import gui.components.Button;
-import gui.components.PasswordField;
-import gui.components.TextField;
 import gui.components.TitledTextField;
 
 import static gui.bootstrap.Colors.*;
@@ -24,12 +22,12 @@ public class LogInScreen extends SignTemplate {
     private Button logInButton;
     private Button backButton;
     public LogInScreen() {
-        super("Log In",5);
+        super("Log In");
         Database api = new Database();
 
         //initializing the components
-        usernameField = new TitledTextField("Username","username","This username doesn't exist",false);
-        passwordField = new TitledTextField("Password","password","Wrong password",true);
+        usernameField = new TitledTextField("Username","tzikaman","This username doesn't exist",false);
+        passwordField = new TitledTextField("Password","1234","Wrong password",true);
 
         logInButton = new Button("Log In",buttonsWidth,buttonsHeight,characterColor,secondaryColor);
         backButton = new Button("Back",buttonsWidth,buttonsHeight,characterColor,secondaryColor);

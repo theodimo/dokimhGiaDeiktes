@@ -2,16 +2,18 @@ package api;
 
 import api.User;
 
-public class Review {
+import java.io.Serializable;
+
+public class Review implements java.io.Serializable {
     //properties
     private User author; //the user that wrote this particular review
-    private String text; //the review
-    private float rating; //the rating of the review
+    private String text; //the review text
+    private int rating; //the rating of the review (out of 5)
 
     private String date; //the creation date of the review
 
     //constructor
-    public Review(User author, String text, float rating, String date) {
+    public Review(User author, String text, int rating, String date) {
         //initialization
         this.author = author;
         this.text = text;
@@ -28,7 +30,11 @@ public class Review {
         return this.text;
     }
 
-    public float getRating() {
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public int getRating() {
         return this.rating;
     }
 
