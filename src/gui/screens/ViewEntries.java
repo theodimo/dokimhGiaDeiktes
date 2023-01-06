@@ -1,5 +1,6 @@
 package gui.screens;
 
+import api.Database;
 import api.Lodge;
 import api.User;
 import gui.components.Button;
@@ -14,13 +15,16 @@ import static gui.bootstrap.Colors.*;
 import static gui.bootstrap.Fonts.*;
 
 public class ViewEntries extends JFrame {
+    //properties
+    Database db;
 
     private ArrayList<MinimizedLodge> entries;
     private User currentUser;
-    public ViewEntries(User currentUser){
+    public ViewEntries(Database db, User currentUser){
+        this.db = db;
         this.currentUser = currentUser;
         this.entries = new ArrayList<>();
-        this.entries = this.convertToMinimized(currentUser.getLodgeEntries());
+        this.entries = this.convertToMinimized(currentUser.getLodgeIndexes());
 
         //Panels initialization
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEADING,50,50));
@@ -41,12 +45,12 @@ public class ViewEntries extends JFrame {
         //Components initialization
         Button newEntryButton = new Button("+ New Entry", 100, 50, characterColor, secondaryColor);
         newEntryButton.addActionListener(e -> {
-            new LodgeProducer(currentUser);
+            new LodgeProducer(this.db, currentUser);
         });
 
         Button backButton = new Button("Back", 100, 50, characterColor, secondaryColor);
         backButton.addActionListener(e -> {
-            new SearchScreen(currentUser);
+            new SearchScreen(this.db, currentUser);
             this.dispose();
         });
 
@@ -64,10 +68,6 @@ public class ViewEntries extends JFrame {
             entriesPanel.add(lodgeToAdd);
         }
 
-
-
-
-
         this.setTitle("View Entries");
         this.setSize(new Dimension(1080,720 + 48));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,11 +77,13 @@ public class ViewEntries extends JFrame {
 
 
 
-    private ArrayList<MinimizedLodge> convertToMinimized(ArrayList<Lodge> lodges){
+    private ArrayList<MinimizedLodge> convertToMinimized(ArrayList<Integer> lodgesIndexes){
         ArrayList<MinimizedLodge> minimizedLodges = new ArrayList<>();
 
-        for (Lodge tempLodge: lodges) {
-            MinimizedLodge tempMinimized = new MinimizedLodge(655,60,tempLodge,primaryColor,secondaryColor,accentColor);
+
+        for (Integer index: lodgesIndexes) {
+            Lodge tempLodge = this.db.getLodge(index);
+            MinimizedLodge tempMinimized = new MinimizedLodge(this.db,655,60,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor);
             tempMinimized.addMaximizeButton();
             tempMinimized.addEditButtons();
 
@@ -92,7 +94,7 @@ public class ViewEntries extends JFrame {
     }
 
     public static void main(String[] args){
-        new ViewEntries(null);
+        //new ViewEntries(null);
     }
 }
 

@@ -25,6 +25,7 @@ public class LogInScreen extends SignTemplate {
     private Button backButton;
     public LogInScreen() {
         super("Log In",5);
+        Database api = new Database();
 
         //initializing the components
         usernameField = new TitledTextField("Username","username","This username doesn't exist",false);
@@ -41,12 +42,12 @@ public class LogInScreen extends SignTemplate {
         // add action listeners in buttons
         // and add buttons to the screen
         backButton.addActionListener(e -> {
-            new SignUpScreen();
+            new SignUpScreen(api);
             dispose();
         });
         this.buttonsPanel.add(backButton);
 
-        Database api = new Database();
+
         logInButton.addActionListener(e -> {
 
             String username = usernameField.getText();
@@ -59,12 +60,8 @@ public class LogInScreen extends SignTemplate {
             else{
                 try{
                     User user = api.getUser(api.validateSignInCredentials(username,password));
-                    System.out.println("Hello " + user.getName() + " " + user.getSurname());
 
-                    System.out.println(usernameField.getText());
-                    System.out.println(passwordField.getText());
-
-                    new SearchScreen(user);
+                    new SearchScreen(api, user);
                     dispose();
                 }catch (Exception ex) {
                     usernameField.showErrorMessage(false);

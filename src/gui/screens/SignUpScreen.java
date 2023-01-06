@@ -34,8 +34,7 @@ public class SignUpScreen extends SignTemplate{
     Button signUpButton;
     Button backButton;
 
-    Database api = new Database();
-        public SignUpScreen() {
+        public SignUpScreen(Database api) {
             super("Sign Up",5);
 
             nameField = new TextField(fieldsWidth/2,fieldsHeight,primaryColor,secondaryColor,accentColor,secondaryColor,"name");
@@ -88,7 +87,7 @@ public class SignUpScreen extends SignTemplate{
                     api.createUser(name,surname,username,password,selectedUserType);
 
                     User user = api.getUser(api.validateSignInCredentials(username,password));
-                    new SearchScreen(user);
+                    new SearchScreen(api, user);
                     dispose();
                 }
 

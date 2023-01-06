@@ -58,6 +58,11 @@ public class TextField extends JPasswordField implements FocusListener{
         this.isPasswordField = isPasswordField;
     }
 
+    //getters
+    public Color getForegroundColor() {
+        return this.foregroundColor;
+    }
+
     @Override
     public void focusGained(FocusEvent e) {
         this.setBorder(new RoundedLineBorder(focusBorderColor,1,10,true));

@@ -45,6 +45,17 @@ public class TextArea extends JTextArea implements KeyListener, FocusListener {
         this.addFocusListener(this);
     }
 
+    //setters
+    public void setCurrentCharacters(int characters) {
+        this.currentCharacters = characters;
+        this.updateCharactersLabel();
+    }
+
+    //getters
+    public Color getForegroundColor() {
+        return this.foregroundColor;
+    }
+
     public void style(Color backgroundColor, Color foregroundColor, Color idleBorderColor, Color focusBorderColor, Font font) {
         this.backgroundColor = backgroundColor;
         this.foregroundColor = foregroundColor;

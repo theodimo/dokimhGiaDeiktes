@@ -3,7 +3,7 @@ package api;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Lodge extends StringEditor implements java.io.Serializable {
+public class Lodge extends StringEditor implements java.io.Serializable, Element<Lodge> {
     // fields of Lodge class
     private String name;
     private String type;
@@ -14,6 +14,8 @@ public class Lodge extends StringEditor implements java.io.Serializable {
     private User owner;
     private HashMap<String, String[]> Accommodations;
     private ArrayList<String> Reviews;
+
+    private int index; //the position of this lodge inside the "lodges" property of database object
 
     // constructors of Lodge
     public Lodge(String name, String type, String address, String city, int zipCode, String description) {
@@ -26,31 +28,21 @@ public class Lodge extends StringEditor implements java.io.Serializable {
         this.description = description;
         this.Accommodations = new HashMap<>();
         this.Reviews = new ArrayList<>();
+        this.index = 0;
     }
     public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description) {
+        this(name, type, address, city, zipCode, description);
         this.owner = owner;
-        this.name = name;
-        this.type = type;
-        this.address = address;
-        this.city = city;
-        this.zipCode = zipCode;
-        this.description = description;
-        this.Accommodations = new HashMap<>();
-        this.Reviews = new ArrayList<>();
     }
 
-    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations){
+    public Lodge(User owner, String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, int index){
         this(owner,name, type, address, city, zipCode, description);
         this.Accommodations = Accommodations;
+        this.index = index;
     }
-    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, ArrayList<String> Reviews){
-        this(owner,name, type, address, city, zipCode, description, Accommodations);
+    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, ArrayList<String> Reviews, int index){
+        this(owner,name, type, address, city, zipCode, description, Accommodations, index);
         this.Reviews = Reviews;
-    }
-
-    public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, User user, HashMap<String,String[]> Accommodations, ArrayList<String> Reviews){
-        this(owner,name, type, address, city, zipCode, description, Accommodations, Reviews);
-        this.owner = user;
     }
 
     // setters & getters of every field
@@ -114,8 +106,8 @@ public class Lodge extends StringEditor implements java.io.Serializable {
         return Accommodations;
     }
 
-    public void setAccommodations(String accommodation,String[] accommodations) {
-        Accommodations.put(accommodation,accommodations);
+    public void setAccommodations(HashMap<String, String[]> accommodations) {
+        this.Accommodations = accommodations;
     }
 
     public ArrayList<String> getReviews() {
@@ -124,6 +116,10 @@ public class Lodge extends StringEditor implements java.io.Serializable {
 
     public void setReviews(String reviews) {
         Reviews.add(reviews);
+    }
+
+    public int getIndex() {
+        return this.index;
     }
 
     //functions
@@ -163,5 +159,16 @@ public class Lodge extends StringEditor implements java.io.Serializable {
         finalWords.add(this.zipCode + "");
 
         return finalWords;
+    }
+
+    /**
+     * Creates and returns a copy of the lodge. With "copy" we mean a new lodge with the identical properties & values
+     * @return
+     */
+    @Override
+    public Lodge getCopy() {
+        User newUser = this.owner.getCopy();
+        Lodge newLodge = new Lodge(newUser, this.name, this.type, this.address, this.city, this.zipCode, this.description, this.Accommodations, this.Reviews, this.index);
+        return newLodge;
     }
 }

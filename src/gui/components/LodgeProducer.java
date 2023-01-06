@@ -1,6 +1,7 @@
 package gui.components;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import api.Database;
 import api.Lodge;
@@ -10,8 +11,10 @@ import gui.components.TextField;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 import static gui.bootstrap.Fonts.*;
 
@@ -71,7 +74,7 @@ public class LodgeProducer extends JFrame implements ActionListener {
 
     Button2 addAccommodationButton; //a button that is used to add the selected accommodation to the selectedAccommodationsPanel
 
-    public LodgeProducer(User currentUser) {
+    public LodgeProducer(Database db, User currentUser) {
         int i;
         //initialization of the jdialog
         this.setSize(this.width, this.height);
@@ -80,7 +83,7 @@ public class LodgeProducer extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setFocusable(true);
         this.accommodations = new HashMap<>();
-        this.db = new Database();
+        this.db = db;
 
 
         //components initialization
@@ -107,6 +110,9 @@ public class LodgeProducer extends JFrame implements ActionListener {
         this.accommodationTitlesBox = new ComboBox(100, 40, this.accommodationTitles);
         this.accommodationsBox = new ComboBox(150, 40, this.accommodations.get(this.accommodationTitlesBox.getSelectedItem()));
 
+        JScrollPane scrollable = new JScrollPane(this.selectedAccommodationsPanel,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         //layouts
         this.fieldsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 40));
@@ -124,6 +130,7 @@ public class LodgeProducer extends JFrame implements ActionListener {
         this.accommodationTitlesBox.style(accentColor, dark, accentColor, accentColor, mainFont);
         this.accommodationsBox.style(accentColor, dark, accentColor, accentColor, mainFont);
         this.fieldsPanel.setOpaque(true);
+        scrollable.setBorder(new EmptyBorder(0,0,0,0));
 
 
         //components addition
@@ -131,10 +138,7 @@ public class LodgeProducer extends JFrame implements ActionListener {
         this.accommodationBoxesPanel.add(this.accommodationsBox);
         this.accommodationBoxesPanel.add(this.addAccommodationButton);
 
-        this.accommodationsPanel.add(new JScrollPane(this.selectedAccommodationsPanel,
-                                                    ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                                                    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER),
-                                    BorderLayout.EAST);
+        this.accommodationsPanel.add(scrollable, BorderLayout.EAST);
         this.accommodationsPanel.add(this.accommodationBoxesPanel, BorderLayout.WEST);
 
 
@@ -154,75 +158,119 @@ public class LodgeProducer extends JFrame implements ActionListener {
 
         //listeners
         this.accommodationTitlesBox.addItemListener(e -> {
-            //user clicks a value from the combo box that contains the titles of accommodations. We want the accommodations
-            //of the second combo box to changed based on that value
+            //user clicks a value from the combo box that contains the titles of accommodations.
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                this.updateAccommodationBoxValues((String) e.getItem());
+                this.selectAccommodationTitle();
             }
         });
 
         this.addAccommodationButton.addActionListener(e -> {
-            if (this.accommodationsBox.getSelectedItem() != null) {
-                //user clicks the button ADD. We want to add the selected accommodation to the panel that holds the selected accommodations
-                //first, create the accommodation:
-                String accommodationName = this.accommodationsBox.getSelectedItem().toString();
-                int accommodationTitleIndex = this.accommodationTitlesBox.getSelectedIndex();
-                Accommodation accommodation = new Accommodation(accommodationName, accommodationTitleIndex, 350, 20);
-                accommodation.style(secondaryColor, accentColor, Color.RED, smallFont);
-
-                //add listener to accommodation
-                accommodation.deleteButton.addActionListener(e2 -> {
-                    this.removeAccommodation(accommodation);
-                    this.addAccommodationValue(accommodation);
-                });
-
-                //then, add the accommodation to the panel and remove it from the combo box with accommodations
-                this.addAccommodation(accommodation);
-                this.removeAccommodationValue(accommodationName);
-            }
+            //user clicks the button ADD.
+            this.selectAccommodation();
         });
 
         this.createButton.addActionListener(e -> {
-            //user clicks the button in the bottom right corner of the dialog. We want to take the values that user has fill in the fields
-            //and create a new lodge with these values, if they are adequate
-            HashMap<String, String[]> selectedAccommodations = new HashMap<>(); //the final object that will be used to
-            //create a new lodge. Each key is a string that represents a accommodation category (or title). Each value is
-            //a array of strings that represent the accommodations that belong to these categories
+            //user clicks the button in the bottom right corner of the dialog.
+            HashMap<String, String> lodgeData = this.extractData();
+            String name = lodgeData.get("name");
+            String type = lodgeData.get("type");
+            String address = lodgeData.get("address");
+            String city = lodgeData.get("city");
+            int zipcode = Integer.parseInt(lodgeData.get("zipcode"));
+            String description = lodgeData.get("description");
+            HashMap<String, String[]> selectedAccommodations = this.extractAccommodations();
 
-            //build the object. I will iterate through all Accommodations in selectedAccommodationsPanel, and add their name to
-            //the object. If category doesn't exist, then create it.
-            String[] accommodationNames = {};
-            for (Component component: this.selectedAccommodationsPanel.getComponents()) {
-                Accommodation accommodation = (Accommodation) component;
-                String name = accommodation.name; //the name of the accommodation
-                int titleIndex = accommodation.titleIndex;
-                String title = this.accommodationTitles[titleIndex]; //the title of the category that the accommodation belongs to
-
-                if (selectedAccommodations.containsKey(title)) {
-                    //the category already exists at the HashMap, so just add the name to the current values
-                    accommodationNames = selectedAccommodations.get(title);
-                    accommodationNames = this.addItemToArray(accommodationNames, name);
-                } else {
-                    //the category does not exist. Create it and add the name inside it
-                    accommodationNames = new String[]{name};
-                }
-                selectedAccommodations.put(title, accommodationNames);
-            }
-
-            //get the rest of the essential properties for lodge creation
-            String name = this.titleField.getText();
-            String type = this.typeBox.getSelectedItem().toString();
-            String address = this.addressField.getText();
-            String city = this.cityField.getText();
-            int zipcode = Integer.parseInt(this.zipCodeField.getText());
-            String description = this.descriptionField.getText();
-
-
-            currentUser.addEntry(this.db.createLodge(currentUser,name, type, address, city, zipcode, description, selectedAccommodations));
+            Lodge newLodge = this.db.createLodge(currentUser, name, type, address, city, zipcode, description, selectedAccommodations);
+            currentUser.addLodgeIndex(newLodge.getIndex());
+            this.db.saveUsers();
+            System.out.println("twra exei: ");
+            System.out.println(currentUser.getLodgeIndexes());
             this.dispose();
 
         });
 
+    }
+
+     /**
+     * This constructor takes a lodge as a parameter and fills the fields with lodge's values. It implements the "edit" mode
+     * @param currentUser the user that is currently signed in
+     * @param lodge the lodge we want to edit
+     */
+    public LodgeProducer(Database db, User currentUser, Lodge lodge) {
+        this(db, currentUser);
+        //functionality for "edit" mode
+        this.titleField.setText(lodge.getName());
+        this.typeBox.setSelectedItem(lodge.getType());
+        this.addressField.setText(lodge.getAddress());
+        this.cityField.setText(lodge.getCity());
+        this.zipCodeField.setText(lodge.getZipCode() + "");
+        this.descriptionField.setText(lodge.getDescription());
+        this.descriptionField.setCurrentCharacters(lodge.getDescription().length());
+        this.descriptionField.revalidate();
+        this.descriptionField.repaint();
+
+        //move the accommodations of the lodge, to the selectedAccommodations panel
+        HashMap<String, String[]> accommodations = lodge.getAccommodations();
+        for (String accommodationCategory: accommodations.keySet()) {
+            //set the current category as the selected one
+            this.accommodationTitlesBox.setSelectedItem(accommodationCategory);
+            this.selectAccommodationTitle();
+
+            //for every accommodation that the lodge has, we want to move it from the combo box to the panel with the selectedAccommodations
+            for (String accommodationName: accommodations.get(accommodationCategory)) {
+                this.accommodationsBox.setSelectedItem(accommodationName);
+                this.selectAccommodation();
+            }
+        }
+
+        //styling
+        this.titleField.setForeground(this.titleField.getForegroundColor());
+        this.addressField.setForeground(this.addressField.getForegroundColor());
+        this.cityField.setForeground(this.cityField.getForegroundColor());
+        this.zipCodeField.setForeground(this.zipCodeField.getForegroundColor());
+        this.descriptionField.setForeground(this.descriptionField.getForegroundColor());
+
+        //remove the button's actionListener that got added from the main constructor
+        ActionListener[] listeners = this.createButton.getActionListeners();
+        for (ActionListener listener: listeners) {
+            this.createButton.removeActionListener(listener);
+        }
+
+        //change the button's text and event listener in the bottom right corner of the screen
+        this.createButton.setText("Save");
+        this.createButton.addActionListener(e -> {
+            //this code will run when user clicks the button which tells "Save"
+
+            //extract the data from the fields
+            HashMap<String, String> lodgeData = this.extractData();
+            String name = lodgeData.get("name");
+            String type = lodgeData.get("type");
+            String address = lodgeData.get("address");
+            String city = lodgeData.get("city");
+            int zipcode = Integer.parseInt(lodgeData.get("zipcode"));
+            String description = lodgeData.get("description");
+            HashMap<String, String[]> selectedAccommodations = this.extractAccommodations();
+
+            //update the lodge
+            lodge.setName(name);
+            lodge.setType(type);
+            lodge.setAddress(address);
+            lodge.setCity(city);
+            lodge.setZipCode(zipcode);
+            lodge.setDescription(description);
+            lodge.setAccommodations(selectedAccommodations);
+
+            //save the changes to the file. The db is a pointer so the property Lodges of our database changed too
+            System.out.println("Current number of lodges: " + this.db.getLodgesCount());
+            db.saveLodges();
+            db.createAVL();
+
+            this.dispose();
+        });
+
+        //refresh the frame
+        this.revalidate();
+        this.repaint();
     }
 
 
@@ -373,8 +421,99 @@ public class LodgeProducer extends JFrame implements ActionListener {
         return -1;
     }
 
+    /**
+     * This function moves the accommodation name that the user has selected, to the selectedAccommodations panel
+     */
+    private void selectAccommodation() {
+        if (this.accommodationsBox.getSelectedItem() != null) {
+            //We want to add the selected accommodation to the panel that holds the selected accommodations
+            //first, create the accommodation:
+            String accommodationName = this.accommodationsBox.getSelectedItem().toString();
+            int accommodationTitleIndex = this.accommodationTitlesBox.getSelectedIndex();
+            Accommodation accommodation = new Accommodation(accommodationName, accommodationTitleIndex, 350, 20);
+            accommodation.style(secondaryColor, accentColor, Color.RED, smallFont);
+
+            //add listener to accommodation
+            accommodation.deleteButton.addActionListener(e2 -> {
+                this.removeAccommodation(accommodation);
+                this.addAccommodationValue(accommodation);
+            });
+
+            //then, add the accommodation to the panel and remove it from the combo box with accommodations
+            this.addAccommodation(accommodation);
+            this.removeAccommodationValue(accommodationName);
+        }
+    }
+
+
+    public void selectAccommodationTitle() {
+        //we want the accommodations of the second combo box to changed based on the selected value of the combo box
+        //that contains the categories (titles) of the accommodations
+        this.updateAccommodationBoxValues(this.accommodationTitlesBox.getSelectedItem().toString());
+    }
+
+    /**
+     * This functions creates an arrayList with the values of all the fields in lodgeProducer.
+     * @return the arrayList with the data extracted from the fields
+     */
+    public HashMap<String, String> extractData() {
+        //we want to take the values that user has fill in the fields
+        //and create a new lodge with these values, if they are adequate
+
+        String name = this.titleField.getText();
+        String type = this.typeBox.getSelectedItem().toString();
+        String address = this.addressField.getText();
+        String city = this.cityField.getText();
+        int zipcode = Integer.parseInt(this.zipCodeField.getText());
+        String description = this.descriptionField.getText();
+
+        //create the data object for the lodge
+        HashMap<String, String> lodgeData = new HashMap<>();
+        lodgeData.put("name", name);
+        lodgeData.put("type", type);
+        lodgeData.put("address", address);
+        lodgeData.put("city", city);
+        lodgeData.put("zipcode", zipcode + "");
+        lodgeData.put("description", description);
+
+        return lodgeData;
+    }
+
+    /**
+     * This function creates a hashMap whose keys are accommodation categories (titles), and values are lists with the
+     * accommodations that belong to that category. These accommodations are the ones that user selected.
+     * @return
+     */
+    public HashMap<String, String[]> extractAccommodations() {
+        HashMap<String, String[]> selectedAccommodations = new HashMap<>(); //the final object that will be used to
+        //create a new lodge. Each key is a string that represents a accommodation category (or title). Each value is
+        //an array of strings that represent the accommodations that belong to these categories
+
+        //build the object. I will iterate through all Accommodations in selectedAccommodationsPanel, and add their name to
+        //the object. If category doesn't exist, then create it.
+        String[] accommodationNames = {};
+        for (Component component: this.selectedAccommodationsPanel.getComponents()) {
+            Accommodation accommodation = (Accommodation) component;
+            String name = accommodation.name; //the name of the accommodation
+            int titleIndex = accommodation.titleIndex;
+            String title = this.accommodationTitles[titleIndex]; //the title of the category that the accommodation belongs to
+
+            if (selectedAccommodations.containsKey(title)) {
+                //the category already exists at the HashMap, so just add the name to the current values
+                accommodationNames = selectedAccommodations.get(title);
+                accommodationNames = this.addItemToArray(accommodationNames, name);
+            } else {
+                //the category does not exist. Create it and add the name inside it
+                accommodationNames = new String[]{name};
+            }
+            selectedAccommodations.put(title, accommodationNames);
+        }
+
+        return selectedAccommodations;
+    }
+
     public static void main(String[] args) {
-        LodgeProducer l = new LodgeProducer((User) null);
+        //LodgeProducer l = new LodgeProducer((User) null);
     }
 
     /**

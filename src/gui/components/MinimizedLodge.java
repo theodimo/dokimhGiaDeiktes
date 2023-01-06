@@ -2,6 +2,7 @@ package gui.components;
 
 import api.Database;
 import api.Lodge;
+import api.User;
 import gui.screens.LodgeScreen;
 
 import javax.swing.*;
@@ -12,16 +13,21 @@ import static gui.bootstrap.Fonts.*;
 import static gui.bootstrap.Icons.*;
 
 public class MinimizedLodge extends JPanel {
+    //properties
+    User currentUser;
 
+    Database db;
     public JButton maximizeButton = new JButton();
     public JButton editButton = new JButton();
     public JButton deleteButton = new JButton();
 
-    public MinimizedLodge(int width, int height, Lodge lodge, Color backgroundColor, Color foregroundColor, Color borderColor){
+    public MinimizedLodge(Database db, int width, int height, Lodge lodge, User currentUser, Color backgroundColor, Color foregroundColor, Color borderColor){
         this.setPreferredSize(new Dimension(width,height));
         this.setLayout(new FlowLayout(FlowLayout.CENTER,5,0));
         this.setBackground(backgroundColor);
         this.setForeground(foregroundColor);
+        this.currentUser = currentUser;
+        this.db = db;
         //this.setBorder(new RoundedLineBorder(borderColor, 1, 10, true));
 
         JLabel lodgeName = createNewLabel(lodge.getName(), buttonFont, 300, 30, Color.white, secondaryColor);
@@ -39,7 +45,6 @@ public class MinimizedLodge extends JPanel {
         maximizeButton.setBackground(primaryColor);
         maximizeButton.setPreferredSize(new Dimension(40,40));
         maximizeButton.addActionListener(e -> {
-            System.out.println(lodge.getAddress());
             new LodgeScreen(lodge);
             //this.dispose();
         });
@@ -48,7 +53,7 @@ public class MinimizedLodge extends JPanel {
         editButton.setBackground(primaryColor);
         editButton.setPreferredSize(new Dimension(40,40));
         editButton.addActionListener(e -> {
-
+            new LodgeProducer(this.db, this.currentUser, lodge);
         });
 
         deleteButton.setIcon(trashCan);

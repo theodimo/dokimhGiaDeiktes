@@ -22,34 +22,31 @@ public class Database extends StringEditor{
         //fetch users
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/database/Users.dat"));
-            this.users = (ArrayList<User>) in.readObject();
+            ArrayList<User> oldUsers = (ArrayList<User>) in.readObject();
+            for (User user: oldUsers) {
+                this.users.add(user.getCopy());
+            }
             in.close();
         } catch(Exception e) {
+            System.out.println("error fortwnontas ta users");
             System.out.println(e);
         }
 
         //fetch lodges
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/database/Lodges.dat"));
-            this.lodges = (ArrayList<Lodge>) in.readObject();
+            ArrayList<Lodge> oldLodges = (ArrayList<Lodge>) in.readObject();
+            for (Lodge lodge: oldLodges) {
+                this.lodges.add(lodge.getCopy());
+            }
             in.close();
         } catch(Exception e) {
+            System.out.println("error fortwnontas ta lodges");
             System.out.println(e);
         }
 
         //create AVL. It will be used for the searching
-        myAVL = new AVL();
-        int i = 0;
-        ArrayList<String> words;
-        for (Lodge lodge: this.lodges) {
-            words = lodge.getAllWords();
-            System.out.println(words);
-            for (String word: words) {
-                AVLnode newNode = new AVLnode(word, i);
-                myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), newNode));
-            }
-            i += 1;
-        }
+        this.createAVL();
 
     }
 
@@ -142,12 +139,13 @@ public class Database extends StringEditor{
             out.writeObject(this.users);
             out.close();
         } catch (Exception e) {
+            System.out.println("error ftiaxnontas ton neo user");
             System.out.println(e);
         }
     }
 
     public Lodge createLodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations) {
-        Lodge newLodge = new Lodge(owner, name, type, address, city, zipCode, description, Accommodations);
+        Lodge newLodge = new Lodge(owner, name, type, address, city, zipCode, description, Accommodations, this.lodges.size());
         this.lodges.add(newLodge);
 
         try {
@@ -155,7 +153,15 @@ public class Database extends StringEditor{
             out.writeObject(this.lodges);
             out.close();
         } catch (Exception e) {
+            System.out.println("error ftiaxnontas to neo lodge");
             System.out.println(e);
+        }
+
+        //put the words of the new lodge to the avl tree
+        ArrayList<String> words = newLodge.getAllWords();
+        for (String word: words) {
+            AVLnode newNode = new AVLnode(word, this.lodges.size() - 1);
+            myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), newNode));
         }
 
         return newLodge;
@@ -172,6 +178,7 @@ public class Database extends StringEditor{
             out.close();
 
         } catch (Exception e) {
+            System.out.println("error diagrafontas to lodge");
             System.out.println(e);
 
         }
@@ -190,12 +197,66 @@ public class Database extends StringEditor{
 
         for (String word : WordsForSearching) {
             ArrayList<Integer> results = myAVL.find(myAVL.getRoot(), word);
-
-            resultIds.addAll(results);
+            if (results != null) {
+                resultIds.addAll(results);
+            }
         }
         System.out.println(resultIds);
 
         return resultIds;
+    }
+
+     /**
+     * Saves the object "this.lodges" inside database at the file Lodges.dat
+     */
+    public void saveLodges() {
+        try {
+            ObjectOutputStream out =  new ObjectOutputStream(new FileOutputStream("src/database/Lodges.dat", false));
+            out.writeObject(this.lodges);
+            out.close();
+        } catch(Exception e) {
+            System.out.println("error kanontas save ta lodges");
+            System.out.println(e);
+        }
+    }
+
+    /**
+     * Saves the object "this.users" inside database at the file Users.dat
+     */
+    public void saveUsers() {
+        try {
+            ObjectOutputStream out =  new ObjectOutputStream(new FileOutputStream("src/database/Users.dat", false));
+            out.writeObject(this.users);
+            out.close();
+        } catch(Exception e) {
+            System.out.println("error kanontas save ta ussers");
+            System.out.println(e);
+        }
+    }
+
+     /**
+     * Creates the avl tree. The nodes of avl will be words that describe a lodge. These words exist in lodge's properties, ie
+     * title, address, city, description etc
+     */
+    public void createAVL() {
+        this.myAVL = new AVL();
+        int i = 0;
+        ArrayList<String> words;
+        for (Lodge lodge: this.lodges) {
+            words = lodge.getAllWords();
+            for (String word: words) {
+                AVLnode newNode = new AVLnode(word, i);
+                myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), newNode));
+            }
+            i += 1;
+        }
+    }
+
+    /**
+     * @return the number or lodges registered in database
+     */
+    public int getLodgesCount() {
+        return this.lodges.size();
     }
 
     public static void main(String[] args) {

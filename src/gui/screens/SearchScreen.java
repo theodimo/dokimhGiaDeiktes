@@ -25,9 +25,12 @@ public class SearchScreen extends JFrame {
     Button viewEntriesButton;
     Button logoutButton;
 
-    public SearchScreen(User currentUser){
+    Database db;
+
+    public SearchScreen(Database db, User currentUser){
         this.searchedLodges = new HashSet<>();
         this.currentUser = currentUser;
+        this.db = db;
 
         //initialization of Panels
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,100));
@@ -59,7 +62,6 @@ public class SearchScreen extends JFrame {
         searchButton.addActionListener(e -> {
             minimizedLodgesContainer.removeAll();
 
-            Database db = new Database();
             searchedLodges = db.performSearch(searchBar.getText());
             //System.out.println("these are the searches now" + searchedLodges);
 
@@ -83,12 +85,12 @@ public class SearchScreen extends JFrame {
 
         newButton = new Button("new Lodge", 100, 50, characterColor, secondaryColor);
         newButton.addActionListener(e -> {
-            new LodgeProducer(this.currentUser);
+            new LodgeProducer(this.db, this.currentUser);
         });
 
         viewEntriesButton = new Button("View Entries", 100, 50, characterColor, secondaryColor);
         viewEntriesButton.addActionListener(e -> {
-            new ViewEntries(this.currentUser);
+            new ViewEntries(this.db, this.currentUser);
             this.dispose();
         });
 
@@ -123,7 +125,7 @@ public class SearchScreen extends JFrame {
         ArrayList<MinimizedLodge> minimizedLodges = new ArrayList<>();
 
         for (Lodge tempLodge: lodges) {
-            MinimizedLodge tempMinimized = new MinimizedLodge(655,60,tempLodge,primaryColor,secondaryColor,accentColor);
+            MinimizedLodge tempMinimized = new MinimizedLodge(this.db, 655,60,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor);
             tempMinimized.addMaximizeButton();
             tempMinimized.addEditButtons();
 
@@ -135,6 +137,6 @@ public class SearchScreen extends JFrame {
 
     public static void main(String[] args) {
 
-        new SearchScreen(new User("Dimitris", "Tzikas", "tzikaman", "1234", "provider"));
+        //new SearchScreen(new User("Dimitris", "Tzikas", "tzikaman", "1234", "provider"));
     }
 }
