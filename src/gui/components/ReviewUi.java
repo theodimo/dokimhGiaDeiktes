@@ -4,9 +4,16 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import api.Database;
+import api.Lodge;
 import api.Review;
+import api.User;
+import gui.screens.ReviewProducer;
 
 import java.awt.*;
+
+import static gui.bootstrap.Colors.*;
+import static gui.bootstrap.Fonts.*;
 
 //this class is responsible for displaying a review. Specifically, it is a panel that provides information about
 //the author, the rating, the date and the review itself
@@ -23,6 +30,7 @@ public class ReviewUi extends JPanel implements ScrollableElement {
     private Label dateLabel; //displays the creation time of the review
     private Label textLabel; //displays the text of the review
     private Label ratingLabel; //displays the rating of the review
+    private Button2 editButton; //opens the ReviewProducer so the user can edit their review
 
     //constructor
     public ReviewUi(Review review, int width, int height) {
@@ -39,6 +47,7 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         this.dateLabel = new Label(this.review.getDate(), 60, (int) (height * 0.2), false);
         this.textLabel = new Label(this.review.getText(), width, (int) (height * 0.4), false);
         this.ratingLabel = new Label("Rating: " + this.review.getRating() + "/5", width, (int) (height * 0.2), false);
+        this.editButton = new Button2("edit",50,25);
 
         //layouts
         this.setLayout(new BorderLayout(0, 5));
@@ -49,6 +58,7 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         //styling
         this.authorLabel.setBounds(5, 0, this.authorLabel.getWidth(), this.authorLabel.getHeight());
         this.dateLabel.setBounds(width - this.dateLabel.getWidth() - 5, 0, this.dateLabel.getWidth(), this.dateLabel.getHeight());
+        this.editButton.style(primaryColor,secondaryColor,accentColor,mainFont);
 
 
         //components adding
@@ -58,10 +68,19 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         this.mainPanel.add(this.textLabel);
 
         this.ratingPanel.add(this.ratingLabel);
+        this.ratingPanel.add(this.editButton);
 
         this.add(this.credentialsPanel, BorderLayout.NORTH);
         this.add(this.mainPanel, BorderLayout.CENTER);
         this.add(this.ratingPanel, BorderLayout.SOUTH);
+
+        //listeners
+        this.editButton.addActionListener(e -> {
+            new ReviewProducer(new Database(),
+                    new Lodge(new User("temp","temp","temp","temp","temp") , "temp","temp","temp","temp",5,"temp",null,5),
+                    this.review
+            );
+        });
     }
 
     public void style(Color backgroundColor, Color textBackgroundColor, Color authorColor, Color dateColor, Color textColor, Color ratingColor, Font authorFont, Font dateFont, Font textFont, Font ratingFont) {

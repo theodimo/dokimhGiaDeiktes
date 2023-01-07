@@ -1,5 +1,6 @@
 package gui.screens;
 
+import api.Database;
 import api.Review;
 import gui.components.ReviewUi;
 import gui.components.ScrollableDialog;
@@ -17,8 +18,8 @@ public class Reviews extends ScrollableDialog implements ScrollableDialogInterfa
     //properties
     private ArrayList<Review> reviews;
 
-    public Reviews(ArrayList<Review> reviews) {
-        super("Reviews", "The reviews for that lodge");
+    public Reviews(Database db, ArrayList<Review> reviews) {
+        super(db, "Reviews", "The reviews for that lodge", 500);
         //initialization
         this.reviews = reviews;
 
