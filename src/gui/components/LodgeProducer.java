@@ -11,14 +11,12 @@ import gui.components.TextField;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 
 import static gui.bootstrap.Fonts.*;
 
-public class LodgeProducer extends JFrame implements ActionListener {
+public class LodgeProducer extends JFrame {
     private static Color primaryColor = new Color(21, 47, 80);
     private static Color secondaryColor = new Color(5, 68, 94);
     private static Color accentColor = new Color(212, 241, 244);
@@ -28,7 +26,7 @@ public class LodgeProducer extends JFrame implements ActionListener {
 
     //properties
     private int width = 850;
-    private int height = 650;
+    private int height = 700;
 
     private String[] types = {"Apartment", "Maisonette"};
 
@@ -57,17 +55,16 @@ public class LodgeProducer extends JFrame implements ActionListener {
 
     Panel selectedAccommodationsPanel; //here i will place all the accommodations that have been selected
 
-    TextField titleField; //the field for the title of the lodge
-    TextField addressField; //the field for the address of the lodge
-    TextField cityField; //the field for the city where lodge is
-
-    TextField zipCodeField; //the field for the zipcode area where the lodge is
+    TitledTextField titleField; //the field for the title of the lodge
+    TitledTextField addressField; //the field for the address of the lodge
+    TitledTextField cityField; //the field for the city where lodge is
+    TitledTextField zipCodeField; //the field for the zipcode area where the lodge is
 
     ComboBox typeBox; //this combo box contains the types that the lodge can have
 
     Button2 createButton; //this button is responsible for registering the lodge to the database
 
-    TextArea descriptionField; //an area where provider can describe his lodge
+    TitledTextArea descriptionField; //an area where provider can describe his lodge
 
     ComboBox accommodationTitlesBox; //the combo box whose values are the titles of accommodations
     ComboBox accommodationsBox; //the combo box whose values are the accommodations of the selected accommodation-title
@@ -87,17 +84,17 @@ public class LodgeProducer extends JFrame implements ActionListener {
 
 
         //components initialization
-        this.fieldsPanel = new Panel(this.width, (int) (this.height * 0.85), primaryColor, "preferredSize");
-        this.buttonsPanel = new Panel(this.width, (int) (this.height * 0.15), primaryColor, "preferredSize");
+        this.fieldsPanel = new Panel(this.width, (int) (this.height * 0.9), primaryColor, "preferredSize");
+        this.buttonsPanel = new Panel(this.width, (int) (this.height * 0.1), primaryColor, "preferredSize");
         this.accommodationsPanel = new Panel((int) (this.width * 0.9), 150, secondaryColor, "preferredSize");
         this.accommodationBoxesPanel = new Panel((int) (this.accommodationsPanel.getPreferredSize().getWidth() * 0.3), 150, secondaryColor, "preferredSize");
         this.selectedAccommodationsPanel = new Panel((int) (this.accommodationsPanel.getPreferredSize().getWidth() * 0.7), 145, secondaryColor, "preferredSize");
 
-        this.titleField = new TextField((int) (this.width * 0.4), 50, secondaryColor, accentColor, dark, accentColor,"Title");
-        this.addressField = new TextField((int) (this.width * 0.3), 50, secondaryColor, accentColor, dark, accentColor,"Address");
-        this.cityField = new TextField((int) (this.width * 0.2), 50, secondaryColor, accentColor, dark, accentColor, "City");
-        this.zipCodeField = new TextField((int) (this.width * 0.2), 50, secondaryColor, accentColor, dark, accentColor, "Zip Code");
-        this.descriptionField = new TextArea("Description", (int) (this.width * 0.9), 100, 250);
+        this.titleField = new TitledTextField("Title", "", "Title should consist from 6 to 20 characters!", false);
+        this.addressField = new TitledTextField("Address", "", "Address should have 10 to 20 characters", false);
+        this.cityField = new TitledTextField("City", "", "City should consist from 4 to 16 characters", false);
+        this.zipCodeField = new TitledTextField("Zip Code", "", "Zip Code should be a 5 digit number", false);
+        this.descriptionField = new TitledTextArea((int) (this.width * 0.9), 160, "Description", "", "Description should be at lease 50 characters long",250);
 
         this.createButton = new Button2("Create Lodge", 200, 50);
         this.addAccommodationButton = new Button2("Add", 120,30);
@@ -115,7 +112,7 @@ public class LodgeProducer extends JFrame implements ActionListener {
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         //layouts
-        this.fieldsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 40));
+        this.fieldsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10));
         this.buttonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         this.accommodationsPanel.setLayout(new BorderLayout());
         this.accommodationBoxesPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 60, 10));
@@ -123,7 +120,6 @@ public class LodgeProducer extends JFrame implements ActionListener {
 
 
         //styling
-        this.descriptionField.style(secondaryColor, accentColor, dark, accentColor, mainFont);
         this.typeBox.style(secondaryColor, accentColor, secondaryColor, secondaryColor, mainFont);
         this.createButton.style(accentColor, secondaryColor, paleBlue, inputLabel);
         this.addAccommodationButton.style(accentColor, secondaryColor, paleBlue, inputLabel);
@@ -131,6 +127,12 @@ public class LodgeProducer extends JFrame implements ActionListener {
         this.accommodationsBox.style(accentColor, dark, accentColor, accentColor, mainFont);
         this.fieldsPanel.setOpaque(true);
         scrollable.setBorder(new EmptyBorder(0,0,0,0));
+
+        this.descriptionField.style(primaryColor, secondaryColor, accentColor, dark, mainFont);
+        this.titleField.style(primaryColor, secondaryColor, accentColor, dark);
+        this.addressField.style(primaryColor, secondaryColor, accentColor, dark);
+        this.cityField.style(primaryColor, secondaryColor, accentColor, dark);
+        this.zipCodeField.style(primaryColor, secondaryColor, accentColor, dark);
 
 
         //components addition
@@ -171,22 +173,34 @@ public class LodgeProducer extends JFrame implements ActionListener {
 
         this.createButton.addActionListener(e -> {
             //user clicks the button in the bottom right corner of the dialog.
+
+            //extract the data from the fields
             HashMap<String, String> lodgeData = this.extractData();
             String name = lodgeData.get("name");
             String type = lodgeData.get("type");
             String address = lodgeData.get("address");
             String city = lodgeData.get("city");
-            int zipcode = Integer.parseInt(lodgeData.get("zipcode"));
+            String zipcode = lodgeData.get("zipcode");
             String description = lodgeData.get("description");
             HashMap<String, String[]> selectedAccommodations = this.extractAccommodations();
 
-            Lodge newLodge = this.db.createLodge(currentUser, name, type, address, city, zipcode, description, selectedAccommodations);
-            currentUser.addLodgeIndex(newLodge.getIndex());
-            this.db.saveUsers();
-            System.out.println("twra exei: ");
-            System.out.println(currentUser.getLodgeIndexes());
-            this.dispose();
+            //check if data are valid
+            boolean titleValidation = this.db.validateLodgeTitle(name);
+            boolean addressValidation = this.db.validateLodgeAddress(address);
+            boolean cityValidation = this.db.validateLodgeCity(city);
+            int zipCodeValidation = this.db.validateLodgeZipCode(zipcode);
+            boolean descriptionValidation = this.db.validateLodgeDescription(description);
 
+            if (titleValidation && addressValidation && cityValidation && zipCodeValidation == 0 && descriptionValidation) {
+                //if they are valid, create the lodge
+                Lodge newLodge = this.db.createLodge(currentUser, name, type, address, city, Integer.parseInt(zipcode), description, selectedAccommodations);
+                currentUser.addLodgeIndex(newLodge.getIndex());
+                this.db.saveUsers();
+                this.dispose();
+            } else {
+                //if they are invalid, show the messages of the fields whose values are invalid
+                this.showErrorMessages(titleValidation, addressValidation, cityValidation, zipCodeValidation, descriptionValidation);
+            }
         });
 
     }
@@ -224,10 +238,10 @@ public class LodgeProducer extends JFrame implements ActionListener {
         }
 
         //styling
-        this.titleField.setForeground(this.titleField.getForegroundColor());
-        this.addressField.setForeground(this.addressField.getForegroundColor());
-        this.cityField.setForeground(this.cityField.getForegroundColor());
-        this.zipCodeField.setForeground(this.zipCodeField.getForegroundColor());
+        this.titleField.setForegroundColor(this.titleField.getForegroundColor());
+        this.addressField.setForegroundColor(this.addressField.getForegroundColor());
+        this.cityField.setForegroundColor(this.cityField.getForegroundColor());
+        this.zipCodeField.setForegroundColor(this.zipCodeField.getForegroundColor());
         this.descriptionField.setForeground(this.descriptionField.getForegroundColor());
 
         //remove the button's actionListener that got added from the main constructor
@@ -247,25 +261,40 @@ public class LodgeProducer extends JFrame implements ActionListener {
             String type = lodgeData.get("type");
             String address = lodgeData.get("address");
             String city = lodgeData.get("city");
-            int zipcode = Integer.parseInt(lodgeData.get("zipcode"));
+            String zipcode = lodgeData.get("zipcode");
             String description = lodgeData.get("description");
             HashMap<String, String[]> selectedAccommodations = this.extractAccommodations();
 
-            //update the lodge
-            lodge.setName(name);
-            lodge.setType(type);
-            lodge.setAddress(address);
-            lodge.setCity(city);
-            lodge.setZipCode(zipcode);
-            lodge.setDescription(description);
-            lodge.setAccommodations(selectedAccommodations);
+            //check if data are valid
+            boolean titleValidation = this.db.validateLodgeTitle(name);
+            boolean addressValidation = this.db.validateLodgeAddress(address);
+            boolean cityValidation = this.db.validateLodgeCity(city);
+            int zipCodeValidation = this.db.validateLodgeZipCode(zipcode);
+            boolean descriptionValidation = this.db.validateLodgeDescription(description);
 
-            //save the changes to the file. The db is a pointer so the property Lodges of our database changed too
-            System.out.println("Current number of lodges: " + this.db.getLodgesCount());
-            db.saveLodges();
-            db.createAVL();
+            if (titleValidation && addressValidation && cityValidation && zipCodeValidation == 0 && descriptionValidation) {
+                //if they are valid, save the changes to the lodge
+                //update the lodge
+                lodge.setName(name);
+                lodge.setType(type);
+                lodge.setAddress(address);
+                lodge.setCity(city);
+                lodge.setZipCode(Integer.parseInt(zipcode));
+                lodge.setDescription(description);
+                lodge.setAccommodations(selectedAccommodations);
 
-            this.dispose();
+                //save the changes to the file. The db is a pointer so the property Lodges of our database changed too
+                System.out.println("Current number of lodges: " + this.db.getLodgesCount());
+                db.saveLodges();
+                db.createAVL();
+
+                this.dispose();
+
+            } else {
+                //if they are invalid, show the error messages of the fields whose values are invalid
+                this.showErrorMessages(titleValidation, addressValidation, cityValidation, zipCodeValidation, descriptionValidation);
+            }
+
         });
 
         //refresh the frame
@@ -464,7 +493,12 @@ public class LodgeProducer extends JFrame implements ActionListener {
         String type = this.typeBox.getSelectedItem().toString();
         String address = this.addressField.getText();
         String city = this.cityField.getText();
-        int zipcode = Integer.parseInt(this.zipCodeField.getText());
+        String zipcode;
+        if (zipCodeField.getText().length() == 0) {
+            zipcode = "wrong"; //we will handle this zipCode at the next phase of the actionListener of the create button
+        } else {
+            zipcode = zipCodeField.getText() + "";
+        }
         String description = this.descriptionField.getText();
 
         //create the data object for the lodge
@@ -473,7 +507,7 @@ public class LodgeProducer extends JFrame implements ActionListener {
         lodgeData.put("type", type);
         lodgeData.put("address", address);
         lodgeData.put("city", city);
-        lodgeData.put("zipcode", zipcode + "");
+        lodgeData.put("zipcode", zipcode);
         lodgeData.put("description", description);
 
         return lodgeData;
@@ -512,17 +546,32 @@ public class LodgeProducer extends JFrame implements ActionListener {
         return selectedAccommodations;
     }
 
-    public static void main(String[] args) {
-        //LodgeProducer l = new LodgeProducer((User) null);
-    }
-
     /**
-     * Invoked when an action occurs.
-     *
-     * @param e the event to be processed
+     * This functions shows the error messages of the fields whose values are invalid
+     * @param titleValidation whether title is validated
+     * @param addressValidation whether address is validated
+     * @param cityValidation whether city is validated
+     * @param zipCodeValidation whether zipCode is validated
+     * @param descriptionValidation whether description is validated
      */
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public void showErrorMessages(boolean titleValidation, boolean addressValidation, boolean cityValidation, int zipCodeValidation, boolean descriptionValidation) {
+        this.titleField.showErrorMessage(!titleValidation);
+        this.addressField.showErrorMessage(!addressValidation);
+        this.cityField.showErrorMessage(!cityValidation);
 
+        //the zipCode is unique field, because we want to display 2 error messages because its validation consists of 2 causes
+        //give zipCode specific error message based on the cause of non-validation
+        if (zipCodeValidation == -1) {
+            this.zipCodeField.setErrorMessage("ZipCode's length should be 5");
+        } else if (zipCodeValidation == 1) {
+            this.zipCodeField.setErrorMessage("Zipcode should consist of numeric digits");
+        }
+
+        this.zipCodeField.showErrorMessage(zipCodeValidation != 0);
+        this.descriptionField.showErrorMessage(!descriptionValidation);
+
+        revalidate();
+        repaint();
     }
+
 }

@@ -87,10 +87,11 @@ public class User implements java.io.Serializable, Element<User> {
 
     /**
      * Remove the id of a lodge from lodgesIndexes property
-     * @param index the id of the lodge we want to remove
+     * @param id the id of the lodge we want to remove
      */
-    public void removeLodgeIndex(int index) {
-        this.lodgeIndexes.remove(index);
+    public void removeLodgeIndex(int id) {
+        int position = this.lodgeIndexes.indexOf(id);
+        this.lodgeIndexes.remove(position);
     }
 
     /**

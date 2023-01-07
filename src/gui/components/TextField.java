@@ -16,12 +16,12 @@ import static gui.bootstrap.Fonts.*;
  */
 public class TextField extends JPasswordField implements FocusListener{
 
-    private final Color idleBorderColor; //the color of the border when it is NOT interacted
-    private final Color focusBorderColor; //the color of the border when it is interacted
-    private final  Color backgroundColor; //the color of the field
-    private final Color foregroundColor; //the color of the text in the field
-    private final Color defaultMessageColor; //the color of the default text in the field
-    private final String defaultMessage; //the text
+    private Color idleBorderColor; //the color of the border when it is NOT interacted
+    private Color focusBorderColor; //the color of the border when it is interacted
+    private Color backgroundColor; //the color of the field
+    private Color foregroundColor; //the color of the text in the field
+    private Color defaultMessageColor; //the color of the default text in the field
+    private String defaultMessage; //the text
     private boolean isPasswordField = false; //shows if the field is going to be a passwordField or not
 
     public TextField(int width, int height,
@@ -29,19 +29,11 @@ public class TextField extends JPasswordField implements FocusListener{
                      Color idleBorderColor, Color focusBorderColor,
                      String defaultMessage) {
 
-        this.idleBorderColor = idleBorderColor;
-        this.focusBorderColor = focusBorderColor;
-        this.backgroundColor = backgroundColor;
-        this.foregroundColor = foregroundColor;
-        this.defaultMessageColor = idleBorderColor;
+        this.changeColors(backgroundColor, foregroundColor, idleBorderColor, focusBorderColor);
         this.defaultMessage = defaultMessage;
 
-        this.setBackground(this.backgroundColor);
-        this.setForeground(this.defaultMessageColor);
 
-        this.setBorder(new RoundedLineBorder(idleBorderColor,1,10,true));
         this.setText(defaultMessage);
-        this.setCaretColor(focusBorderColor);
 
         this.setEchoChar((char) 0);
         this.setFont(mainFont);
@@ -55,12 +47,27 @@ public class TextField extends JPasswordField implements FocusListener{
                      String defaultMessage, boolean isPasswordField) {
         this(width,height,backgroundColor,foregroundColor,idleBorderColor,focusBorderColor,defaultMessage);
 
+
         this.isPasswordField = isPasswordField;
     }
 
     //getters
     public Color getForegroundColor() {
         return this.foregroundColor;
+    }
+
+    public void changeColors(Color backgroundColor, Color foregroundColor, Color idleBorderColor, Color focusBorderColor) {
+        this.idleBorderColor = idleBorderColor;
+        this.focusBorderColor = focusBorderColor;
+        this.backgroundColor = backgroundColor;
+        this.foregroundColor = foregroundColor;
+        this.defaultMessageColor = idleBorderColor;
+
+        this.setBackground(this.backgroundColor);
+        this.setForeground(this.defaultMessageColor);
+
+        this.setBorder(new RoundedLineBorder(idleBorderColor,1,10,true));
+        this.setCaretColor(focusBorderColor);
     }
 
     @Override

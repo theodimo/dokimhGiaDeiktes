@@ -158,6 +158,64 @@ public class Database extends StringEditor {
         return successfullValidation;
     }
 
+    /**
+     * Checks if the title of the lodge that is going to be created, is validated.
+     * A title is validated if it consists from 6 to 20 characters
+     * @param title
+     * @return
+     */
+    public boolean validateLodgeTitle(String title) {
+        return title.length() >= 6 && title.length() <= 20;
+    }
+
+    /**
+     * Checks if the address of the lodge that is going to be created, is validated.
+     * An address is validated if it consists from 10 to 20 characters
+     * @param address
+     * @return
+     */
+    public boolean validateLodgeAddress(String address) {
+        return address.length() >= 10 && address.length() <= 20;
+    }
+
+    /**
+     * Checks if the city of the lodge that is going to be created, is validated
+     * A city is validated if it consists from 4 to 16 characters
+     * @param city
+     * @return
+     */
+    public boolean validateLodgeCity(String city) {
+        return city.length() >= 4 && city.length() <= 16;
+    }
+
+    /**
+     * Checks if the zipCode of the lodge that is going to be created, is validated
+     * A zipCode is validated if it consists of 5 numeric digits
+     * @param zipCode
+     * @return 0 if zipCode is validated,
+     *        -1 if zipCode's length is different from 5,
+     *         1 if it doesn't consist of numeric digits
+     */
+    public int validateLodgeZipCode(String zipCode) {
+        if (zipCode.length() == 5 && zipCode.matches("[0-9]+")) {
+            return 0;
+        } else if (zipCode.length() != 5) {
+            return -1;
+        } {
+            return 1;
+        }
+    }
+
+    /**
+     * Checks if the description of the lodge that is going to be created, is validated
+     * A description is validated if it is at least 50 characters long
+     * @param text
+     * @return
+     */
+    public boolean validateLodgeDescription(String text) {
+        return text.length() >= 50;
+    }
+
 
     public void createUser(String name, String surname, String username, String password, String type) {
         User newUser = new User(name, surname, username, password, type);
@@ -208,6 +266,11 @@ public class Database extends StringEditor {
     public void deleteLodge(Lodge lodgeForDeleting, User owner){
         //firstly, we want the lodges to have an ascending index with step 1. By removing a lodge, we should decrease the
         //index of all lodges with bigger index, in order to maintain the order
+
+        System.out.println("before deleting:");
+        for (Lodge lodge: this.lodges) {
+            System.out.println(lodge.getIndex() + " -> " + lodge.getName());
+        }
         int deletedIndex = lodgeForDeleting.getIndex();
         for (int i = deletedIndex + 1; i < this.lodges.size(); i++) {
             this.lodges.get(i).decreaseIndex();
@@ -215,6 +278,14 @@ public class Database extends StringEditor {
 
         //then, delete the lodge from the lodges property
         this.lodges.remove(lodgeForDeleting);
+
+        System.out.println("after deleting:");
+        for (Lodge lodge: this.lodges) {
+            System.out.println(lodge.getIndex() + " -> " + lodge.getName());
+        }
+
+        //remove the index of the lodge from owner's lodgeIndexes
+        owner.removeLodgeIndex(deletedIndex);
 
         //furthermore, decrease the indexes of all owner's lodges that have index higher that deletedIndex, for every user
         //to understand it better lets say that User1 and User2 have lodges at indexes:
@@ -228,8 +299,6 @@ public class Database extends StringEditor {
             user.decreaseIndexes(deletedIndex);
         }
 
-        //after that, remove the index of the lodge from owner's lodgeIndexes
-        owner.removeLodgeIndex(deletedIndex);
 
         //save the changes to database files
         this.saveLodges();
@@ -253,7 +322,6 @@ public class Database extends StringEditor {
                 resultIds.addAll(results);
             }
         }
-        System.out.println(resultIds);
 
         return resultIds;
     }

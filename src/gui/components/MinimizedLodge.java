@@ -48,7 +48,7 @@ public class MinimizedLodge extends JPanel {
         maximizeButton.setBackground(primaryColor);
         maximizeButton.setPreferredSize(new Dimension(40,40));
         maximizeButton.addActionListener(e -> {
-            new LodgeScreen(lodge);
+            new LodgeScreen(db, lodge);
             //this.dispose();
         });
 
