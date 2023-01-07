@@ -11,7 +11,7 @@ public class Accommodation extends JPanel {
     public int titleIndex;
 
     //components
-    Button2 deleteButton;
+    public Button2 deleteButton;
     Label titleLabel;
 
     public Accommodation(String name, int titleIndex, int width, int height) {

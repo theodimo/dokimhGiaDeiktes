@@ -1,4 +1,4 @@
-package gui.components;
+package gui.screens;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -7,6 +7,8 @@ import api.Database;
 import api.Lodge;
 import api.User;
 import gui.bootstrap.Colors;
+import gui.components.*;
+import gui.components.Panel;
 import gui.components.TextField;
 
 import java.awt.*;
@@ -48,13 +50,13 @@ public class LodgeProducer extends JFrame {
 
     private Database db;
     //components
-    Panel fieldsPanel; //the container of all input fields
-    Panel buttonsPanel; //the container of the buttons
+    gui.components.Panel fieldsPanel; //the container of all input fields
+    gui.components.Panel buttonsPanel; //the container of the buttons
 
-    Panel accommodationsPanel; //here i will place the entire functionality and ui display for the accommodations
-    Panel accommodationBoxesPanel; //here i will place the boxes that display accommodations titles and accommodations themselves
+    gui.components.Panel accommodationsPanel; //here i will place the entire functionality and ui display for the accommodations
+    gui.components.Panel accommodationBoxesPanel; //here i will place the boxes that display accommodations titles and accommodations themselves
 
-    Panel selectedAccommodationsPanel; //here i will place all the accommodations that have been selected
+    gui.components.Panel selectedAccommodationsPanel; //here i will place all the accommodations that have been selected
 
     TitledTextField titleField; //the field for the title of the lodge
     TitledTextField addressField; //the field for the address of the lodge
@@ -85,10 +87,10 @@ public class LodgeProducer extends JFrame {
 
 
         //components initialization
-        this.fieldsPanel = new Panel(this.width, (int) (this.height * 0.9), primaryColor, "preferredSize");
-        this.buttonsPanel = new Panel(this.width, (int) (this.height * 0.1), primaryColor, "preferredSize");
-        this.accommodationsPanel = new Panel((int) (this.width * 0.9), 150, secondaryColor, "preferredSize");
-        this.accommodationBoxesPanel = new Panel((int) (this.accommodationsPanel.getPreferredSize().getWidth() * 0.3), 150, secondaryColor, "preferredSize");
+        this.fieldsPanel = new gui.components.Panel(this.width, (int) (this.height * 0.9), primaryColor, "preferredSize");
+        this.buttonsPanel = new gui.components.Panel(this.width, (int) (this.height * 0.1), primaryColor, "preferredSize");
+        this.accommodationsPanel = new gui.components.Panel((int) (this.width * 0.9), 150, secondaryColor, "preferredSize");
+        this.accommodationBoxesPanel = new gui.components.Panel((int) (this.accommodationsPanel.getPreferredSize().getWidth() * 0.3), 150, secondaryColor, "preferredSize");
         this.selectedAccommodationsPanel = new Panel((int) (this.accommodationsPanel.getPreferredSize().getWidth() * 0.7), 145, secondaryColor, "preferredSize");
 
         this.titleField = new TitledTextField("Title", "", "Title should consist from 6 to 20 characters!", false);
