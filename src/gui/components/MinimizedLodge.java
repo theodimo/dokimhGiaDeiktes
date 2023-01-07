@@ -3,22 +3,19 @@ package gui.components;
 import api.Database;
 import api.Lodge;
 import api.User;
+import gui.screens.LodgeProducer;
 import gui.screens.LodgeScreen;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-import static gui.bootstrap.Colors.*;
 import static gui.bootstrap.Fonts.*;
 import static gui.bootstrap.Icons.*;
 
 public class MinimizedLodge extends JPanel {
     //properties
     User currentUser;
-
     Lodge lodge;
-
     Database db;
     public JButton maximizeButton = new JButton();
     public JButton editButton = new JButton();
@@ -42,7 +39,9 @@ public class MinimizedLodge extends JPanel {
 
         JLabel lodgeType = createNewLabel(lodge.getType(), mainFont, 100, 60, backgroundColor, foregroundColor);
 
-        JLabel lodgeRating = createNewLabel("4.5 (15)", mainFont, 100, 60, backgroundColor, foregroundColor);
+        JLabel lodgeRating = createNewLabel(lodge.getTotalRating() + " (" + lodge.getTotalReviews() + ")", mainFont, 100, 60, backgroundColor, foregroundColor);
+
+        JLabel lodgeId = createNewLabel(String.valueOf(lodge.getIndex()), mainFont, 50, 60, backgroundColor,foregroundColor);
 
         maximizeButton.setIcon(maximize);
         maximizeButton.setBackground(buttonsColor);
@@ -73,6 +72,8 @@ public class MinimizedLodge extends JPanel {
         this.add(lodgeType);
 
         this.add(lodgeRating);
+
+        this.add(lodgeId);
     }
 
     private JLabel createNewLabel(String text, Font font, int width, int height, Color backgroundColor, Color foregroundColor){

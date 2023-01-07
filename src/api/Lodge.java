@@ -3,6 +3,8 @@ package api;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static java.lang.Math.round;
+
 public class Lodge extends StringEditor implements java.io.Serializable, Element<Lodge> {
     // fields of Lodge class
     private String name;
@@ -31,7 +33,7 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
         this.index = index;
 
         this.reviewsIndexes = new ArrayList<>();
-        this.totalRating = -1;
+        this.totalRating = 0;
     }
     public Lodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations, ArrayList<Integer> reviewsIndexes, int index, float totalRating){
         this(owner,name, type, address, city, zipCode, description, Accommodations, index);
@@ -111,7 +113,7 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
 
     public void addReviewIndex(int index, Database db) {
         this.reviewsIndexes.add(index);
-        this.totalRating = calculateTotalRating(db, this.reviewsIndexes);
+        this.totalRating = (float) (round(calculateTotalRating(db, this.reviewsIndexes) * 10.0) / 10.0);
     }
 
     public float getTotalRating(){
@@ -195,5 +197,9 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
         User newUser = this.owner.getCopy();
         Lodge newLodge = new Lodge(newUser, this.name, this.type, this.address, this.city, this.zipCode, this.description, this.Accommodations, this.reviewsIndexes, this.index, this.totalRating);
         return newLodge;
+    }
+
+    public int getTotalReviews() {
+        return this.reviewsIndexes.size();
     }
 }

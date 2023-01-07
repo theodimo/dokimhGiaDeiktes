@@ -2,6 +2,8 @@ package api;
 
 import java.util.ArrayList;
 
+import static java.lang.Math.round;
+
 public class User implements java.io.Serializable, Element<User> {
     private String name;
     private String surname;
@@ -52,6 +54,29 @@ public class User implements java.io.Serializable, Element<User> {
     }
     public String getType() {
         return this.type;
+    }
+    public int getTotalReviewCount(){
+        Database db = new Database();
+
+        int sum = 0;
+        for (int i : this.lodgeIndexes) {
+            sum += db.getLodge(i).getReviewsIndexes().size();
+        }
+
+        return sum;
+    }
+    public float getOverallRating(){
+
+        Database db = new Database();
+
+        float ratingSum = 0;
+        int count = 0;
+        for (int i : this.lodgeIndexes) {
+            ratingSum += db.getLodge(i).getTotalRating();
+            count++;
+        }
+
+        return (float) (round((ratingSum / count) * 10.0) / 10.0);
     }
 
     //Functions
