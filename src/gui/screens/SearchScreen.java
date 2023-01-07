@@ -8,6 +8,7 @@ import gui.components.Button;
 import gui.components.TextField;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,22 +39,29 @@ public class SearchScreen extends JFrame {
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,100));
         searchPanel.setPreferredSize(new Dimension(1080,250));
         searchPanel.setBackground(primaryColor);
-        this.add(searchPanel,BorderLayout.CENTER);
+
 
         JPanel recentSearchesPanel = new JPanel(new BorderLayout(0,0));
         recentSearchesPanel.setPreferredSize(new Dimension(1080,470));
         recentSearchesPanel.setBackground(primaryColor);
-        this.add(recentSearchesPanel,BorderLayout.SOUTH);
+
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEADING,200,50));
         titlePanel.setPreferredSize(new Dimension(1080,100));
         titlePanel.setBackground(primaryColor);
-        recentSearchesPanel.add(titlePanel,BorderLayout.NORTH);
+
 
         JPanel minimizedLodgesContainer = new JPanel(new FlowLayout(FlowLayout.CENTER,0,25));
         minimizedLodgesContainer.setPreferredSize(new Dimension(1010,300));
         minimizedLodgesContainer.setBackground(Color.lightGray);
-        recentSearchesPanel.add(minimizedLodgesContainer,BorderLayout.CENTER);
+        //recentSearchesPanel.add(minimizedLodgesContainer,BorderLayout.CENTER);
+
+        JScrollPane scrollable = new JScrollPane(minimizedLodgesContainer,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        scrollable.setBorder(new EmptyBorder(0,0,0,0));
+
 
 
 
@@ -67,17 +75,23 @@ public class SearchScreen extends JFrame {
             searchedLodges = db.performSearch(searchBar.getText());
             //System.out.println("these are the searches now" + searchedLodges);
 
-
-            ArrayList<Lodge> temp = new ArrayList<>();
-            for (Integer index : searchedLodges) {
-                temp.add(db.getLodge(index));
+            if(searchedLodges.isEmpty()) {
+                JLabel noResultsLabel = new JLabel("Sorry, we couldn't find anything to match ' " + searchBar.getText() + "'");
+                noResultsLabel.setFont(titleFont);
+                minimizedLodgesContainer.add(noResultsLabel);
             }
+            else {
+                ArrayList<Lodge> temp = new ArrayList<>();
+                for (Integer index : searchedLodges) {
+                    temp.add(db.getLodge(index));
+                }
 
-            ArrayList<MinimizedLodge> lodgesToDisplay;
-            lodgesToDisplay = this.convertToMinimized(temp);
+                ArrayList<MinimizedLodge> lodgesToDisplay;
+                lodgesToDisplay = this.convertToMinimized(temp);
 
-            for (MinimizedLodge lodgeToDisplay : lodgesToDisplay) {
-                minimizedLodgesContainer.add(lodgeToDisplay);
+                for (MinimizedLodge lodgeToDisplay : lodgesToDisplay) {
+                    minimizedLodgesContainer.add(lodgeToDisplay);
+                }
             }
 
             minimizedLodgesContainer.revalidate();
@@ -127,6 +141,12 @@ public class SearchScreen extends JFrame {
         searchPanel.add(viewEntriesButton);
         searchPanel.add(allLodgesButton);
         titlePanel.add(title);
+        recentSearchesPanel.add(titlePanel,BorderLayout.NORTH);
+        recentSearchesPanel.add(scrollable,BorderLayout.CENTER);
+
+        this.add(recentSearchesPanel,BorderLayout.SOUTH);
+        this.add(searchPanel,BorderLayout.CENTER);
+
 
         this.getRootPane().setDefaultButton(searchButton); //this will automatically listen to the "Enter" key
                                                            //and trigger the action listener of the given button
@@ -142,7 +162,7 @@ public class SearchScreen extends JFrame {
         ArrayList<MinimizedLodge> minimizedLodges = new ArrayList<>();
 
         for (Lodge tempLodge: lodges) {
-            MinimizedLodge tempMinimized = new MinimizedLodge(this.db, 650,60,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor,Color.red);
+            MinimizedLodge tempMinimized = new MinimizedLodge(this.db, 800,60,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor,accentColor);
             tempMinimized.addMaximizeButton();
             tempMinimized.addEditButtons();
 

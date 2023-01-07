@@ -4,7 +4,6 @@ import api.Database;
 import api.Lodge;
 import api.User;
 import gui.components.Button;
-import gui.components.LodgeProducer;
 import gui.components.MinimizedLodge;
 
 import javax.swing.*;
@@ -32,10 +31,19 @@ public class ViewEntries extends JFrame {
         titlePanel.setBackground(Color.lightGray);
         this.add(titlePanel,BorderLayout.NORTH);
 
-        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.LEADING,100,35));
-        buttonsPanel.setPreferredSize(new Dimension(1080,125));
+        JPanel generalInfoPanel = new JPanel(new BorderLayout());
+        generalInfoPanel.setPreferredSize(new Dimension(1080, 125));
+        this.add(generalInfoPanel,BorderLayout.CENTER);
+
+        JPanel userInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEADING,50,5));
+        userInfoPanel.setPreferredSize(new Dimension(300,125));
+        userInfoPanel.setBackground(primaryColor);
+        generalInfoPanel.add(userInfoPanel,BorderLayout.WEST);
+
+        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.TRAILING,20,35));
+        buttonsPanel.setPreferredSize(new Dimension(780,125));
         buttonsPanel.setBackground(primaryColor);
-        this.add(buttonsPanel,BorderLayout.CENTER);
+        generalInfoPanel.add(buttonsPanel,BorderLayout.EAST);
 
         JPanel entriesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,35,100));
         entriesPanel.setPreferredSize(new Dimension(1080,470));
@@ -43,6 +51,15 @@ public class ViewEntries extends JFrame {
         this.add(entriesPanel,BorderLayout.SOUTH);
 
         //Components initialization
+        JLabel userNameLabel = new JLabel(currentUser.getName() + " " + currentUser.getSurname());
+        userNameLabel.setFont(bigFont);
+
+        JLabel totalReviewsPanel = new JLabel("Total Reviews: " + currentUser.getTotalReviewCount());
+        totalReviewsPanel.setFont(mainFont);
+
+        JLabel overallRatingPanel = new JLabel("Overall Rating: " + currentUser.getOverallRating());
+        overallRatingPanel.setFont(mainFont);
+
         Button newEntryButton = new Button("+ New Entry", 100, 50, characterColor, secondaryColor);
         newEntryButton.addActionListener(e -> {
             new LodgeProducer(this.db, currentUser);
@@ -61,6 +78,12 @@ public class ViewEntries extends JFrame {
 
         //Adding components to the frame
         titlePanel.add(titleLabel);
+
+        userInfoPanel.add(userNameLabel);
+        userInfoPanel.add(totalReviewsPanel);
+        userInfoPanel.add(overallRatingPanel);
+
+
         buttonsPanel.add(backButton);
         buttonsPanel.add(newEntryButton);
 
