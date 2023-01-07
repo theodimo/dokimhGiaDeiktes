@@ -35,9 +35,9 @@ public class TitledTextField extends JPanel {
 
         //components
         this.titleLabel = new JLabel(title);
-        this.titleLabel.setFont(mainFont);
+        this.titleLabel.setFont(inputLabel);
 
-        this.field = new TextField(250,40,secondaryColor,accentColor,accentColor,accentColor,defaultMessage,isPasswordField);
+        this.field = new TextField(250,40,secondaryColor,accentColor1,accentColor1,accentColor1,defaultMessage,isPasswordField);
 
         errorLabel = new JLabel(this.errorMessage);
         errorLabel.setFont(smallFont);

@@ -4,12 +4,12 @@ import api.Database;
 import api.Lodge;
 import api.User;
 import gui.components.Button;
+import gui.components.Button2;
 import gui.components.MinimizedLodge;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 
 import static gui.bootstrap.Colors.*;
@@ -32,21 +32,22 @@ public class ViewEntries extends JFrame {
         //Panels initialization
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEADING,50,50));
         titlePanel.setPreferredSize(new Dimension(1080,125));
-        titlePanel.setBackground(Color.lightGray);
+        titlePanel.setBackground(secondaryColor);
         this.add(titlePanel,BorderLayout.NORTH);
 
         JPanel generalInfoPanel = new JPanel(new BorderLayout());
         generalInfoPanel.setPreferredSize(new Dimension(1080, 125));
+        generalInfoPanel.setBackground(secondaryColor);
         this.add(generalInfoPanel,BorderLayout.SOUTH);
 
         JPanel userInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEADING,50,5));
         userInfoPanel.setPreferredSize(new Dimension(300,125));
-        userInfoPanel.setBackground(primaryColor);
+        userInfoPanel.setBackground(secondaryColor);
         generalInfoPanel.add(userInfoPanel,BorderLayout.WEST);
 
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.TRAILING,20,35));
         buttonsPanel.setPreferredSize(new Dimension(780,125));
-        buttonsPanel.setBackground(primaryColor);
+        buttonsPanel.setBackground(secondaryColor);
         generalInfoPanel.add(buttonsPanel,BorderLayout.EAST);
 
         JPanel entriesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,35,this.verticalGap));
@@ -62,19 +63,26 @@ public class ViewEntries extends JFrame {
         //Components initialization
         JLabel userNameLabel = new JLabel(currentUser.getName() + " " + currentUser.getSurname());
         userNameLabel.setFont(bigFont);
+        userNameLabel.setForeground(accentColor3);
 
         JLabel totalReviewsPanel = new JLabel("Total Reviews: " + currentUser.getTotalReviewCount());
         totalReviewsPanel.setFont(mainFont);
+        totalReviewsPanel.setForeground(accentColor2);
 
         JLabel overallRatingPanel = new JLabel("Overall Rating: " + currentUser.getOverallRating());
         overallRatingPanel.setFont(mainFont);
+        overallRatingPanel.setForeground(accentColor2);
 
-        Button newEntryButton = new Button("+ New Entry", 100, 50, characterColor, secondaryColor);
+        Button2 newEntryButton = new Button2("+ New Entry", 100, 50);
+        newEntryButton.style(accentColor2, primaryColor, accentColor1, mainFont);
+        newEntryButton.setFocusable(false);
         newEntryButton.addActionListener(e -> {
             new LodgeProducer(this.db, currentUser);
         });
 
-        Button backButton = new Button("Back", 100, 50, characterColor, secondaryColor);
+        Button2 backButton = new Button2("Back", 100, 50);
+        backButton.style(accentColor2, primaryColor, accentColor1, mainFont);
+        backButton.setFocusable(false);
         backButton.addActionListener(e -> {
             new SearchScreen(this.db, currentUser);
             this.dispose();
@@ -82,6 +90,8 @@ public class ViewEntries extends JFrame {
 
         JLabel titleLabel = new JLabel("View Entries");
         titleLabel.setFont(titleFont);
+        titleLabel.setForeground(accentColor3);
+
         //Adding components to the frame
         titlePanel.add(titleLabel);
 
@@ -139,7 +149,7 @@ public class ViewEntries extends JFrame {
 
         for (Integer index: lodgesIndexes) {
             Lodge tempLodge = this.db.getLodge(index);
-            MinimizedLodge tempMinimized = new MinimizedLodge(this.db,655,this.heightOfMinimizedLodge,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor, secondaryColor);
+            MinimizedLodge tempMinimized = new MinimizedLodge(this.db,655,this.heightOfMinimizedLodge,tempLodge,this.currentUser,secondaryColor,accentColor2,accentColor3,primaryColor);
             tempMinimized.addMaximizeButton();
             tempMinimized.addEditButtons();
 

@@ -25,7 +25,8 @@ public class LodgeProducer extends JFrame {
     private static Color accentColor = new Color(212, 241, 244);
     public static Color paleBlue = new Color(29, 75, 135);
 
-    public static Color dark = new Color(20, 20, 20);
+    //public static Color dark = new Color(20, 20, 20);
+    public static Color dark = new Color(56, 233, 246);
 
     //properties
     private int width = 850;
@@ -136,6 +137,11 @@ public class LodgeProducer extends JFrame {
         this.addressField.style(primaryColor, secondaryColor, accentColor, dark);
         this.cityField.style(primaryColor, secondaryColor, accentColor, dark);
         this.zipCodeField.style(primaryColor, secondaryColor, accentColor, dark);
+
+        this.accommodationsBox.setBackground(primaryColor);
+        this.accommodationTitlesBox.setBackground(primaryColor);
+        this.accommodationsBox.setBorder(new EmptyBorder(0, 0, 0, 0));
+        this.accommodationTitlesBox.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 
         //components addition

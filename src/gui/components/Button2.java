@@ -7,9 +7,10 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-/**This is a simple button class which extends JButton
+/**This is a simple button class which extends JButton. It implements a reactive button, which means a button that changes
+ * background color on hover event
  *
- * @author tzikaman
+ * @author Dimos Theocharis
  */
 public class Button2 extends JButton {
 

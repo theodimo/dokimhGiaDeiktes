@@ -7,19 +7,21 @@ import gui.screens.LodgeProducer;
 import gui.screens.LodgeScreen;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 import static gui.bootstrap.Fonts.*;
 import static gui.bootstrap.Icons.*;
+import static gui.bootstrap.Colors.*;
 
 public class MinimizedLodge extends JPanel {
     //properties
     User currentUser;
     Lodge lodge;
     Database db;
-    public JButton maximizeButton = new JButton();
-    public JButton editButton = new JButton();
-    public JButton deleteButton = new JButton();
+    public Button2 maximizeButton;
+    public Button2 editButton;
+    public Button2 deleteButton;
 
     public MinimizedLodge(Database db, int width, int height, Lodge lodge, User currentUser, Color backgroundColor, Color foregroundColor, Color titleColor, Color buttonsColor){
         this.setPreferredSize(new Dimension(width,height));
@@ -36,33 +38,36 @@ public class MinimizedLodge extends JPanel {
                 smallFont, 30, 30, backgroundColor, foregroundColor);
         JPanel nameAndLocationPanel = new JPanel(new BorderLayout());
 
-
         JLabel lodgeType = createNewLabel(lodge.getType(), mainFont, 100, 60, backgroundColor, foregroundColor);
 
         JLabel lodgeRating = createNewLabel(lodge.getTotalRating() + " (" + lodge.getTotalReviews() + ")", mainFont, 100, 60, backgroundColor, foregroundColor);
 
         JLabel lodgeId = createNewLabel(String.valueOf(lodge.getIndex()), mainFont, 50, 60, backgroundColor,foregroundColor);
 
+        maximizeButton = new Button2("", 40, 40);
+        maximizeButton.style(buttonsColor, buttonsColor, accentColor1, mainFont);
         maximizeButton.setIcon(maximize);
-        maximizeButton.setBackground(buttonsColor);
-        maximizeButton.setPreferredSize(new Dimension(40,40));
+        maximizeButton.setBorder(new EmptyBorder(0, 0, 0, 0));
         maximizeButton.setFocusable(false);
         maximizeButton.addActionListener(e -> {
             new LodgeScreen(db, lodge);
             //this.dispose();
         });
 
+        editButton = new Button2("", 40, 40);
+        editButton.style(buttonsColor, buttonsColor, accentColor1, mainFont);
         editButton.setIcon(pencil);
-        editButton.setBackground(buttonsColor);
-        editButton.setPreferredSize(new Dimension(40,40));
+        editButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+        editButton.setFocusable(false);
         editButton.addActionListener(e -> {
             new LodgeProducer(this.db, this.currentUser, lodge);
         });
 
+        deleteButton = new Button2("", 40, 40);
+        deleteButton.style(buttonsColor, buttonsColor, accentColor1, mainFont);
         deleteButton.setIcon(trashCan);
-        deleteButton.setBackground(buttonsColor);
-        deleteButton.setPreferredSize(new Dimension(40,40));
-
+        deleteButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+        deleteButton.setFocusable(false);
 
         nameAndLocationPanel.add(lodgeName,BorderLayout.NORTH);
         nameAndLocationPanel.add(lodgeLocation,BorderLayout.SOUTH);

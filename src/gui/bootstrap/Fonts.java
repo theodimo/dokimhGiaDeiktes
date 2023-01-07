@@ -3,7 +3,7 @@ package gui.bootstrap;
 import java.awt.Font;
 
 public class Fonts {
-    public static Font smallFont = new Font("Rapor", Font.PLAIN, 14);
+    public static Font smallFont = new Font("Rapor", Font.PLAIN, 12);
     public static Font mainFont = new Font("Rapor", Font.PLAIN, 16);
     public static Font bigFont = new Font("Rapor", Font.BOLD, 23);
     public static Font buttonFont = new Font("Rapor", Font.BOLD, 16);

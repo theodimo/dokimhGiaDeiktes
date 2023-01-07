@@ -23,12 +23,12 @@ public class SearchScreen extends JFrame {
     int verticalGap = 25; //the gap between every minimized lodge
 
     TextField searchBar;
-    Button searchButton;
-    Button newButton;
-    Button viewEntriesButton;
-    Button logoutButton;
+    Button2 searchButton;
+    Button2 newButton;
+    Button2 viewEntriesButton;
+    Button2 logoutButton;
 
-    Button allLodgesButton;
+    Button2 allLodgesButton;
 
     Database db;
 
@@ -40,12 +40,12 @@ public class SearchScreen extends JFrame {
         //initialization of Panels
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,100));
         searchPanel.setPreferredSize(new Dimension(1080,250));
-        searchPanel.setBackground(primaryColor);
+        searchPanel.setBackground(secondaryColor);
 
 
         JPanel recentSearchesPanel = new JPanel(new BorderLayout(0,0));
         recentSearchesPanel.setPreferredSize(new Dimension(1080,470));
-        recentSearchesPanel.setBackground(primaryColor);
+        recentSearchesPanel.setBackground(secondaryColor);
 
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEADING,200,50));
@@ -55,7 +55,7 @@ public class SearchScreen extends JFrame {
 
         JPanel minimizedLodgesContainer = new JPanel(new FlowLayout(FlowLayout.CENTER,0,this.verticalGap));
         minimizedLodgesContainer.setPreferredSize(new Dimension(1010,300));
-        minimizedLodgesContainer.setBackground(Color.lightGray);
+        minimizedLodgesContainer.setBackground(primaryColor);
         //recentSearchesPanel.add(minimizedLodgesContainer,BorderLayout.CENTER);
 
         JScrollPane scrollable = new JScrollPane(minimizedLodgesContainer,
@@ -66,9 +66,9 @@ public class SearchScreen extends JFrame {
 
 
         //initialization of components
-        searchBar = new TextField(500,50,Color.white,secondaryColor,accentColor,secondaryColor,"Search");
+        searchBar = new TextField(500,50,accentColor2,accentColor3,accentColor1,secondaryColor,"Search");
 
-        searchButton = new Button("Search",100,50,characterColor,secondaryColor);
+        searchButton = new Button2("Search",100,50);
         searchButton.addActionListener(e -> {
             minimizedLodgesContainer.removeAll();
 
@@ -108,12 +108,12 @@ public class SearchScreen extends JFrame {
 
         });
 
-        newButton = new Button("new Lodge", 100, 50, characterColor, secondaryColor);
+        newButton = new Button2("new Lodge", 100, 50);
         newButton.addActionListener(e -> {
             new LodgeProducer(this.db, this.currentUser);
         });
 
-        viewEntriesButton = new Button("View Entries", 100, 50, characterColor, secondaryColor);
+        viewEntriesButton = new Button2("View Entries", 100, 50);
         viewEntriesButton.addActionListener(e -> {
             System.out.println("Index of lodges:");
             for (int i = 0; i < this.db.getLodgesCount(); i++) {
@@ -127,20 +127,42 @@ public class SearchScreen extends JFrame {
             this.dispose();
         });
 
-        logoutButton = new Button("Log out", 100,50, characterColor, secondaryColor);
+        logoutButton = new Button2("Log out", 100,50);
         logoutButton.addActionListener(e -> {
             new LogInScreen();
             this.dispose();
         });
 
-        allLodgesButton = new Button("All lodges", 100, 50, characterColor, secondaryColor);
+        allLodgesButton = new Button2("All lodges", 100, 50);
         allLodgesButton.addActionListener(e -> {
             new LodgesScreen(this.db);
             this.dispose();
         });
 
+        //buttons styling
+        searchButton.style(accentColor1, secondaryColor, primaryColor, mainFont);
+        newButton.style(accentColor1, secondaryColor, primaryColor, mainFont);
+        logoutButton.style(accentColor1, secondaryColor, primaryColor, mainFont);
+        viewEntriesButton.style(accentColor1, secondaryColor, primaryColor, mainFont);
+        allLodgesButton.style(accentColor1, secondaryColor, primaryColor, mainFont);
+
+        searchButton.setFocusable(false);
+        newButton.setFocusable(false);
+        logoutButton.setFocusable(false);
+        viewEntriesButton.setFocusable(false);
+        allLodgesButton.setFocusable(false);
+
+        /*
+        searchButton.style(accentColor1, primaryColor, secondaryColor, mainFont);
+        newButton.style(accentColor1, primaryColor, secondaryColor, mainFont);
+        logoutButton.style(accentColor1, primaryColor, secondaryColor, mainFont);
+        viewEntriesButton.style(accentColor1, primaryColor, secondaryColor, mainFont);
+        allLodgesButton.style(accentColor1, primaryColor, secondaryColor, mainFont);
+         */
+
         JLabel title = new JLabel("Your Searches:");
-        title.setFont(buttonFont);
+        title.setFont(bigFont);
+        title.setForeground(accentColor3);
 
         //adding components to the frame
         searchPanel.add(searchBar);
@@ -153,8 +175,8 @@ public class SearchScreen extends JFrame {
         recentSearchesPanel.add(titlePanel,BorderLayout.NORTH);
         recentSearchesPanel.add(scrollable,BorderLayout.CENTER);
 
-        this.add(recentSearchesPanel,BorderLayout.SOUTH);
         this.add(searchPanel,BorderLayout.CENTER);
+        this.add(recentSearchesPanel,BorderLayout.SOUTH);
 
 
         this.getRootPane().setDefaultButton(searchButton); //this will automatically listen to the "Enter" key
@@ -171,7 +193,7 @@ public class SearchScreen extends JFrame {
         ArrayList<MinimizedLodge> minimizedLodges = new ArrayList<>();
 
         for (Lodge tempLodge: lodges) {
-            MinimizedLodge tempMinimized = new MinimizedLodge(this.db, 800,this.heightOfMinimizedLodge,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor,accentColor);
+            MinimizedLodge tempMinimized = new MinimizedLodge(this.db, 800,this.heightOfMinimizedLodge,tempLodge,this.currentUser,secondaryColor,accentColor2,accentColor3,primaryColor);
             tempMinimized.addMaximizeButton();
             tempMinimized.addEditButtons();
 

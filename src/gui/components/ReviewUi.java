@@ -58,7 +58,7 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         //styling
         this.authorLabel.setBounds(5, 0, this.authorLabel.getWidth(), this.authorLabel.getHeight());
         this.dateLabel.setBounds(width - this.dateLabel.getWidth() - 5, 0, this.dateLabel.getWidth(), this.dateLabel.getHeight());
-        this.editButton.style(primaryColor,secondaryColor,accentColor,mainFont);
+        this.editButton.style(primaryColor,secondaryColor,accentColor2,mainFont);
 
 
         //components adding

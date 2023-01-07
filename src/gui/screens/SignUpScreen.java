@@ -8,6 +8,7 @@ import gui.components.TextField;
 import gui.components.TitledTextField;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 import static gui.bootstrap.Colors.*;
@@ -47,13 +48,22 @@ public class SignUpScreen extends SignTemplate{
             String[] choices = {"simple", "provider"};
             userType = new JComboBox<>(choices);
             userType.setPreferredSize(new Dimension(fieldsWidth,fieldsHeight));
-            userType.setBackground(primaryColor);
+            userType.setBackground(secondaryColor);
+            userType.setForeground(accentColor2);
             userType.setFont(mainFont);
             userType.setSelectedIndex(0);
+            userType.setBorder(new EmptyBorder(0, 10, 0, 0));
+
+            //styling
+            nameField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
+            surnameField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
+            usernameField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
+            passwordField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
+            validatePasswordField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
 
 
-            signUpButton = new Button("Sign Up",buttonsWidth,buttonsHeight,characterColor,secondaryColor);
-            backButton = new Button("Back",buttonsWidth,buttonsHeight,characterColor,secondaryColor);
+            signUpButton = new Button("Sign Up",buttonsWidth,buttonsHeight,secondaryColor,accentColor1);
+            backButton = new Button("Back",buttonsWidth,buttonsHeight,secondaryColor,accentColor1);
 
             //add components
             this.fieldsPanel.add(nameField);

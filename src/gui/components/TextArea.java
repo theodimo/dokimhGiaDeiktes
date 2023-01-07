@@ -1,6 +1,7 @@
 package gui.components;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -67,7 +68,7 @@ public class TextArea extends JTextArea implements KeyListener, FocusListener {
         this.setFont(font);
         this.setCaretColor(this.foregroundColor);
         this.charactersLabel.style(this.backgroundColor, this.foregroundColor, font);
-        this.setBorder(new RoundedLineBorder(this.idleBorderColor,1,10,true));
+        this.setBorder(new EmptyBorder(10, 10, 10, 10));
         this.setLineWrap(true); //when text goes off textArea, it breaks it and continues at the next line
         this.setWrapStyleWord(true); //continues at the next line but keeps the word united the word that provoked the event
     }
@@ -119,7 +120,7 @@ public class TextArea extends JTextArea implements KeyListener, FocusListener {
             boolean decremented = decrementCharacterCount();
             if (decremented) {
                 //the total number of characters that have been typed is larger than 0.
-                //change the label at the bottom right corner of the text-area
+                //change the label in the bottom right corner of the text-area
                 updateCharactersLabel();
             }
 
@@ -150,7 +151,6 @@ public class TextArea extends JTextArea implements KeyListener, FocusListener {
 
     @Override
     public void focusGained(FocusEvent e) {
-        this.setBorder(new RoundedLineBorder(this.focusBorderColor,1,10,true));
         if (this.getText().equals(this.defaultMessage)) {
             this.setText("");
             this.setForeground(this.focusBorderColor);
@@ -159,7 +159,6 @@ public class TextArea extends JTextArea implements KeyListener, FocusListener {
 
     @Override
     public void focusLost(FocusEvent e) {
-        this.setBorder(new RoundedLineBorder(idleBorderColor,1,10,true));
         if (this.getText().equals("")) {
             this.setText(this.defaultMessage);
             this.setForeground(this.idleBorderColor);

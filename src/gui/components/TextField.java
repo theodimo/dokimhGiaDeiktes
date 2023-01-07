@@ -1,6 +1,8 @@
 package gui.components;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -35,6 +37,7 @@ public class TextField extends JPasswordField implements FocusListener{
 
         this.setText(defaultMessage);
 
+        this.setCaretColor(this.foregroundColor);
         this.setEchoChar((char) 0);
         this.setFont(mainFont);
         this.setPreferredSize(new Dimension(width, height));
@@ -64,15 +67,15 @@ public class TextField extends JPasswordField implements FocusListener{
         this.defaultMessageColor = idleBorderColor;
 
         this.setBackground(this.backgroundColor);
-        this.setForeground(this.defaultMessageColor);
+        this.setForeground(this.foregroundColor);
 
-        this.setBorder(new RoundedLineBorder(idleBorderColor,1,10,true));
+        //this.setBorder(new RoundedLineBorder(idleBorderColor,1,10,true));
+        this.setBorder(new EmptyBorder(0, 10, 0, 0));
         this.setCaretColor(focusBorderColor);
     }
 
     @Override
     public void focusGained(FocusEvent e) {
-        this.setBorder(new RoundedLineBorder(focusBorderColor,1,10,true));
 
         if(Objects.equals(String.valueOf(this.getPassword()), defaultMessage)){
             if(isPasswordField){
@@ -85,7 +88,6 @@ public class TextField extends JPasswordField implements FocusListener{
 
     @Override
     public void focusLost(FocusEvent e) {
-        this.setBorder(new RoundedLineBorder(idleBorderColor,1,10,true));
 
         if(Objects.equals(String.valueOf(this.getPassword()), "")){
             if(isPasswordField){

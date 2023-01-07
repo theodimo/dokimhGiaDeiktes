@@ -5,6 +5,8 @@ import api.User;
 import gui.components.Button;
 import gui.components.TitledTextField;
 
+import java.awt.*;
+
 import static gui.bootstrap.Colors.*;
 
 /**This is the screen in which a user can Log In
@@ -29,9 +31,12 @@ public class LogInScreen extends SignTemplate {
         usernameField = new TitledTextField("Username","tzikaman","This username doesn't exist",false);
         passwordField = new TitledTextField("Password","1234","Wrong password",true);
 
-        logInButton = new Button("Log In",buttonsWidth,buttonsHeight,characterColor,secondaryColor);
-        backButton = new Button("Back",buttonsWidth,buttonsHeight,characterColor,secondaryColor);
+        logInButton = new Button("Log In",buttonsWidth,buttonsHeight,secondaryColor,accentColor1);
+        backButton = new Button("Back",buttonsWidth,buttonsHeight,secondaryColor,accentColor1);
 
+        //style the labels
+        usernameField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
+        passwordField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
 
         // add text fields to the screen
         this.fieldsPanel.add(usernameField);

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import static gui.bootstrap.Fonts.*;
+import static gui.bootstrap.Colors.*;
 
 /**This class is a template that will be used by the ui classes SignUpScreen & SignInScreen
  * It contains code that both these classes have in common
@@ -50,14 +51,15 @@ public abstract class SignTemplate extends JFrame {
         buttonsPanel.setPreferredSize(new Dimension(width, 150));
 
         //set title in the screen
-        JLabel titleLabel = new JLabel(title);
+        titleLabel = new JLabel(title);
         titleLabel.setFont(titleFont);
         titlePanel.add(titleLabel);
+        titleLabel.setForeground(accentColor3);
 
         //styling the Panels
-        titlePanel.setBackground(Color.lightGray);
-        buttonsPanel.setBackground(Color.white);
-        fieldsPanel.setBackground(Color.white);
+        titlePanel.setBackground(secondaryColor);
+        fieldsPanel.setBackground(primaryColor);
+        buttonsPanel.setBackground(secondaryColor);
 
         //adding Panels in the Frame
         this.add(titlePanel,BorderLayout.NORTH);
