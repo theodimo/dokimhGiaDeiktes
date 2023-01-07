@@ -19,6 +19,8 @@ import static gui.bootstrap.Fonts.*;
 public class SearchScreen extends JFrame {
     User currentUser;
     HashSet<Integer> searchedLodges;
+    int heightOfMinimizedLodge = 60;
+    int verticalGap = 25; //the gap between every minimized lodge
 
     TextField searchBar;
     Button searchButton;
@@ -51,7 +53,7 @@ public class SearchScreen extends JFrame {
         titlePanel.setBackground(primaryColor);
 
 
-        JPanel minimizedLodgesContainer = new JPanel(new FlowLayout(FlowLayout.CENTER,0,25));
+        JPanel minimizedLodgesContainer = new JPanel(new FlowLayout(FlowLayout.CENTER,0,this.verticalGap));
         minimizedLodgesContainer.setPreferredSize(new Dimension(1010,300));
         minimizedLodgesContainer.setBackground(Color.lightGray);
         //recentSearchesPanel.add(minimizedLodgesContainer,BorderLayout.CENTER);
@@ -61,8 +63,6 @@ public class SearchScreen extends JFrame {
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
         );
         scrollable.setBorder(new EmptyBorder(0,0,0,0));
-
-
 
 
         //initialization of components
@@ -92,6 +92,15 @@ public class SearchScreen extends JFrame {
                 for (MinimizedLodge lodgeToDisplay : lodgesToDisplay) {
                     minimizedLodgesContainer.add(lodgeToDisplay);
                 }
+
+                //resize the minimizedLodgesContainer based on the number of minimized lodges that got added
+                //we want to compute the new height of the minimizedLodgesContainer.
+                int totalMinimizedLodges = lodgesToDisplay.size();
+                int totalHeight = (totalMinimizedLodges + 1) * this.verticalGap; //for x components, there are x+1 gaps around them
+                totalHeight += (totalMinimizedLodges) * this.heightOfMinimizedLodge;
+
+                int oldWidth = (int) minimizedLodgesContainer.getPreferredSize().getWidth();
+                minimizedLodgesContainer.setPreferredSize(new Dimension(oldWidth, totalHeight));
             }
 
             minimizedLodgesContainer.revalidate();
@@ -162,7 +171,7 @@ public class SearchScreen extends JFrame {
         ArrayList<MinimizedLodge> minimizedLodges = new ArrayList<>();
 
         for (Lodge tempLodge: lodges) {
-            MinimizedLodge tempMinimized = new MinimizedLodge(this.db, 800,60,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor,accentColor);
+            MinimizedLodge tempMinimized = new MinimizedLodge(this.db, 800,this.heightOfMinimizedLodge,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor,accentColor);
             tempMinimized.addMaximizeButton();
             tempMinimized.addEditButtons();
 

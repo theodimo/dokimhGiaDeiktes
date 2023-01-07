@@ -7,7 +7,9 @@ import gui.components.Button;
 import gui.components.MinimizedLodge;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 
 import static gui.bootstrap.Colors.*;
@@ -16,6 +18,8 @@ import static gui.bootstrap.Fonts.*;
 public class ViewEntries extends JFrame {
     //properties
     Database db;
+    int verticalGap = 40;
+    int heightOfMinimizedLodge = 60;
 
     private ArrayList<MinimizedLodge> entries;
     private User currentUser;
@@ -33,7 +37,7 @@ public class ViewEntries extends JFrame {
 
         JPanel generalInfoPanel = new JPanel(new BorderLayout());
         generalInfoPanel.setPreferredSize(new Dimension(1080, 125));
-        this.add(generalInfoPanel,BorderLayout.CENTER);
+        this.add(generalInfoPanel,BorderLayout.SOUTH);
 
         JPanel userInfoPanel = new JPanel(new FlowLayout(FlowLayout.LEADING,50,5));
         userInfoPanel.setPreferredSize(new Dimension(300,125));
@@ -45,10 +49,15 @@ public class ViewEntries extends JFrame {
         buttonsPanel.setBackground(primaryColor);
         generalInfoPanel.add(buttonsPanel,BorderLayout.EAST);
 
-        JPanel entriesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,35,100));
+        JPanel entriesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,35,this.verticalGap));
         entriesPanel.setPreferredSize(new Dimension(1080,470));
         entriesPanel.setBackground(primaryColor);
-        this.add(entriesPanel,BorderLayout.SOUTH);
+        JScrollPane scrollable = new JScrollPane(entriesPanel,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        scrollable.setBorder(new EmptyBorder(0,0,0,0));
+        this.add(scrollable,BorderLayout.CENTER);
 
         //Components initialization
         JLabel userNameLabel = new JLabel(currentUser.getName() + " " + currentUser.getSurname());
@@ -73,9 +82,6 @@ public class ViewEntries extends JFrame {
 
         JLabel titleLabel = new JLabel("View Entries");
         titleLabel.setFont(titleFont);
-
-
-
         //Adding components to the frame
         titlePanel.add(titleLabel);
 
@@ -109,6 +115,15 @@ public class ViewEntries extends JFrame {
             entriesPanel.add(lodgeToAdd);
         }
 
+        //resize the entriesPanel based on the number of minimizedLodges added
+        //we want to compute the new height of the entriesPanel
+        int totalMinimizedLodges = entries.size();
+        int totalHeight = (totalMinimizedLodges + 1) * this.verticalGap; //for x components, there are x+1 gaps around them
+        totalHeight += totalMinimizedLodges * this.heightOfMinimizedLodge;
+
+        int oldWidth = (int) entriesPanel.getPreferredSize().getWidth();
+        entriesPanel.setPreferredSize(new Dimension(oldWidth, totalHeight));
+
         this.setTitle("View Entries");
         this.setSize(new Dimension(1080,720 + 48));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -124,7 +139,7 @@ public class ViewEntries extends JFrame {
 
         for (Integer index: lodgesIndexes) {
             Lodge tempLodge = this.db.getLodge(index);
-            MinimizedLodge tempMinimized = new MinimizedLodge(this.db,655,60,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor, secondaryColor);
+            MinimizedLodge tempMinimized = new MinimizedLodge(this.db,655,this.heightOfMinimizedLodge,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor, secondaryColor);
             tempMinimized.addMaximizeButton();
             tempMinimized.addEditButtons();
 
