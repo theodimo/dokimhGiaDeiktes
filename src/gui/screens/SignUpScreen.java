@@ -5,6 +5,7 @@ import api.User;
 import gui.components.Button;
 import gui.components.PasswordField;
 import gui.components.TextField;
+import gui.components.TitledTextField;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,11 +26,11 @@ import static gui.bootstrap.Fonts.*;
 
 public class SignUpScreen extends SignTemplate{
 
-    TextField nameField;
-    TextField surnameField;
-    TextField usernameField;
-    PasswordField passwordField;
-    PasswordField validatePasswordField;
+    TitledTextField nameField;
+    TitledTextField surnameField;
+    TitledTextField usernameField;
+    TitledTextField passwordField;
+    TitledTextField validatePasswordField;
     JComboBox<String> userType;
     Button signUpButton;
     Button backButton;
@@ -37,11 +38,11 @@ public class SignUpScreen extends SignTemplate{
         public SignUpScreen(Database api) {
             super("Sign Up");
 
-            nameField = new TextField(fieldsWidth/2,fieldsHeight,primaryColor,secondaryColor,accentColor,secondaryColor,"name");
-            surnameField = new TextField(fieldsWidth/2,fieldsHeight,primaryColor,secondaryColor,accentColor,secondaryColor,"surname");
-            usernameField = new TextField(fieldsWidth,fieldsHeight,primaryColor,secondaryColor,accentColor,secondaryColor,"username");
-            passwordField = new PasswordField(fieldsWidth,fieldsHeight,primaryColor,secondaryColor,accentColor,secondaryColor,"password");
-            validatePasswordField = new PasswordField(fieldsWidth,fieldsHeight,primaryColor,secondaryColor,accentColor,secondaryColor,"validate password");
+            nameField = new TitledTextField("Name","Name","",false);
+            surnameField = new TitledTextField("Surname","Surname","",false);
+            usernameField = new TitledTextField("Username","Username","This username already exists",false);
+            passwordField = new TitledTextField("Password","Password","",true);
+            validatePasswordField = new TitledTextField("Validate Password","Validate Password","Not valid password",true);
 
             String[] choices = {"simple", "provider"};
             userType = new JComboBox<>(choices);
@@ -78,18 +79,29 @@ public class SignUpScreen extends SignTemplate{
                 String name = nameField.getText();
                 String surname = surnameField.getText();
                 String username = usernameField.getText();
-                String password = String.valueOf(passwordField.getPassword());
-                String validatePassword = String.valueOf(validatePasswordField.getPassword());
+                String password = String.valueOf(passwordField.getText());
+                String validatePassword = String.valueOf(validatePasswordField.getText());
                 String selectedUserType = (String) userType.getSelectedItem();
 
                 //checks weather the credentials are valid and proceeds to the Search Screen
-                if(api.validateSignUpCredentials(username,password,validatePassword)){
-                    api.createUser(name,surname,username,password,selectedUserType);
+                if(api.validateUsername(username) == -1){
+                    usernameField.showErrorMessage(false);
 
-                    User user = api.getUser(api.validateSignInCredentials(username,password));
-                    api.setCurrentUser(user);
-                    new SearchScreen(api, user);
-                    dispose();
+                    if(api.validateSignUpCredentials(username,password,validatePassword)){
+                        api.createUser(name,surname,username,password,selectedUserType);
+
+                        User user = api.getUser(api.validateSignInCredentials(username,password));
+                        api.setCurrentUser(user);
+                        new SearchScreen(api, user);
+                        dispose();
+                    }
+                    else {
+                        validatePasswordField.showErrorMessage(true);
+                    }
+
+                }
+                else {
+                    usernameField.showErrorMessage(true);
                 }
 
 
