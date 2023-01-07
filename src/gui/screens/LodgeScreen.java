@@ -201,7 +201,7 @@ public class LodgeScreen extends JFrame {
 
         //listeners
         this.seeMoreAccommodationsButton.addActionListener(e -> {
-            new Accommodations(this.lodge.getAccommodations());
+            new Accommodations(db, this.lodge.getAccommodations());
         });
 
         this.seeMoreReviewsButton.addActionListener(e -> {
@@ -211,7 +211,7 @@ public class LodgeScreen extends JFrame {
             for (Integer index: this.lodge.getReviewsIndexes()) {
                 reviews.add(db.getReview(index));
             }
-            new Reviews(reviews);
+            new Reviews(db, reviews);
         });
 
         this.addReviewButton.addActionListener(e -> {

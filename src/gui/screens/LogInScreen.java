@@ -58,7 +58,7 @@ public class LogInScreen extends SignTemplate {
             else{
                 try{
                     User user = api.getUser(api.validateSignInCredentials(username,password));
-
+                    api.setCurrentUser(user);
                     new SearchScreen(api, user);
                     dispose();
                 }catch (Exception ex) {

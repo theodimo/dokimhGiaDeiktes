@@ -25,6 +25,8 @@ public class SearchScreen extends JFrame {
     Button viewEntriesButton;
     Button logoutButton;
 
+    Button allLodgesButton;
+
     Database db;
 
     public SearchScreen(Database db, User currentUser){
@@ -90,6 +92,14 @@ public class SearchScreen extends JFrame {
 
         viewEntriesButton = new Button("View Entries", 100, 50, characterColor, secondaryColor);
         viewEntriesButton.addActionListener(e -> {
+            System.out.println("Index of lodges:");
+            for (int i = 0; i < this.db.getLodgesCount(); i++) {
+                System.out.println(this.db.getLodge(i).getIndex());
+            }
+            System.out.println("index tou current user");
+            for (Integer index: this.currentUser.getLodgeIndexes()) {
+                System.out.println(index);
+            }
             new ViewEntries(this.db, this.currentUser);
             this.dispose();
         });
@@ -97,6 +107,12 @@ public class SearchScreen extends JFrame {
         logoutButton = new Button("Log out", 100,50, characterColor, secondaryColor);
         logoutButton.addActionListener(e -> {
             new LogInScreen();
+            this.dispose();
+        });
+
+        allLodgesButton = new Button("All lodges", 100, 50, characterColor, secondaryColor);
+        allLodgesButton.addActionListener(e -> {
+            new LodgesScreen(this.db);
             this.dispose();
         });
 
@@ -109,6 +125,7 @@ public class SearchScreen extends JFrame {
         searchPanel.add(newButton);
         searchPanel.add(logoutButton);
         searchPanel.add(viewEntriesButton);
+        searchPanel.add(allLodgesButton);
         titlePanel.add(title);
 
         this.getRootPane().setDefaultButton(searchButton); //this will automatically listen to the "Enter" key
@@ -125,7 +142,7 @@ public class SearchScreen extends JFrame {
         ArrayList<MinimizedLodge> minimizedLodges = new ArrayList<>();
 
         for (Lodge tempLodge: lodges) {
-            MinimizedLodge tempMinimized = new MinimizedLodge(this.db, 655,60,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor);
+            MinimizedLodge tempMinimized = new MinimizedLodge(this.db, 650,60,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor,Color.red);
             tempMinimized.addMaximizeButton();
             tempMinimized.addEditButtons();
 

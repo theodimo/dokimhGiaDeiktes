@@ -5,14 +5,16 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.HashMap;
 
+import api.Database;
 import gui.components.AccommodationWithIcon;
 import gui.components.AccommodationsContainer;
 import gui.components.Panel;
 import gui.components.Label;
+import gui.screens.SearchScreen;
 
 import static gui.bootstrap.Fonts.*;
 
-//this class displays a jdialog. It creates the basic structure of the window, the colors, fonts etc. Hovewer, it does not display
+//this class displays a jdialog. It creates the basic structure of the window, the colors, fonts etc. However, it does not display
 //any data because it should be expanded by other dialogs that will put different data into this "vessel"
 
 public abstract class ScrollableDialog extends JDialog {
@@ -30,19 +32,22 @@ public abstract class ScrollableDialog extends JDialog {
     protected static Color gray = new Color(96, 96, 96);
 
     //properties
-    private int width = 500;
+    private int width;
     private int height = 600;
     protected int verticalGap; //the space between each component inside mainPanel. Used at resizing
     private HashMap<String, String[]> accommodations;
 
     //components
-    Panel northPanel; //this panel displays a title and a maybe a button
+    protected Panel northPanel; //this panel displays a title and a maybe a button
     protected Panel mainPanel; //this panel displays the accommodation categories and the accommodations themselves
 
-    Label titleLabel; //displays the title What this lodge provides""
+    Label titleLabel; //displays the title What this lodge provides
 
-    public ScrollableDialog(String title, String titleMessage) {
+    protected Button2 backButton; //a button that gets you to the SearchScreen
+
+    public ScrollableDialog(Database db, String title, String titleMessage, int width) {
         //initialization
+        this.width = width;
         this.setSize(width, height);
         this.setLocationRelativeTo(null);
         this.setTitle(title);
@@ -57,7 +62,9 @@ public abstract class ScrollableDialog extends JDialog {
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
         );
 
-        this.titleLabel = new Label(titleMessage, 200, verticalGap, false);
+        this.titleLabel = new Label(titleMessage, 300, this.verticalGap, false);
+
+        this.backButton = new Button2("<- Back", 60, this.verticalGap);
 
 
         //layouts
@@ -69,6 +76,7 @@ public abstract class ScrollableDialog extends JDialog {
         this.getContentPane().setBackground(primaryColor);
         this.titleLabel.style(primaryColor, dark, titleFont);
         scrollable.setBorder(new EmptyBorder(0,0,0,0));
+        this.backButton.style(accentColor, secondaryColor, paleBlue, mainFont);
 
         //components addition
         this.northPanel.add(this.titleLabel);
@@ -78,11 +86,13 @@ public abstract class ScrollableDialog extends JDialog {
 
         this.setVisible(true);
 
+        //listeners
+        this.backButton.addActionListener(e -> {
+            new SearchScreen(db, db.getCurrentUser());
+        });
     }
 
     public static void main(String[] args) {
-        //the ScrollableDialog is an interface, and therefore it cannot be instanced
-        //you can delete this main now as it's of no use
         //new ScrollableDialog("Accommodations", "What this lodge provides");
     }
 }

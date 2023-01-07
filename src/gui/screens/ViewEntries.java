@@ -67,14 +67,17 @@ public class ViewEntries extends JFrame {
         for (MinimizedLodge lodgeToAdd : entries) {
             //add listener to delete the lodge
             lodgeToAdd.deleteButton.addActionListener(e -> {
+                System.out.println("klithika");
                 //delete the lodge from the database
                 this.db.deleteLodge(lodgeToAdd.getLodge(), currentUser);
 
-                //build again the avl tree cause we don't longer want the words of the deleted lodge to be there
+                //build again the avl tree because we don't longer want the words of the deleted lodge to be there
                 this.db.createAVL();
 
                 //when deleting a lodge, make sure to remove its minimizedLodge from entriesPanel
                 entriesPanel.remove(lodgeToAdd);
+
+                this.db.printData();
 
                 //refresh the frame
                 revalidate();
@@ -98,7 +101,7 @@ public class ViewEntries extends JFrame {
 
         for (Integer index: lodgesIndexes) {
             Lodge tempLodge = this.db.getLodge(index);
-            MinimizedLodge tempMinimized = new MinimizedLodge(this.db,655,60,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor);
+            MinimizedLodge tempMinimized = new MinimizedLodge(this.db,655,60,tempLodge,this.currentUser,primaryColor,secondaryColor,accentColor, secondaryColor);
             tempMinimized.addMaximizeButton();
             tempMinimized.addEditButtons();
 

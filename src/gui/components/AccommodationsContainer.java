@@ -34,7 +34,7 @@ public class AccommodationsContainer extends JPanel implements ScrollableElement
 
         //components initialization
         this.titlePanel = new Panel(width, 40, null, "preferredSize");
-        this.mainPanel = new Panel(width, this.computeMainPanelHeight(20), null, "preferredSize");
+        this.mainPanel = new Panel(width, this.computeMainPanelHeight(this.verticalGap), null, "preferredSize");
         this.titleLabel = new Label(this.categoryTitle, 200, this.verticalGap, false);
 
         this.mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, this.verticalGap));

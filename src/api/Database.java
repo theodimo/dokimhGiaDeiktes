@@ -15,6 +15,8 @@ public class Database extends StringEditor {
     private ArrayList<Review> reviews;
     private AVL myAVL;
 
+    private User currentUser;
+
     public Database() {
         //initialization of the objects
         this.users = new ArrayList<>();
@@ -62,6 +64,8 @@ public class Database extends StringEditor {
         //create AVL. It will be used for the searching
         this.createAVL();
 
+
+        this.printData();
     }
 
     //getters
@@ -95,6 +99,21 @@ public class Database extends StringEditor {
     public ArrayList<Review> getReviews() {
         return this.reviews;
     }
+
+    public ArrayList<User> getUsers() {
+        return this.users;
+    }
+
+
+    public User getCurrentUser() {
+        return this.currentUser;
+    }
+
+    //setters
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
+
 
 
     //functions
@@ -397,6 +416,40 @@ public class Database extends StringEditor {
      */
     public int getReviewsCount() {
         return this.reviews.size();
+    }
+
+    /**
+     * @return the number of users registered in database
+     */
+    public int getUsersCount() {
+        return this.users.size();
+    }
+
+    public void clearFiles() {
+        try {
+            ObjectOutputStream out =  new ObjectOutputStream(new FileOutputStream("src/database/Lodges.dat", false));
+            out.writeObject(null);
+            out.close();
+        } catch(Exception e) {
+            System.out.println("error kanontas save ta lodges");
+            System.out.println(e);
+        }
+    }
+
+    public void printData() {
+        System.out.println("----------------");
+        System.out.println("Users:");
+        for (User user: this.users) {
+            System.out.println(user.getName() + " " + user.getSurname());
+            System.out.println("me indexes: ");
+            System.out.println(user.getLodgeIndexes());
+        }
+        System.out.println("Lodges");
+        System.out.println("Ola ta indexes apo ta lodges:");
+        for (Lodge lodge: this.lodges) {
+            System.out.println(lodge.getIndex() + "-> " + lodge.getOwner().getName() + " " + lodge.getOwner().getSurname());
+        }
+        System.out.println("----------------");
     }
 
     public static void main(String[] args) {

@@ -6,6 +6,7 @@ import api.User;
 import gui.screens.LodgeScreen;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 import static gui.bootstrap.Colors.*;
@@ -23,7 +24,7 @@ public class MinimizedLodge extends JPanel {
     public JButton editButton = new JButton();
     public JButton deleteButton = new JButton();
 
-    public MinimizedLodge(Database db, int width, int height, Lodge lodge, User currentUser, Color backgroundColor, Color foregroundColor, Color borderColor){
+    public MinimizedLodge(Database db, int width, int height, Lodge lodge, User currentUser, Color backgroundColor, Color foregroundColor, Color titleColor, Color buttonsColor){
         this.setPreferredSize(new Dimension(width,height));
         this.setLayout(new FlowLayout(FlowLayout.CENTER,5,0));
         this.setBackground(backgroundColor);
@@ -31,36 +32,36 @@ public class MinimizedLodge extends JPanel {
         this.currentUser = currentUser;
         this.db = db;
         this.lodge = lodge;
-        //this.setBorder(new RoundedLineBorder(borderColor, 1, 10, true));
 
-        JLabel lodgeName = createNewLabel(lodge.getName(), buttonFont, 300, 30, Color.white, secondaryColor);
-        lodgeName.setBackground(primaryColor);
+        JLabel lodgeName = createNewLabel(lodge.getName(), buttonFont, 300, 30, backgroundColor, titleColor);
+        lodgeName.setBackground(backgroundColor);
         JLabel lodgeLocation = createNewLabel(lodge.getCity() + "," + lodge.getAddress() + "," + lodge.getZipCode(),
-                smallFont, 30, 30, primaryColor, secondaryColor);
+                smallFont, 30, 30, backgroundColor, foregroundColor);
         JPanel nameAndLocationPanel = new JPanel(new BorderLayout());
 
 
-        JLabel lodgeType = createNewLabel(lodge.getType(), mainFont, 100, 60, primaryColor, secondaryColor);
+        JLabel lodgeType = createNewLabel(lodge.getType(), mainFont, 100, 60, backgroundColor, foregroundColor);
 
-        JLabel lodgeRating = createNewLabel("4.5 (15)", mainFont, 100, 60, primaryColor, secondaryColor);
+        JLabel lodgeRating = createNewLabel("4.5 (15)", mainFont, 100, 60, backgroundColor, foregroundColor);
 
         maximizeButton.setIcon(maximize);
-        maximizeButton.setBackground(primaryColor);
+        maximizeButton.setBackground(buttonsColor);
         maximizeButton.setPreferredSize(new Dimension(40,40));
+        maximizeButton.setFocusable(false);
         maximizeButton.addActionListener(e -> {
             new LodgeScreen(db, lodge);
             //this.dispose();
         });
 
         editButton.setIcon(pencil);
-        editButton.setBackground(primaryColor);
+        editButton.setBackground(buttonsColor);
         editButton.setPreferredSize(new Dimension(40,40));
         editButton.addActionListener(e -> {
             new LodgeProducer(this.db, this.currentUser, lodge);
         });
 
         deleteButton.setIcon(trashCan);
-        deleteButton.setBackground(primaryColor);
+        deleteButton.setBackground(buttonsColor);
         deleteButton.setPreferredSize(new Dimension(40,40));
 
 
@@ -79,6 +80,7 @@ public class MinimizedLodge extends JPanel {
         tempLabel.setFont(font);
         tempLabel.setPreferredSize(new Dimension(width, height));
         tempLabel.setBackground(backgroundColor);
+        tempLabel.setForeground(foregroundColor);
         tempLabel.setOpaque(true);
 
         return tempLabel;

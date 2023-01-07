@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 
 import static gui.bootstrap.Fonts.*;
 
@@ -196,6 +197,8 @@ public class LodgeProducer extends JFrame {
                 Lodge newLodge = this.db.createLodge(currentUser, name, type, address, city, Integer.parseInt(zipcode), description, selectedAccommodations);
                 currentUser.addLodgeIndex(newLodge.getIndex());
                 this.db.saveUsers();
+
+                this.db.printData();
                 this.dispose();
             } else {
                 //if they are invalid, show the messages of the fields whose values are invalid

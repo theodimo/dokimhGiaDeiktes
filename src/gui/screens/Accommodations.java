@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.HashMap;
 
+import api.Database;
 import gui.components.*;
 import gui.components.Label;
 import gui.components.Panel;
@@ -17,8 +18,8 @@ public class Accommodations extends ScrollableDialog implements ScrollableDialog
     //properties
     private HashMap<String, String[]> accommodations;
 
-    public Accommodations(HashMap<String, String[]> accommodations) {
-        super("Accommodations", "What this lodge provides");
+    public Accommodations(Database db, HashMap<String, String[]> accommodations) {
+        super(db, "Accommodations", "What this lodge provides", 500);
         //initialization
         this.accommodations = accommodations;
 
@@ -32,21 +33,10 @@ public class Accommodations extends ScrollableDialog implements ScrollableDialog
         }
 
         //resize the main panel
-        this.resizeMainPanel(3);
+        this.resizeMainPanel(this.accommodations.size());
 
         this.revalidate();
         this.repaint();
-    }
-
-    public static void main(String[] args) {
-        HashMap<String, String[]> accommodations = new HashMap<>() {
-            {
-                put("Θέα", new String[]{"Θέα σε πισίνα", "Θέα στο βουνό", "Θέα στο λιμάνι", "Θέα σε παραλία"});
-                put("Θέρμανση & Κλιματισμός", new String[]{"Εσωτερικό τζάκι", "Κεντρική Θέρμανση"});
-                put("Κουζίνα & Τραπεζαρία", new String[]{"Κουζίνα", "Πιάτα και Μαχαιροπίρουνα", "Ψυγείο", "Πλυντήριο Πιάτων"});
-            }
-        };
-        Accommodations acc = new Accommodations(accommodations);
     }
 
     @Override
