@@ -22,7 +22,7 @@ public class LogInScreen extends SignTemplate {
     private Button logInButton;
     private Button backButton;
     public LogInScreen() {
-        super("Log In");
+        super("Log In", 400, 600 + 48);
         Database api = new Database();
 
         //initializing the components
@@ -30,7 +30,7 @@ public class LogInScreen extends SignTemplate {
         passwordField = new TitledTextField("Password","1234","Wrong password",true);
 
         logInButton = new Button("Log In",buttonsWidth,buttonsHeight,secondaryColor,accentColor1);
-        backButton = new Button("Back",buttonsWidth,buttonsHeight,secondaryColor,accentColor1);
+        backButton = new Button("Create Account",buttonsWidth,buttonsHeight,secondaryColor,accentColor1);
 
         //style the labels
         usernameField.style(primaryColor, secondaryColor, accentColor2, accentColor1);

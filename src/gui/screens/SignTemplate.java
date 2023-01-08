@@ -16,13 +16,9 @@ import static gui.bootstrap.Colors.*;
 
 
 public abstract class SignTemplate extends JFrame {
-
-
-    private final int width = 400;
-    private final int height = 600 + 48;
     protected int fieldsWidth = 250;
     protected int fieldsHeight = 40;
-    protected int buttonsWidth = 80;
+    protected int buttonsWidth = 200;
     protected int buttonsHeight = 30;
 
     //components
@@ -31,23 +27,23 @@ public abstract class SignTemplate extends JFrame {
     public JPanel fieldsPanel; //the panel that contains all fields and their labels
     public JPanel buttonsPanel; //the panel that contains the buttons, such as Sign Up etc
 
-    public SignTemplate(String title){
+    public SignTemplate(String title, int width, int height){
         //initialization of Frame
         this.setSize(width, height);
         this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
         this.setFocusable(true);
 
         this.setLocationRelativeTo(null);
-        //this.setResizable(false);
+        this.setResizable(false);
 
         //initialization of Panels
         titlePanel = new JPanel(new FlowLayout(FlowLayout.LEADING,50,50));
         titlePanel.setPreferredSize(new Dimension(width, 100));
 
-        fieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,10,5));
+        fieldsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,50,5));
         fieldsPanel.setPreferredSize(new Dimension(width, 350));
 
-        buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,20,50));
+        buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,20,20));
         buttonsPanel.setPreferredSize(new Dimension(width, 150));
 
         //set title in the screen

@@ -35,7 +35,7 @@ public class SignUpScreen extends SignTemplate{
     Button backButton;
 
         public SignUpScreen(Database api) {
-            super("Sign Up");
+            super("Sign Up", 650, 600 + 48);
 
             nameField = new TitledTextField("Name","Name","",false);
             surnameField = new TitledTextField("Surname","Surname","",false);
@@ -67,10 +67,9 @@ public class SignUpScreen extends SignTemplate{
             this.fieldsPanel.add(nameField);
             this.fieldsPanel.add(surnameField);
             this.fieldsPanel.add(usernameField);
+            this.fieldsPanel.add(userType);
             this.fieldsPanel.add(passwordField);
             this.fieldsPanel.add(validatePasswordField);
-
-            this.fieldsPanel.add(userType);
 
 
             //add buttons in the screen and action listeners to the buttons
