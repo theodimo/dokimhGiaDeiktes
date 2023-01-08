@@ -9,24 +9,12 @@ import api.Database;
 import gui.screens.SearchScreen;
 
 import static gui.bootstrap.Fonts.*;
+import static gui.bootstrap.Colors.*;
 
 //this class displays a jdialog. It creates the basic structure of the window, the colors, fonts etc. However, it does not display
 //any data because it should be expanded by other dialogs that will put different data into this "vessel"
 
 public abstract class ScrollableDialog extends JDialog {
-    //various variables
-    protected static Color primaryColor = new Color(21, 47, 80);
-    protected static Color secondaryColor = new Color(5, 68, 94);
-    protected static Color accentColor = new Color(212, 241, 244);
-    protected static Color paleBlue = new Color(29, 75, 135);
-
-    protected static Font smallFont = new Font("Rapor", Font.PLAIN, 14);
-    protected static Font bigFont = new Font("Rapor", Font.PLAIN, 26);
-
-    protected static Color dark = new Color(0, 0, 0);
-
-    protected static Color gray = new Color(96, 96, 96);
-
     //properties
     private int width;
     private int height = 600;
@@ -70,9 +58,10 @@ public abstract class ScrollableDialog extends JDialog {
 
         //styling
         this.getContentPane().setBackground(primaryColor);
-        this.titleLabel.style(primaryColor, dark, titleFont);
+        this.titleLabel.style(primaryColor, accentColor3, titleFont);
         scrollable.setBorder(new EmptyBorder(0,0,0,0));
-        this.backButton.style(accentColor, secondaryColor, paleBlue, mainFont);
+        this.backButton.style(accentColor2, secondaryColor, accentColor1, mainFont);
+        this.backButton.setFocusable(false);
 
         //components addition
         this.northPanel.add(this.titleLabel);

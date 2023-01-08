@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import static gui.bootstrap.Colors.*;
 import static gui.bootstrap.Fonts.*;
+import static gui.bootstrap.Icons.pencil;
 
 public class ReviewProducer extends JDialog {
 
@@ -40,7 +41,7 @@ public class ReviewProducer extends JDialog {
         //panels initialization
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEADING,25,25));
         titlePanel.setPreferredSize(new Dimension(600,80));
-        titlePanel.setBackground(Color.lightGray);
+        titlePanel.setBackground(secondaryColor);
 
         JPanel reviewPanel = new JPanel(new BorderLayout());
         reviewPanel.setPreferredSize(new Dimension(600,240));
@@ -61,6 +62,7 @@ public class ReviewProducer extends JDialog {
         //components initialization
         titleLabel = new JLabel("Write a review for " + lodge.getName());
         titleLabel.setFont(titleFont);
+        titleLabel.setForeground(accentColor3);
 
         errorMessageLabel = new JLabel();
         errorMessageLabel.setFont(smallFont);
@@ -68,12 +70,14 @@ public class ReviewProducer extends JDialog {
 
         this.defaultMessage = "Write a comment";
         textArea = new TextArea(defaultMessage, 500, 200, 500);
-        textArea.style(Color.lightGray,secondaryColor,primaryColor,secondaryColor,mainFont);
+        textArea.style(secondaryColor,accentColor2,primaryColor,secondaryColor,mainFont);
 
 
         for (int i = 0; i < 5; i++) {
             JRadioButton ratingButton = new JRadioButton(String.valueOf(i+1));
+            ratingButton.setFocusable(false);
             ratingButton.setBackground(primaryColor);
+            ratingButton.setForeground(accentColor1);
 
             int finalI = i+1;
             ratingButton.addActionListener(e -> {
@@ -86,7 +90,7 @@ public class ReviewProducer extends JDialog {
         }
 
         submitButton = new Button2("Submit",150,40);
-        submitButton.style(secondaryColor,Color.lightGray,Color.gray,buttonFont);
+        submitButton.style(accentColor2, secondaryColor, accentColor1, mainFont);
 
         submitButton.addActionListener(e -> {
             if(getSelectedRating() != 0 && ( !Objects.equals(textArea.getText(), "") && !Objects.equals(textArea.getText(), defaultMessage) ) ) {

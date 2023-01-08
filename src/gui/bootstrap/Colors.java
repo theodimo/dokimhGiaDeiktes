@@ -20,5 +20,4 @@ public class Colors {
     public static Color accentColor1 = new Color(56, 233, 246); //used in fields' titles and foregroundColor for buttons. Usually it signs something reactive
     public static Color accentColor2 = new Color(212, 241, 244); //used for characters in fields
     public static Color accentColor3 = new Color(20, 20, 20);
-    public static Color characterColor = new Color(224,205,255); //used for screen titles
 }

@@ -10,8 +10,8 @@ import gui.components.ScrollableDialogInterface;
 import java.awt.*;
 import java.util.ArrayList;
 
-import static gui.bootstrap.Fonts.inputLabel;
-import static gui.bootstrap.Fonts.mainFont;
+import static gui.bootstrap.Fonts.*;
+import static gui.bootstrap.Colors.*;
 
 //this class is a dialog. It is responsible for displaying all the reviews that a lodge may have
 //it appears when user is at LodgeScreen and clicks "See all reviews" button
@@ -28,7 +28,7 @@ public class Reviews extends ScrollableDialog implements ScrollableDialogInterfa
             //create the component
             ReviewUi reviewComponent = new ReviewUi(db, review, reviewedLodge, 400, 180);
             //style the component
-            reviewComponent.style(primaryColor, secondaryColor, dark, gray, accentColor, dark, inputLabel, smallFont, mainFont, inputLabel);
+            reviewComponent.style(primaryColor, secondaryColor, accentColor3, new Color(96, 96, 96), accentColor2, accentColor3, inputLabel, smallFont, mainFont, inputLabel);
             //add the component
             this.addElement(reviewComponent);
         }

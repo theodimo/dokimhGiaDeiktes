@@ -7,13 +7,13 @@ import api.Review;
 
 import static api.StringEditor.*;
 
-import api.User;
 import gui.components.*;
 import gui.components.Label;
 import gui.components.Panel;
 import gui.components.Button2;
 
 import static gui.bootstrap.Fonts.*;
+import static gui.bootstrap.Colors.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -23,19 +23,6 @@ import java.util.Objects;
 
 //this screen is responsible for displaying the information about a Lodge
 public class LodgeScreen extends JFrame {
-    //various variables
-    private static Color primaryColor = new Color(21, 47, 80);
-    private static Color secondaryColor = new Color(5, 68, 94);
-    private static Color accentColor = new Color(212, 241, 244);
-    public static Color paleBlue = new Color(29, 75, 135);
-
-    public static Font smallFont = new Font("Rapor", Font.PLAIN, 14);
-    public static Font bigFont = new Font("Rapor", Font.PLAIN, 26);
-
-    public static Color dark = new Color(0, 0, 0);
-
-    public static Color gray = new Color(96, 96, 96);
-
     //dimensions
     private int width = 1080;
     private int height = 770;
@@ -81,7 +68,6 @@ public class LodgeScreen extends JFrame {
         this.setSize(this.width, this.height);
         this.setTitle("Lodge Screen");
         this.setDefaultCloseOperation(this.HIDE_ON_CLOSE);
-        this.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 8));
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 
@@ -117,6 +103,7 @@ public class LodgeScreen extends JFrame {
 
 
         //layouts
+        this.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 8));
         this.identityPanel.setLayout(null);
         this.descriptionPanel.setLayout(new BorderLayout());
         this.accommodationsPanel.setLayout(new BorderLayout());
@@ -128,16 +115,16 @@ public class LodgeScreen extends JFrame {
 
         //styling
         this.getContentPane().setBackground(primaryColor);
-        this.titleLabel.style(secondaryColor, accentColor, titleFont);
-        this.ownerLabel.style(secondaryColor, dark, mainFont);
-        this.locationLabel.style(secondaryColor, dark, smallFont);
-        this.descriptionTitleLabel.style(primaryColor, dark, bigFont);
-        this.descriptionLabel.style(secondaryColor, accentColor, mainFont);
-        this.accommodationsTitleLabel.style(primaryColor, dark, bigFont);
-        this.reviewsLabel.style(primaryColor, dark, bigFont);
+        this.titleLabel.style(secondaryColor, accentColor2, titleFont);
+        this.ownerLabel.style(secondaryColor, accentColor3, mainFont);
+        this.locationLabel.style(secondaryColor, accentColor3, smallFont);
+        this.descriptionTitleLabel.style(primaryColor, accentColor3, bigFont);
+        this.descriptionLabel.style(secondaryColor, accentColor2, mainFont);
+        this.accommodationsTitleLabel.style(primaryColor, accentColor3, bigFont);
+        this.reviewsLabel.style(primaryColor, accentColor3, bigFont);
 
         for (AccommodationWithIcon acc : AccommodationsToShow) {
-            acc.style(secondaryColor, accentColor, mainFont);
+            acc.style(secondaryColor, accentColor2, mainFont);
         }
 
 
@@ -147,9 +134,9 @@ public class LodgeScreen extends JFrame {
         this.descriptionLabel.setVerticalAlignment(Label.TOP);
         this.descriptionLabel.setBorder(new EmptyBorder(5, 10, 0, 0));
 
-        this.seeMoreAccommodationsButton.style(accentColor, secondaryColor, paleBlue, inputLabel);
-        this.seeMoreReviewsButton.style(accentColor, secondaryColor, paleBlue, inputLabel);
-        this.addReviewButton.style(accentColor, secondaryColor, paleBlue, inputLabel);
+        this.seeMoreAccommodationsButton.style(accentColor2, secondaryColor, accentColor1, inputLabel);
+        this.seeMoreReviewsButton.style(accentColor2, secondaryColor, accentColor1, inputLabel);
+        this.addReviewButton.style(accentColor2, secondaryColor, accentColor1, inputLabel);
 
         this.seeMoreAccommodationsButton.setFocusPainted(false);
         this.seeMoreReviewsButton.setFocusPainted(false);
@@ -192,7 +179,7 @@ public class LodgeScreen extends JFrame {
 
             ReviewUi r1 = new ReviewUi(db, R1, this.lodge, 1000, 120);
 
-            r1.style(primaryColor, secondaryColor, dark, gray, accentColor, dark, inputLabel, smallFont, mainFont, inputLabel);
+            r1.style(primaryColor, secondaryColor, accentColor3, new Color(96, 96, 96), accentColor2, accentColor3, inputLabel, smallFont, mainFont, inputLabel);
             this.reviewsPanel.add(r1, BorderLayout.CENTER);
         }
 

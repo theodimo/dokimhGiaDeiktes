@@ -11,11 +11,11 @@ import api.User;
 import gui.screens.ReviewProducer;
 
 import java.awt.*;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import static gui.bootstrap.Colors.*;
 import static gui.bootstrap.Fonts.*;
+import static gui.bootstrap.Icons.*;
 
 //this class is responsible for displaying a review. Specifically, it is a panel that provides information about
 //the author, the rating, the date and the review itself
@@ -42,16 +42,16 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         this.setPreferredSize(new Dimension(width, height));
 
         //components initialization
-        this.credentialsPanel = new Panel(width, (int) (height * 0.3), null, "preferredSize");
+        this.credentialsPanel = new Panel(width, (int) (height * 0.2), null, "preferredSize");
         this.mainPanel = new Panel(width, (int) (height * 0.5), null, "preferredSize");
-        this.ratingPanel = new Panel(width, (int) (height * 0.2), null, "preferredSize");
+        this.ratingPanel = new Panel(width, (int) (height * 0.3), null, "preferredSize");
 
         this.authorLabel = new Label(this.review.getAuthor().getName() + " " + this.review.getAuthor().getSurname(), 270, (int) (height * 0.2), false);
         this.dateLabel = new Label(this.review.getDate(), 100, (int) (height * 0.2), false);
         this.textLabel = new Label(this.review.getText(), width, (int) (height * 0.4), false);
         this.ratingLabel = new Label("Rating: " + this.review.getRating() + "/5", width, (int) (height * 0.2), false);
-        this.editButton = new Button2("edit",50,25);
-        this.deleteButton = new Button2("delete",50,25);
+        this.editButton = new Button2("",32,32);
+        this.deleteButton = new Button2("",32,32);
 
         //layouts
         this.setLayout(new BorderLayout(0, 5));
@@ -62,9 +62,10 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         //styling
         this.authorLabel.setBounds(5, 0, this.authorLabel.getWidth(), this.authorLabel.getHeight());
         this.dateLabel.setBounds(width - this.dateLabel.getWidth() - 5, 0, this.dateLabel.getWidth(), this.dateLabel.getHeight());
-        this.editButton.style(primaryColor,secondaryColor,accentColor2,mainFont);
-        this.deleteButton.style(primaryColor,secondaryColor,accentColor2,mainFont);
-
+        this.editButton.style(accentColor2, secondaryColor, accentColor1, mainFont);
+        this.deleteButton.style(accentColor2, secondaryColor, accentColor1, mainFont);
+        this.editButton.setIcon(pencil);
+        this.deleteButton.setIcon(trashCan);
 
 
         //components adding

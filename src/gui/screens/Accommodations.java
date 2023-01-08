@@ -11,6 +11,7 @@ import gui.components.Label;
 import gui.components.Panel;
 
 import static gui.bootstrap.Fonts.*;
+import static gui.bootstrap.Colors.*;
 
 //this class is a dialog. It is responsible for displaying all the accommodations that a lodge may have
 //it appears when user is at LodgeScreen and clicks "See all accommodations" button
@@ -27,7 +28,7 @@ public class Accommodations extends ScrollableDialog implements ScrollableDialog
             //create the container
             AccommodationsContainer container = new AccommodationsContainer(accommodationCategory, this.accommodations.get(accommodationCategory), 400);
             //style the container
-            container.style(secondaryColor, dark, accentColor, bigFont, mainFont);
+            container.style(secondaryColor, accentColor3, accentColor2, bigFont, mainFont);
             //add the container
             this.addElement(container);
         }

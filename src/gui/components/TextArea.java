@@ -64,7 +64,7 @@ public class TextArea extends JTextArea implements KeyListener, FocusListener {
         this.focusBorderColor = focusBorderColor;
 
         this.setBackground(this.backgroundColor);
-        this.setForeground(this.idleBorderColor); //we set color to be idleBorderColor cause text-area will be unfocused initially
+        this.setForeground(this.foregroundColor);
         this.setFont(font);
         this.setCaretColor(this.foregroundColor);
         this.charactersLabel.style(this.backgroundColor, this.foregroundColor, font);
@@ -153,7 +153,7 @@ public class TextArea extends JTextArea implements KeyListener, FocusListener {
     public void focusGained(FocusEvent e) {
         if (this.getText().equals(this.defaultMessage)) {
             this.setText("");
-            this.setForeground(this.focusBorderColor);
+            this.setCurrentCharacters(0);
         }
     }
 
@@ -161,7 +161,7 @@ public class TextArea extends JTextArea implements KeyListener, FocusListener {
     public void focusLost(FocusEvent e) {
         if (this.getText().equals("")) {
             this.setText(this.defaultMessage);
-            this.setForeground(this.idleBorderColor);
+            this.setCurrentCharacters(this.defaultMessage.length());
         }
     }
 }

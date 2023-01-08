@@ -3,9 +3,15 @@ package gui.screens;
 import api.Database;
 import api.User;
 import gui.components.Button;
+import gui.components.Button2;
 import gui.components.TitledTextField;
 
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+
 import static gui.bootstrap.Colors.*;
+import static gui.bootstrap.Fonts.mainFont;
 
 /**This is the screen in which a user can Log In
  * the application. The class checks if the given
@@ -19,8 +25,8 @@ import static gui.bootstrap.Colors.*;
 public class LogInScreen extends SignTemplate {
     private final TitledTextField usernameField;
     private final TitledTextField passwordField;
-    private Button logInButton;
-    private Button backButton;
+    private Button2 logInButton;
+    private Button2 backButton;
     public LogInScreen() {
         super("Log In");
         Database api = new Database();
@@ -29,12 +35,22 @@ public class LogInScreen extends SignTemplate {
         usernameField = new TitledTextField("Username","tzikaman","This username doesn't exist",false);
         passwordField = new TitledTextField("Password","1234","Wrong password",true);
 
-        logInButton = new Button("Log In",buttonsWidth,buttonsHeight,secondaryColor,accentColor1);
-        backButton = new Button("Back",buttonsWidth,buttonsHeight,secondaryColor,accentColor1);
+        logInButton = new Button2("Log In",buttonsWidth,buttonsHeight);
+        backButton = new Button2("Back",buttonsWidth,buttonsHeight);
 
         //style the labels
         usernameField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
         passwordField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
+
+        //style the buttons
+        logInButton.style(accentColor2, primaryColor, accentColor1, mainFont);
+        backButton.style(accentColor2, primaryColor, accentColor1, mainFont);
+
+        logInButton.setBorder(new LineBorder(accentColor1, 2));
+        backButton.setBorder(new LineBorder(accentColor1, 2));
+
+        logInButton.setFocusable(false);
+        backButton.setFocusable(false);
 
         // add text fields to the screen
         this.fieldsPanel.add(usernameField);

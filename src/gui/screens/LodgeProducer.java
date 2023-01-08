@@ -6,7 +6,7 @@ import javax.swing.border.EmptyBorder;
 import api.Database;
 import api.Lodge;
 import api.User;
-import gui.bootstrap.Colors;
+import static gui.bootstrap.Colors.*;
 import gui.components.*;
 import gui.components.Panel;
 import gui.components.TextField;
@@ -15,18 +15,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Optional;
 
 import static gui.bootstrap.Fonts.*;
 
 public class LodgeProducer extends JFrame {
-    private static Color primaryColor = new Color(21, 47, 80);
-    private static Color secondaryColor = new Color(5, 68, 94);
-    private static Color accentColor = new Color(212, 241, 244);
-    public static Color paleBlue = new Color(29, 75, 135);
-
-    //public static Color dark = new Color(20, 20, 20);
-    public static Color dark = new Color(56, 233, 246);
 
     //properties
     private int width = 850;
@@ -88,7 +80,7 @@ public class LodgeProducer extends JFrame {
 
 
         //components initialization
-        this.fieldsPanel = new gui.components.Panel(this.width, (int) (this.height * 0.9), primaryColor, "preferredSize");
+        this.fieldsPanel = new Panel(this.width, (int) (this.height * 0.9), primaryColor, "preferredSize");
         this.buttonsPanel = new gui.components.Panel(this.width, (int) (this.height * 0.1), primaryColor, "preferredSize");
         this.accommodationsPanel = new gui.components.Panel((int) (this.width * 0.9), 150, secondaryColor, "preferredSize");
         this.accommodationBoxesPanel = new gui.components.Panel((int) (this.accommodationsPanel.getPreferredSize().getWidth() * 0.3), 150, secondaryColor, "preferredSize");
@@ -124,19 +116,19 @@ public class LodgeProducer extends JFrame {
 
 
         //styling
-        this.typeBox.style(secondaryColor, accentColor, secondaryColor, secondaryColor, mainFont);
-        this.createButton.style(accentColor, secondaryColor, paleBlue, inputLabel);
-        this.addAccommodationButton.style(accentColor, secondaryColor, paleBlue, inputLabel);
-        this.accommodationTitlesBox.style(accentColor, dark, accentColor, accentColor, mainFont);
-        this.accommodationsBox.style(accentColor, dark, accentColor, accentColor, mainFont);
+        this.typeBox.style(secondaryColor, accentColor2, secondaryColor, secondaryColor, mainFont);
+        this.createButton.style(accentColor3, secondaryColor, accentColor1, inputLabel);
+        this.addAccommodationButton.style(accentColor3, secondaryColor, accentColor1, inputLabel);
+        this.accommodationTitlesBox.style(accentColor2, accentColor1, accentColor2, accentColor2, mainFont);
+        this.accommodationsBox.style(accentColor2, accentColor1, accentColor1, accentColor1, mainFont);
         this.fieldsPanel.setOpaque(true);
         scrollable.setBorder(new EmptyBorder(0,0,0,0));
 
-        this.descriptionField.style(primaryColor, secondaryColor, accentColor, dark, mainFont);
-        this.titleField.style(primaryColor, secondaryColor, accentColor, dark);
-        this.addressField.style(primaryColor, secondaryColor, accentColor, dark);
-        this.cityField.style(primaryColor, secondaryColor, accentColor, dark);
-        this.zipCodeField.style(primaryColor, secondaryColor, accentColor, dark);
+        this.descriptionField.style(primaryColor, secondaryColor, accentColor2, accentColor1, mainFont);
+        this.titleField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
+        this.addressField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
+        this.cityField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
+        this.zipCodeField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
 
         this.accommodationsBox.setBackground(primaryColor);
         this.accommodationTitlesBox.setBackground(primaryColor);
@@ -471,7 +463,7 @@ public class LodgeProducer extends JFrame {
             String accommodationName = this.accommodationsBox.getSelectedItem().toString();
             int accommodationTitleIndex = this.accommodationTitlesBox.getSelectedIndex();
             Accommodation accommodation = new Accommodation(accommodationName, accommodationTitleIndex, 350, 20);
-            accommodation.style(secondaryColor, accentColor, Color.RED, smallFont);
+            accommodation.style(secondaryColor, accentColor2, Color.RED, smallFont);
 
             //add listener to accommodation
             accommodation.deleteButton.addActionListener(e2 -> {
