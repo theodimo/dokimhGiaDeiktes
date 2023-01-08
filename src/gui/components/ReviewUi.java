@@ -91,7 +91,7 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         //listeners
         this.editButton.addActionListener(e -> {
             new ReviewProducer(db,
-                    new Lodge(new User("temp","temp","temp","temp","temp") , "temp","temp","temp","temp",5,"temp",null,5),
+                    reviewedLodge,
                     this.review
             );
         });

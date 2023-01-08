@@ -239,18 +239,16 @@ public class Database extends StringEditor {
     }
 
 
-    public void createUser(String name, String surname, String username, String password, String type) {
+    public User createUser(String name, String surname, String username, String password, String type) {
         User newUser = new User(name, surname, username, password, type);
         this.users.add(newUser);
 
-        try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/database/Users.dat"));
-            out.writeObject(this.users);
-            out.close();
-        } catch (Exception e) {
-            System.out.println("error ftiaxnontas ton neo user");
-            System.out.println(e);
-        }
+        this.saveUsers();
+
+        User user = this.getUser(this.validateSignInCredentials(username,password));
+        this.setCurrentUser(user);
+
+        return newUser;
     }
 
     public Lodge createLodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations) {
@@ -266,6 +264,9 @@ public class Database extends StringEditor {
             myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), newNode));
         }
 
+        owner.addLodgeIndex(newLodge.getIndex());
+        this.saveUsers();
+
         return newLodge;
     }
 
@@ -275,8 +276,14 @@ public class Database extends StringEditor {
 
         this.saveReviews();
 
-        System.out.println("I have created a review");
-        this.printReviewData();
+        author.addReviewIndex(newReview.getIndex()); //add the position of the review to the user's review positions
+        this.saveUsers();
+
+        reviewedLodge.addReviewIndex(newReview.getIndex(), this); //add the position of the review to the lodge's reviews indexes
+        this.saveLodges();
+
+        //System.out.println("I have created a review");
+        //this.printReviewData();
 
         return newReview;
     }
@@ -536,6 +543,25 @@ public class Database extends StringEditor {
         }
 
         System.out.println("**************");
+    }
+
+    public void initializationOfData(){
+
+        User user1 = this.createUser("Dimitris", "Tzikas", "tzikaman", "1234", "provider");
+        User user2 = this.createUser("Maria", "Orfanaki", "marouli", "1234", "simple");
+        User user3 = this.createUser("Dimos", "Theocharis", "thanatopios", "1234", "provider");
+        User user4 = this.createUser("Thanasis", "Maurotsoukalos", "gamatos", "1234", "simple");
+
+        HashMap<String,String[]> hashMap = new HashMap<>();
+        Lodge lodge1 = this.createLodge(user1,"spitaki","Hotel","siatistis 6","larisa", 41335, "mpla",hashMap);
+        Lodge lodge2 = this.createLodge(user1,"spiti","Apartment","siatistis 6","larisa", 41335, "mpla",hashMap);
+        Lodge lodge3 = this.createLodge(user3,"spitarona","Maisonette","siatistis 6","larisa", 41335, "mpla",hashMap);
+
+        this.createReview(lodge1,user2,"my 1st review", 5, "1/1/2000");
+        this.createReview(lodge2,user4,"my first review", 3, "1/1/2000");
+        this.createReview(lodge3,user4,"my second review", 1, "1/1/2000");
+        this.createReview(lodge1,user2,"my 2nd review", 4, "1/1/2000");
+
     }
 
     public static void main(String[] args) {

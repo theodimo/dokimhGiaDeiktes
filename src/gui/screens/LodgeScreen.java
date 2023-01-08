@@ -86,7 +86,7 @@ public class LodgeScreen extends JFrame {
         this.descriptionTitleLabel = new Label("Description", 1000, 40, false);
         this.descriptionLabel = new Label(transformToHtml(this.lodge.getDescription(), 180), 960, (int) (this.descriptionPanel.getPreferredSize().getHeight() - this.descriptionTitleLabel.getHeight()), false);
         this.accommodationsTitleLabel = new Label("What this lodge provides", 1000, 40, false);
-        this.reviewsLabel = new Label("Reviews " + lodge.getTotalRating(), 1000, 40, false);
+        this.reviewsLabel = new Label("Reviews " + lodge.getTotalRating() + " (" + lodge.getTotalReviews() + ")", 1000, 40, false);
 
         this.seeMoreAccommodationsButton = new Button2("See all accommodations", 250, 40);
         this.seeMoreReviewsButton = new Button2("See all reviews", 250, 40);

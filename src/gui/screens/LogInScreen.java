@@ -28,15 +28,16 @@ public class LogInScreen extends SignTemplate {
     private Button2 logInButton;
     private Button2 backButton;
     public LogInScreen() {
-        super("Log In");
+        super("Log In", 400, 600 + 48);
         Database api = new Database();
+        //api.initializationOfData();
 
         //initializing the components
         usernameField = new TitledTextField("Username","tzikaman","This username doesn't exist",false);
         passwordField = new TitledTextField("Password","1234","Wrong password",true);
 
         logInButton = new Button2("Log In",buttonsWidth,buttonsHeight);
-        backButton = new Button2("Back",buttonsWidth,buttonsHeight);
+        backButton = new Button2("Create Account",buttonsWidth,buttonsHeight);
 
         //style the labels
         usernameField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
