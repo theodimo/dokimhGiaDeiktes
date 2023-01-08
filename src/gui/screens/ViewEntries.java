@@ -79,7 +79,7 @@ public class ViewEntries extends JFrame {
         JLabel totalReviewsPanel = new JLabel();
         JLabel overallRatingPanel = new JLabel();
         if(currentUser.getUsername().equals("provider")){
-            totalReviewsPanel.setText("Total Reviews Received: " + currentUser.getTotalReviewCount());
+            totalReviewsPanel.setText("Total Reviews Received: " + currentUser.getReviewsReceived());
             totalReviewsPanel.setFont(mainFont);
             totalReviewsPanel.setForeground(accentColor2);
 
@@ -88,7 +88,7 @@ public class ViewEntries extends JFrame {
             overallRatingPanel.setForeground(accentColor2);
         }
         else {
-            totalReviewsPanel.setText("Total Reviews Received: " );
+            totalReviewsPanel.setText("Total Reviews Made: " + currentUser.getReviewsMade());
             totalReviewsPanel.setFont(mainFont);
             totalReviewsPanel.setForeground(accentColor2);
         }
@@ -178,6 +178,7 @@ public class ViewEntries extends JFrame {
         this.setSize(new Dimension(1080, 720 + 48));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.setVisible(true);
     }
 

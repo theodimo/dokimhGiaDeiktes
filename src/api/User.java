@@ -1,5 +1,6 @@
 package api;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 
 import static java.lang.Math.round;
@@ -54,7 +55,10 @@ public class User implements java.io.Serializable, Element<User> {
     public String getType() {
         return this.type;
     }
-    public int getTotalReviewCount(){
+    public int getReviewsMade(){
+        return this.reviewsIndexes.size();
+    }
+    public int getReviewsReceived(){
         Database db = new Database();
 
         int sum = 0;

@@ -57,7 +57,6 @@ public class SearchScreen extends JFrame {
         JPanel minimizedLodgesContainer = new JPanel(new FlowLayout(FlowLayout.CENTER,0,this.verticalGap));
         minimizedLodgesContainer.setPreferredSize(new Dimension(1010,300));
         minimizedLodgesContainer.setBackground(primaryColor);
-        //recentSearchesPanel.add(minimizedLodgesContainer,BorderLayout.CENTER);
 
         JScrollPane scrollable = new JScrollPane(minimizedLodgesContainer,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -78,7 +77,8 @@ public class SearchScreen extends JFrame {
 
             if(searchedLodges.isEmpty()) {
                 JLabel noResultsLabel = new JLabel("Sorry, we couldn't find anything to match '" + searchBar.getText() + "'");
-                noResultsLabel.setFont(titleFont);
+                noResultsLabel.setFont(bigFont);
+                noResultsLabel.setForeground(accentColor2);
                 minimizedLodgesContainer.add(noResultsLabel);
             }
             else {
@@ -188,6 +188,7 @@ public class SearchScreen extends JFrame {
         this.setSize(new Dimension(1080,720 + 48));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.setVisible(true);
     }
 
