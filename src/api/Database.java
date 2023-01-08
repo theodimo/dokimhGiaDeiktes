@@ -269,8 +269,8 @@ public class Database extends StringEditor {
         return newLodge;
     }
 
-    public Review createReview(User author,String reviewText, int rating, String date) {
-        Review newReview = new Review(author, reviewText, rating, date, this.reviews.size());
+    public Review createReview(Lodge reviewedLodge, User author,String reviewText, int rating, String date) {
+        Review newReview = new Review(reviewedLodge, author, reviewText, rating, date, this.reviews.size());
         this.reviews.add(newReview);
 
         this.saveReviews();

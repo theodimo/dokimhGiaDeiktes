@@ -51,7 +51,9 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         this.textLabel = new Label(this.review.getText(), width, (int) (height * 0.4), false);
         this.ratingLabel = new Label("Rating: " + this.review.getRating() + "/5", width, (int) (height * 0.2), false);
         this.editButton = new Button2("edit",50,25);
+        this.editButton.setFocusable(false);
         this.deleteButton = new Button2("delete",50,25);
+        this.deleteButton.setFocusable(false);
 
         //layouts
         this.setLayout(new BorderLayout(0, 5));

@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class Review implements java.io.Serializable, Element<Review> {
     //properties
+    private Lodge reviewedLodge;
     private User author; //the user that wrote this particular review
     private String text; //the review text
     private int rating; //the rating of the review (out of 5)
@@ -15,8 +16,9 @@ public class Review implements java.io.Serializable, Element<Review> {
     private int index; //the position of this review in the reviews Arraylist in the Database class
 
     //constructor
-    public Review(User author, String text, int rating, String date, int index) {
+    public Review(Lodge reviewedLodge, User author, String text, int rating, String date, int index) {
         //initialization
+        this.reviewedLodge = reviewedLodge;
         this.author = author;
         this.text = text;
         this.rating = rating;
@@ -25,6 +27,14 @@ public class Review implements java.io.Serializable, Element<Review> {
     }
 
     //getters
+    public  Lodge getReviewedLodge() {
+        return this.reviewedLodge;
+    }
+
+    public void setReviewedLodge(Lodge reviewedLodge) {
+        this.reviewedLodge = reviewedLodge;
+    }
+
     public User getAuthor() {
         return this.author;
     }
@@ -59,7 +69,7 @@ public class Review implements java.io.Serializable, Element<Review> {
 
     @Override
     public Review getCopy() {
-        Review newReview = new Review(this.author, this.text, this.rating, this.date, this.index);
+        Review newReview = new Review(this.reviewedLodge, this.author, this.text, this.rating, this.date, this.index);
         return newReview;
     }
 }

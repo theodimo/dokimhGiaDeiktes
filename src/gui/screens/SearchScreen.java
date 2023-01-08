@@ -168,10 +168,8 @@ public class SearchScreen extends JFrame {
         //adding components to the frame
         searchPanel.add(searchBar);
         searchPanel.add(searchButton);
-        if(Objects.equals(this.currentUser.getType(), "simple")){
-            newButton.setEnabled(false);
-        }
-        searchPanel.add(newButton);
+        if(Objects.equals(this.currentUser.getType(), "provider"))
+            searchPanel.add(newButton);
         searchPanel.add(viewEntriesButton);
         searchPanel.add(allLodgesButton);
         searchPanel.add(logoutButton);
