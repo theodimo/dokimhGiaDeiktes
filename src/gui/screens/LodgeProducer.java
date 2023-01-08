@@ -32,7 +32,7 @@ public class LodgeProducer extends JFrame {
     private int width = 850;
     private int height = 700;
 
-    private String[] types = {"Apartment", "Maisonette"};
+    private String[] types = {"Apartment", "Maisonette", "Hotel"};
 
     private String[] accommodationTitles = {"Θέα", "Μπάνιο", "Πλύσιμο Ρούχων", "Ψυχαγωγία", "Θέρμανση & Κλιματισμός", "Διαδίκτυο", "Κουζίνα & Τραπεζαρία", "Εξωτερικός Χώρος", "Χώρος Σταύθμεσης"};
     private String[][] availableAccommodations = {
@@ -231,8 +231,8 @@ public class LodgeProducer extends JFrame {
         this.zipCodeField.setText(lodge.getZipCode() + "");
         this.descriptionField.setText(lodge.getDescription());
         this.descriptionField.setCurrentCharacters(lodge.getDescription().length());
-        this.descriptionField.revalidate();
-        this.descriptionField.repaint();
+        //this.descriptionField.revalidate();
+        //this.descriptionField.repaint();
 
         //move the accommodations of the lodge, to the selectedAccommodations panel
         HashMap<String, String[]> accommodations = lodge.getAccommodations();
@@ -296,8 +296,8 @@ public class LodgeProducer extends JFrame {
 
                 //save the changes to the file. The db is a pointer so the property Lodges of our database changed too
                 System.out.println("Current number of lodges: " + this.db.getLodgesCount());
-                db.saveLodges();
-                db.createAVL();
+                this.db.saveLodges();
+                this.db.createAVL();
 
                 this.dispose();
 
@@ -309,8 +309,8 @@ public class LodgeProducer extends JFrame {
         });
 
         //refresh the frame
-        this.revalidate();
-        this.repaint();
+        //this.revalidate();
+        //this.repaint();
     }
 
 

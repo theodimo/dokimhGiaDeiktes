@@ -3,7 +3,6 @@ package gui.screens;
 import api.Database;
 import api.Lodge;
 import api.User;
-import gui.components.Button;
 import gui.components.Button2;
 import gui.components.MinimizedLodge;
 
@@ -84,7 +83,7 @@ public class ViewEntries extends JFrame {
         backButton.style(accentColor2, primaryColor, accentColor1, mainFont);
         backButton.setFocusable(false);
         backButton.addActionListener(e -> {
-            new SearchScreen(this.db, currentUser);
+            new SearchScreen(this.db);
             this.dispose();
         });
 
@@ -149,9 +148,7 @@ public class ViewEntries extends JFrame {
 
         for (Integer index: lodgesIndexes) {
             Lodge tempLodge = this.db.getLodge(index);
-            MinimizedLodge tempMinimized = new MinimizedLodge(this.db,655,this.heightOfMinimizedLodge,tempLodge,this.currentUser,secondaryColor,accentColor2,accentColor3,primaryColor);
-            tempMinimized.addMaximizeButton();
-            tempMinimized.addEditButtons();
+            MinimizedLodge tempMinimized = new MinimizedLodge(this.db,800,this.heightOfMinimizedLodge,tempLodge,this.currentUser,secondaryColor,accentColor2,accentColor3,primaryColor);
 
             minimizedLodges.add(tempMinimized);
         }

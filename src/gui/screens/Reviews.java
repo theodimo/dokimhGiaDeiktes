@@ -1,6 +1,7 @@
 package gui.screens;
 
 import api.Database;
+import api.Lodge;
 import api.Review;
 import gui.components.ReviewUi;
 import gui.components.ScrollableDialog;
@@ -18,14 +19,14 @@ public class Reviews extends ScrollableDialog implements ScrollableDialogInterfa
     //properties
     private ArrayList<Review> reviews;
 
-    public Reviews(Database db, ArrayList<Review> reviews) {
+    public Reviews(Database db, Lodge reviewedLodge, ArrayList<Review> reviews) {
         super(db, "Reviews", "The reviews for that lodge", 500);
         //initialization
         this.reviews = reviews;
 
         for (Review review: this.reviews) {
             //create the component
-            ReviewUi reviewComponent = new ReviewUi(review, 400, 180);
+            ReviewUi reviewComponent = new ReviewUi(db, review, reviewedLodge, 400, 180);
             //style the component
             reviewComponent.style(primaryColor, secondaryColor, dark, gray, accentColor, dark, inputLabel, smallFont, mainFont, inputLabel);
             //add the component

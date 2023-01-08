@@ -119,14 +119,21 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
     public float getTotalRating(){
         return totalRating;
     }
+    public void setTotalRating(int rating) {
+        this.totalRating = rating;
+    }
+    public void updateTotalRating(Database db){
+        System.out.println("total rating updated and gone from " + this.totalRating);
+        this.totalRating = (float) (round(calculateTotalRating(db, this.reviewsIndexes) * 10.0) / 10.0);
+        System.out.println("to " + this.totalRating);
+    }
 
     public float calculateTotalRating(Database db, ArrayList<Integer> reviewsIndexes){
         int sum = 0;
         int count = 0;
-        int i = 0;
 
         if(reviewsIndexes.size() == 0)
-            return -1;
+            return 0;
 
         for (Integer index: this.reviewsIndexes) {
             Review rev = db.getReview(index);
@@ -134,7 +141,9 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
             count++;
         }
 
-        return (float) sum / (float) count;
+        this.totalRating = (float) sum / (float) count;
+
+        return this.totalRating;
     }
 
     public int getIndex() {
@@ -153,29 +162,29 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
         ArrayList<String> words;
 
         //name decomposition
-        words = this.decompose(this.name);
+        words = this.decompose(this.name.toLowerCase());
         finalWords = this.concatenate(finalWords, words);
 
         //address decomposition
-        words = this.decompose(this.address);
+        words = this.decompose(this.address.toLowerCase());
         finalWords = this.concatenate(finalWords, words);
 
         //description decomposition
-        words = this.decompose(this.description);
+        words = this.decompose(this.description.toLowerCase());
         finalWords = this.concatenate(finalWords, words);
 
         //accommodations decomposition
         for (String accommodationCategory: this.Accommodations.keySet()) {
             for (String accommodationName: this.Accommodations.get(accommodationCategory)) {
-                words = this.decompose(accommodationName);
+                words = this.decompose(accommodationName.toLowerCase());
                 finalWords = this.concatenate(finalWords, words);
             }
         }
 
         //add one-word fields
-        finalWords.add(this.type);
-        finalWords.add(this.city);
-        finalWords.add(this.zipCode + "");
+        finalWords.add(this.type.toLowerCase());
+        finalWords.add(this.city.toLowerCase());
+        finalWords.add( (this.zipCode + "").toLowerCase() );
 
         return finalWords;
     }
@@ -201,5 +210,20 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
 
     public int getTotalReviews() {
         return this.reviewsIndexes.size();
+    }
+
+    public void removeReviewIndex(int id) {
+        int position = this.reviewsIndexes.indexOf(id);
+        this.reviewsIndexes.remove(position);
+    }
+
+    public void decreaseReviewsIndexes(int deletedIndex) {
+        int i = 0;
+        for (Integer currentIndex: this.reviewsIndexes) {
+            if (currentIndex > index) {
+                this.reviewsIndexes.set(i, currentIndex - 1);
+            }
+            i += 1;
+        }
     }
 }

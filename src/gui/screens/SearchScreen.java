@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 
 import static gui.bootstrap.Colors.*;
 import static gui.bootstrap.Fonts.*;
@@ -32,10 +33,10 @@ public class SearchScreen extends JFrame {
 
     Database db;
 
-    public SearchScreen(Database db, User currentUser){
+    public SearchScreen(Database db){
         this.searchedLodges = new HashSet<>();
-        this.currentUser = currentUser;
         this.db = db;
+        this.currentUser = db.getCurrentUser();
 
         //initialization of Panels
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,100));
@@ -72,11 +73,11 @@ public class SearchScreen extends JFrame {
         searchButton.addActionListener(e -> {
             minimizedLodgesContainer.removeAll();
 
-            searchedLodges = db.performSearch(searchBar.getText());
+            searchedLodges = db.performSearch(searchBar.getText().toLowerCase());
             //System.out.println("these are the searches now" + searchedLodges);
 
             if(searchedLodges.isEmpty()) {
-                JLabel noResultsLabel = new JLabel("Sorry, we couldn't find anything to match ' " + searchBar.getText() + "'");
+                JLabel noResultsLabel = new JLabel("Sorry, we couldn't find anything to match '" + searchBar.getText() + "'");
                 noResultsLabel.setFont(titleFont);
                 minimizedLodgesContainer.add(noResultsLabel);
             }
@@ -167,10 +168,13 @@ public class SearchScreen extends JFrame {
         //adding components to the frame
         searchPanel.add(searchBar);
         searchPanel.add(searchButton);
+        if(Objects.equals(this.currentUser.getType(), "simple")){
+            newButton.setEnabled(false);
+        }
         searchPanel.add(newButton);
-        searchPanel.add(logoutButton);
         searchPanel.add(viewEntriesButton);
         searchPanel.add(allLodgesButton);
+        searchPanel.add(logoutButton);
         titlePanel.add(title);
         recentSearchesPanel.add(titlePanel,BorderLayout.NORTH);
         recentSearchesPanel.add(scrollable,BorderLayout.CENTER);
@@ -194,8 +198,6 @@ public class SearchScreen extends JFrame {
 
         for (Lodge tempLodge: lodges) {
             MinimizedLodge tempMinimized = new MinimizedLodge(this.db, 800,this.heightOfMinimizedLodge,tempLodge,this.currentUser,secondaryColor,accentColor2,accentColor3,primaryColor);
-            tempMinimized.addMaximizeButton();
-            tempMinimized.addEditButtons();
 
             minimizedLodges.add(tempMinimized);
         }

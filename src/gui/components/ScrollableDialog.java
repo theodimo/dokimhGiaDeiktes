@@ -6,10 +6,6 @@ import java.awt.*;
 import java.util.HashMap;
 
 import api.Database;
-import gui.components.AccommodationWithIcon;
-import gui.components.AccommodationsContainer;
-import gui.components.Panel;
-import gui.components.Label;
 import gui.screens.SearchScreen;
 
 import static gui.bootstrap.Fonts.*;
@@ -51,7 +47,7 @@ public abstract class ScrollableDialog extends JDialog {
         this.setSize(width, height);
         this.setLocationRelativeTo(null);
         this.setTitle(title);
-        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         this.verticalGap = 30;
 
         //components initialization
@@ -88,7 +84,8 @@ public abstract class ScrollableDialog extends JDialog {
 
         //listeners
         this.backButton.addActionListener(e -> {
-            new SearchScreen(db, db.getCurrentUser());
+            new SearchScreen(db);
+            this.dispose();
         });
     }
 

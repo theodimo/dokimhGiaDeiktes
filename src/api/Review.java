@@ -12,13 +12,16 @@ public class Review implements java.io.Serializable, Element<Review> {
 
     private String date; //the creation date of the review
 
+    private int index; //the position of this review in the reviews Arraylist in the Database class
+
     //constructor
-    public Review(User author, String text, int rating, String date) {
+    public Review(User author, String text, int rating, String date, int index) {
         //initialization
         this.author = author;
         this.text = text;
         this.rating = rating;
         this.date = date;
+        this.index = index;
     }
 
     //getters
@@ -38,13 +41,25 @@ public class Review implements java.io.Serializable, Element<Review> {
         return this.rating;
     }
 
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
     public String getDate() {
         return this.date;
     }
 
+    public int getIndex() {
+        return this.index;
+    }
+
+    public void decreaseIndex() {
+        this.index -= 1;
+    }
+
     @Override
     public Review getCopy() {
-        Review newReview = new Review(this.author, this.text, this.rating, this.date);
+        Review newReview = new Review(this.author, this.text, this.rating, this.date, this.index);
         return newReview;
     }
 }

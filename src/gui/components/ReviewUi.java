@@ -11,6 +11,8 @@ import api.User;
 import gui.screens.ReviewProducer;
 
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import static gui.bootstrap.Colors.*;
 import static gui.bootstrap.Fonts.*;
@@ -31,9 +33,10 @@ public class ReviewUi extends JPanel implements ScrollableElement {
     private Label textLabel; //displays the text of the review
     private Label ratingLabel; //displays the rating of the review
     private Button2 editButton; //opens the ReviewProducer so the user can edit their review
+    private Button2 deleteButton; //deletes this review
 
     //constructor
-    public ReviewUi(Review review, int width, int height) {
+    public ReviewUi(Database db, Review review, Lodge reviewedLodge, int width, int height) {
         //initialization
         this.review = review;
         this.setPreferredSize(new Dimension(width, height));
@@ -43,11 +46,12 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         this.mainPanel = new Panel(width, (int) (height * 0.5), null, "preferredSize");
         this.ratingPanel = new Panel(width, (int) (height * 0.2), null, "preferredSize");
 
-        this.authorLabel = new Label(this.review.getAuthor().getName() + " " + this.review.getAuthor().getSurname(), 300, (int) (height * 0.2), false);
-        this.dateLabel = new Label(this.review.getDate(), 60, (int) (height * 0.2), false);
+        this.authorLabel = new Label(this.review.getAuthor().getName() + " " + this.review.getAuthor().getSurname(), 270, (int) (height * 0.2), false);
+        this.dateLabel = new Label(this.review.getDate(), 100, (int) (height * 0.2), false);
         this.textLabel = new Label(this.review.getText(), width, (int) (height * 0.4), false);
         this.ratingLabel = new Label("Rating: " + this.review.getRating() + "/5", width, (int) (height * 0.2), false);
         this.editButton = new Button2("edit",50,25);
+        this.deleteButton = new Button2("delete",50,25);
 
         //layouts
         this.setLayout(new BorderLayout(0, 5));
@@ -59,6 +63,8 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         this.authorLabel.setBounds(5, 0, this.authorLabel.getWidth(), this.authorLabel.getHeight());
         this.dateLabel.setBounds(width - this.dateLabel.getWidth() - 5, 0, this.dateLabel.getWidth(), this.dateLabel.getHeight());
         this.editButton.style(primaryColor,secondaryColor,accentColor2,mainFont);
+        this.deleteButton.style(primaryColor,secondaryColor,accentColor2,mainFont);
+
 
 
         //components adding
@@ -67,8 +73,12 @@ public class ReviewUi extends JPanel implements ScrollableElement {
 
         this.mainPanel.add(this.textLabel);
 
+
         this.ratingPanel.add(this.ratingLabel);
-        this.ratingPanel.add(this.editButton);
+        if(Objects.equals(db.getCurrentUser().getUsername(), review.getAuthor().getUsername()) ) {
+            this.ratingPanel.add(this.editButton);
+            this.ratingPanel.add(this.deleteButton);
+        }
 
         this.add(this.credentialsPanel, BorderLayout.NORTH);
         this.add(this.mainPanel, BorderLayout.CENTER);
@@ -76,10 +86,14 @@ public class ReviewUi extends JPanel implements ScrollableElement {
 
         //listeners
         this.editButton.addActionListener(e -> {
-            new ReviewProducer(new Database(),
+            new ReviewProducer(db,
                     new Lodge(new User("temp","temp","temp","temp","temp") , "temp","temp","temp","temp",5,"temp",null,5),
                     this.review
             );
+        });
+
+        this.deleteButton.addActionListener(e -> {
+            db.deleteReview(this.review, this.review.getAuthor(), reviewedLodge);
         });
     }
 

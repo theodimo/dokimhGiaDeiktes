@@ -7,6 +7,7 @@ import gui.components.ScrollableDialogInterface;
 import gui.components.UserWithLodges;
 
 import java.awt.*;
+import java.util.Objects;
 
 //this dialog is responsible for displaying the accommodations of every user
 public class LodgesScreen extends ScrollableDialog implements ScrollableDialogInterface<UserWithLodges> {
@@ -22,10 +23,13 @@ public class LodgesScreen extends ScrollableDialog implements ScrollableDialogIn
         super(db, "Lodges Screen", "All Lodges", 880);
 
         for (User user: db.getUsers()) {
-            //create the container
-            UserWithLodges container = new UserWithLodges(user, db, 800, primaryColor, secondaryColor, accentColor, dark);
-            //add the container
-            this.addElement(container);
+            //add only the providers
+            if(Objects.equals(user.getType(), "provider")) {
+                //create the container
+                UserWithLodges container = new UserWithLodges(user, db, 800, primaryColor, secondaryColor, accentColor, dark);
+                //add the container
+                this.addElement(container);
+            }
         }
 
         //add the back button at the north panel. These properties are given from the super class

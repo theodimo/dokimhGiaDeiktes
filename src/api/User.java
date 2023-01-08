@@ -10,7 +10,6 @@ public class User implements java.io.Serializable, Element<User> {
     private String username;
     private String password;
     private String type;
-    private ArrayList<Lodge> lodgeEntries;
 
     private ArrayList<Integer> lodgeIndexes; //a list that contains the positions of the lodges that the
     //user owns, inside 'lodges' property in database class
@@ -27,14 +26,14 @@ public class User implements java.io.Serializable, Element<User> {
         this.password = password;
         this.type = type;
 
-        this.lodgeEntries = new ArrayList<>();
         this.lodgeIndexes = new ArrayList<>();
         this.reviewsIndexes = new ArrayList<>();
     }
 
-    public User(String name, String surname, String username, String password, String type, ArrayList<Integer> lodgeIndexes) {
+    public User(String name, String surname, String username, String password, String type, ArrayList<Integer> lodgeIndexes, ArrayList<Integer> reviewsIndexes) {
         this(name, surname, username, password, type);
         this.lodgeIndexes = lodgeIndexes;
+        this.reviewsIndexes = reviewsIndexes;
     }
 
     //Getters
@@ -80,17 +79,6 @@ public class User implements java.io.Serializable, Element<User> {
     }
 
     //Functions
-    public void addEntry(Lodge lodge){
-        this.lodgeEntries.add(lodge);
-    }
-    public void removeEntry(Lodge lodge){
-        this.lodgeEntries.remove(lodge);
-    }
-
-    public ArrayList<Lodge> getLodgeEntries(){
-        return this.lodgeEntries;
-    }
-
     public void printUserData() {
         System.out.println("Name: " + this.name);
         System.out.println("Surname: " + this.surname);
@@ -121,10 +109,11 @@ public class User implements java.io.Serializable, Element<User> {
 
     /**
      * Remove the id of a review from reviewsIndexes property
-     * @param index the id of the lodge we want to remove
+     * @param id the id of the lodge we want to remove
      */
-    public void removeReviewIndex(int index) {
-        this.reviewsIndexes.remove(index);
+    public void removeReviewIndex(int id) {
+        int position = this.reviewsIndexes.indexOf(id);
+        this.reviewsIndexes.remove(position);
     }
 
     public ArrayList<Integer> getLodgeIndexes() {
@@ -132,6 +121,7 @@ public class User implements java.io.Serializable, Element<User> {
     }
 
     public ArrayList<Integer> getReviewsIndexes() {
+        System.out.println("THA SE GAMHSW");
         return this.reviewsIndexes;
     }
 
@@ -141,11 +131,26 @@ public class User implements java.io.Serializable, Element<User> {
      * owner have, to be at one place left-more
      * @param index
      */
-    public void decreaseIndexes(int index) {
+    public void decreaseLodgeIndexes(int index) {
         int i = 0;
         for (Integer currentIndex: this.lodgeIndexes) {
             if (currentIndex > index) {
                 this.lodgeIndexes.set(i, currentIndex - 1);
+            }
+            i += 1;
+        }
+    }
+
+    /**
+     * This function sets every number inside reviewsIndexes to be one less. The result of this function is to set the reviews that
+     * owner have, to be at one place left-more
+     * @param index
+     */
+    public void decreaseReviewsIndexes(int index) {
+        int i = 0;
+        for (Integer currentIndex: this.reviewsIndexes) {
+            if (currentIndex > index) {
+                this.reviewsIndexes.set(i, currentIndex - 1);
             }
             i += 1;
         }
@@ -157,7 +162,7 @@ public class User implements java.io.Serializable, Element<User> {
      */
     @Override
     public User getCopy() {
-        User newUser = new User(this.name, this.surname, this.username, this.password, this.type, this.lodgeIndexes);
+        User newUser = new User(this.name, this.surname, this.username, this.password, this.type, this.lodgeIndexes, this.reviewsIndexes);
         return newUser;
     }
 }

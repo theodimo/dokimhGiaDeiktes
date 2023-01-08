@@ -54,10 +54,7 @@ public class UserWithLodges extends JPanel implements ScrollableElement {
         for (Integer id: this.owner.getLodgeIndexes()) {
             Lodge lodge = db.getLodge(id);
             MinimizedLodge minimizedLodge = new MinimizedLodge(db, this.width - 40, 60, lodge, db.getCurrentUser(), secondaryColor, accentColor1, accentColor2, primaryColor);
-            minimizedLodge.addMaximizeButton();
-            if (this.owner.getUsername().equals(db.getCurrentUser().getUsername())) {
-                minimizedLodge.addEditButtons();
-            }
+
             this.mainPanel.add(minimizedLodge);
         }
 

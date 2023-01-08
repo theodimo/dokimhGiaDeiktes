@@ -6,6 +6,8 @@ import api.Lodge;
 import api.Review;
 
 import static api.StringEditor.*;
+
+import api.User;
 import gui.components.*;
 import gui.components.Label;
 import gui.components.Panel;
@@ -17,6 +19,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 //this screen is responsible for displaying the information about a Lodge
 public class LodgeScreen extends JFrame {
@@ -167,7 +170,8 @@ public class LodgeScreen extends JFrame {
 
         this.accommodationsButtonContainer.add(this.seeMoreAccommodationsButton);
         this.reviewsButtonContainer.add(this.seeMoreReviewsButton);
-        this.reviewsButtonContainer.add(this.addReviewButton);
+        if(!Objects.equals(db.getCurrentUser().getUsername(), lodge.getOwner().getUsername()))
+            this.reviewsButtonContainer.add(this.addReviewButton);
 
         this.accommodationsPanel.add(this.accommodationsTitleLabel, BorderLayout.NORTH);
         this.accommodationsPanel.add(this.accommodationsContainer, BorderLayout.CENTER);
@@ -183,8 +187,10 @@ public class LodgeScreen extends JFrame {
         }else {
             //this.reviewsPanel.removeAll();
 
+            System.out.println("prepei na eisai 0 alla eisai : " + lodge.getReviewsIndexes().get(0));
             Review R1 = db.getReview(lodge.getReviewsIndexes().get(0));
-            ReviewUi r1 = new ReviewUi(R1, 1000, 120);
+
+            ReviewUi r1 = new ReviewUi(db, R1, this.lodge, 1000, 120);
 
             r1.style(primaryColor, secondaryColor, dark, gray, accentColor, dark, inputLabel, smallFont, mainFont, inputLabel);
             this.reviewsPanel.add(r1, BorderLayout.CENTER);
@@ -211,7 +217,7 @@ public class LodgeScreen extends JFrame {
             for (Integer index: this.lodge.getReviewsIndexes()) {
                 reviews.add(db.getReview(index));
             }
-            new Reviews(db, reviews);
+            new Reviews(db, this.lodge, reviews);
         });
 
         this.addReviewButton.addActionListener(e -> {

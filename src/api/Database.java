@@ -66,6 +66,9 @@ public class Database extends StringEditor {
 
 
         this.printData();
+
+        System.out.println("neo programma");
+        this.printReviewData();
     }
 
     //getters
@@ -267,10 +270,13 @@ public class Database extends StringEditor {
     }
 
     public Review createReview(User author,String reviewText, int rating, String date) {
-        Review newReview = new Review(author, reviewText, rating, date);
+        Review newReview = new Review(author, reviewText, rating, date, this.reviews.size());
         this.reviews.add(newReview);
 
         this.saveReviews();
+
+        System.out.println("I have created a review");
+        this.printReviewData();
 
         return newReview;
     }
@@ -315,13 +321,74 @@ public class Database extends StringEditor {
         //User2 -> 1
         //cause the lodges had indexes 0 1 2 and after the deletion they have 0 1
         for (User user: this.users) {
-            user.decreaseIndexes(deletedIndex);
+            user.decreaseLodgeIndexes(deletedIndex);
         }
 
 
         //save the changes to database files
         this.saveLodges();
         this.saveUsers();
+    }
+
+    public void deleteReview(Review reviewForDeleting, User author, Lodge reviewedLodge){
+        //firstly, we want the lodges to have an ascending index with step 1. By removing a lodge, we should decrease the
+        //index of all lodges with bigger index, in order to maintain the order
+
+        System.out.println("prin thn diagrafh");
+        this.printReviewData();
+
+        System.out.println("before deleting:");
+        for (Review review: this.reviews) {
+            System.out.println(review.getIndex() + " -> " + review.getText());
+        }
+        int deletedIndex = reviewForDeleting.getIndex();
+        for (int i = deletedIndex + 1; i < this.reviews.size(); i++) {
+            this.reviews.get(i).decreaseIndex();
+        }
+
+        //then, delete the lodge from the lodges property
+        this.reviews.remove(reviewForDeleting);
+
+        System.out.println("after deleting:");
+        for (Review review: this.reviews) {
+            System.out.println(review.getIndex() + " -> " + review.getText());
+        }
+
+        System.out.println("meta th diagrafh");
+        this.printReviewData();
+
+        //remove the index of the review from owner's and lodge's reviewIndexes
+        author.removeReviewIndex(deletedIndex);
+        reviewedLodge.removeReviewIndex(deletedIndex);
+        reviewedLodge.updateTotalRating(this);
+
+
+
+        //furthermore, decrease the indexes of all owner's lodges that have index higher that deletedIndex, for every user
+        //to understand it better lets say that User1 and User2 have lodges at indexes:
+        //User1 -> 0, 1
+        //User2 -> 2
+        //if User1 deletes his first lodge, we want the new data to be:
+        //User1 -> 0
+        //User2 -> 1
+        //cause the lodges had indexes 0 1 2 and after the deletion they have 0 1
+        for (User user: this.users) {
+            user.decreaseReviewsIndexes(deletedIndex);
+        }
+
+        //auto den kserw an leitourgei
+        for (Lodge lodge : this.lodges) {
+            lodge.decreaseReviewsIndexes(deletedIndex);
+        }
+
+
+        //save the changes to database files
+        this.saveReviews();
+        this.saveUsers();
+        this.saveLodges();
+
+        System.out.println("telos diagrafhs");
+        this.printReviewData();
     }
 
     /**
@@ -450,6 +517,25 @@ public class Database extends StringEditor {
             System.out.println(lodge.getIndex() + "-> " + lodge.getOwner().getName() + " " + lodge.getOwner().getSurname());
         }
         System.out.println("----------------");
+    }
+
+    public void printReviewData() {
+        System.out.println("**************");
+
+        System.out.println("Users:");
+        for (User user: this.users) {
+            System.out.println(user.getName() + " " + user.getSurname());
+            System.out.println("Me Review indexes: ");
+            System.out.println(user.getReviewsIndexes());
+        }
+
+        System.out.println("Reviews:");
+        System.out.println("Ola ta indexes apo ta reviews:");
+        for (Review review : this.reviews) {
+            System.out.println(review.getIndex() + "-> " + review.getAuthor().getUsername() + " " + review.getRating() + "/5" + " " + review.getText());
+        }
+
+        System.out.println("**************");
     }
 
     public static void main(String[] args) {

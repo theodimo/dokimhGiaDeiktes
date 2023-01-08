@@ -3,8 +3,6 @@ package gui.screens;
 import api.Database;
 import api.User;
 import gui.components.Button;
-import gui.components.PasswordField;
-import gui.components.TextField;
 import gui.components.TitledTextField;
 
 import javax.swing.*;
@@ -102,7 +100,7 @@ public class SignUpScreen extends SignTemplate{
 
                         User user = api.getUser(api.validateSignInCredentials(username,password));
                         api.setCurrentUser(user);
-                        new SearchScreen(api, user);
+                        new SearchScreen(api);
                         dispose();
                     }
                     else {

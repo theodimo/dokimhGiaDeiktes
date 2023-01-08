@@ -5,10 +5,12 @@ import api.Lodge;
 import api.User;
 import gui.screens.LodgeProducer;
 import gui.screens.LodgeScreen;
+import gui.screens.ReviewProducer;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.Objects;
 
 import static gui.bootstrap.Fonts.*;
 import static gui.bootstrap.Icons.*;
@@ -20,6 +22,7 @@ public class MinimizedLodge extends JPanel {
     Lodge lodge;
     Database db;
     public Button2 maximizeButton;
+    public Button2 reviewButton;
     public Button2 editButton;
     public Button2 deleteButton;
 
@@ -28,7 +31,7 @@ public class MinimizedLodge extends JPanel {
         this.setLayout(new FlowLayout(FlowLayout.CENTER,5,0));
         this.setBackground(backgroundColor);
         this.setForeground(foregroundColor);
-        this.currentUser = currentUser;
+        this.currentUser = db.getCurrentUser();
         this.db = db;
         this.lodge = lodge;
 
@@ -52,6 +55,16 @@ public class MinimizedLodge extends JPanel {
         maximizeButton.addActionListener(e -> {
             new LodgeScreen(db, lodge);
             //this.dispose();
+        });
+
+
+        reviewButton = new Button2("", 40, 40);
+        reviewButton.style(buttonsColor, buttonsColor, accentColor1, mainFont);
+        reviewButton.setIcon(review);
+        reviewButton.setBorder(new EmptyBorder(0, 0, 0, 0));
+        reviewButton.setFocusable(false);
+        reviewButton.addActionListener(e -> {
+            new ReviewProducer(db,lodge);
         });
 
         editButton = new Button2("", 40, 40);
@@ -79,6 +92,14 @@ public class MinimizedLodge extends JPanel {
         this.add(lodgeRating);
 
         this.add(lodgeId);
+
+        this.addMaximizeButton();
+
+        if(!Objects.equals(currentUser.getUsername(), lodge.getOwner().getUsername()))
+            addReviewButton();
+        else
+            addEditButtons();
+
     }
 
     private JLabel createNewLabel(String text, Font font, int width, int height, Color backgroundColor, Color foregroundColor){
@@ -95,6 +116,10 @@ public class MinimizedLodge extends JPanel {
     public void addMaximizeButton(){
         this.add(maximizeButton);
 
+    }
+
+    public void addReviewButton() {
+        this.add(reviewButton);
     }
 
     public void addEditButtons(){

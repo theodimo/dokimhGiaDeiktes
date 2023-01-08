@@ -5,8 +5,6 @@ import api.User;
 import gui.components.Button;
 import gui.components.TitledTextField;
 
-import java.awt.*;
-
 import static gui.bootstrap.Colors.*;
 
 /**This is the screen in which a user can Log In
@@ -64,7 +62,7 @@ public class LogInScreen extends SignTemplate {
                 try{
                     User user = api.getUser(api.validateSignInCredentials(username,password));
                     api.setCurrentUser(user);
-                    new SearchScreen(api, user);
+                    new SearchScreen(api);
                     dispose();
                 }catch (Exception ex) {
                     usernameField.showErrorMessage(false);
