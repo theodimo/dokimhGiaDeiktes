@@ -7,12 +7,16 @@ import api.Review;
 
 import static api.StringEditor.*;
 
+import api.User;
+import gui.bootstrap.Colors;
 import gui.components.*;
 import gui.components.Label;
 import gui.components.Panel;
 import gui.components.Button2;
 
+import static gui.bootstrap.Colors.accentColor1;
 import static gui.bootstrap.Fonts.*;
+import static gui.bootstrap.Icons.*;
 import static gui.bootstrap.Colors.*;
 
 import javax.swing.*;
@@ -54,11 +58,17 @@ public class LodgeScreen extends JFrame {
     Label reviewsLabel; //a title that displays "Reviews"
 
     //buttons
+    Button2 editButton; //a button that opens a window in which you can edit the lodge
+
+    Button2 deleteButton; //a button that deletes the lodge
+
     Button2 seeMoreAccommodationsButton; //a button which opens a JDialog that displays all accommodations of the lodge
 
     Button2 seeMoreReviewsButton; //a button which opens a JDialog that displays all reviews of the lodge
 
     Button2 addReviewButton; //a button which opens a JDialog that lets you write a review for the Lodge
+
+    Button2 backButton; //a button that if pressed it closes the frame and opens the searchScreen
 
 
     //constructor
@@ -88,6 +98,12 @@ public class LodgeScreen extends JFrame {
         this.accommodationsTitleLabel = new Label("What this lodge provides", 1000, 40, false);
         this.reviewsLabel = new Label("Reviews " + lodge.getTotalRating() + " (" + lodge.getTotalReviews() + ")", 1000, 40, false);
 
+        this.editButton = new Button2("", 40, 40);
+        this.editButton.setBounds(870,30,40,40);
+        this.deleteButton = new Button2("",40, 40);
+        this.deleteButton.setBounds(920, 30, 40, 40);
+        this.backButton = new Button2("Back",80, 40);
+        this.backButton.setBounds(780, 30, 80, 40);
         this.seeMoreAccommodationsButton = new Button2("See all accommodations", 250, 40);
         this.seeMoreReviewsButton = new Button2("See all reviews", 250, 40);
         this.addReviewButton = new Button2("Add Review",250, 40);
@@ -129,15 +145,23 @@ public class LodgeScreen extends JFrame {
 
 
         this.titleLabel.setBounds(10, 10, this.titleLabel.getWidth(), this.titleLabel.getHeight());
-        this.ownerLabel.setBounds(1040 - this.ownerLabel.getWidth(), 10, this.ownerLabel.getWidth(), this.ownerLabel.getHeight());
+        this.ownerLabel.setBounds(1040 - this.ownerLabel.getWidth(), 0, this.ownerLabel.getWidth(), this.ownerLabel.getHeight());
         this.locationLabel.setBounds(15, 10 + this.titleLabel.getHeight(), this.locationLabel.getWidth(), this.locationLabel.getHeight());
         this.descriptionLabel.setVerticalAlignment(Label.TOP);
         this.descriptionLabel.setBorder(new EmptyBorder(5, 10, 0, 0));
 
+        this.editButton.style(secondaryColor, secondaryColor, accentColor1, mainFont);
+        this.deleteButton.style(secondaryColor, secondaryColor, accentColor1, mainFont);
+        this.backButton.style(Colors.accentColor3, secondaryColor, accentColor1, mainFont);
         this.seeMoreAccommodationsButton.style(accentColor2, secondaryColor, accentColor1, inputLabel);
         this.seeMoreReviewsButton.style(accentColor2, secondaryColor, accentColor1, inputLabel);
         this.addReviewButton.style(accentColor2, secondaryColor, accentColor1, inputLabel);
 
+        this.editButton.setFocusPainted(false);
+        this.editButton.setIcon(pencil);
+        this.deleteButton.setFocusPainted(false);
+        this.deleteButton.setIcon(trashCan);
+        this.backButton.setFocusPainted(false);
         this.seeMoreAccommodationsButton.setFocusPainted(false);
         this.seeMoreReviewsButton.setFocusPainted(false);
         this.addReviewButton.setFocusPainted(false);
@@ -157,8 +181,14 @@ public class LodgeScreen extends JFrame {
 
         this.accommodationsButtonContainer.add(this.seeMoreAccommodationsButton);
         this.reviewsButtonContainer.add(this.seeMoreReviewsButton);
+        this.identityPanel.add(backButton);
+
         if(!Objects.equals(db.getCurrentUser().getUsername(), lodge.getOwner().getUsername()))
             this.reviewsButtonContainer.add(this.addReviewButton);
+        else {
+            this.identityPanel.add(deleteButton);
+            this.identityPanel.add(editButton);
+        }
 
         this.accommodationsPanel.add(this.accommodationsTitleLabel, BorderLayout.NORTH);
         this.accommodationsPanel.add(this.accommodationsContainer, BorderLayout.CENTER);
@@ -172,7 +202,6 @@ public class LodgeScreen extends JFrame {
             noReviewsLabel.setForeground(Color.white);
             this.reviewsPanel.add(noReviewsLabel, BorderLayout.CENTER);
         }else {
-            //this.reviewsPanel.removeAll();
 
             System.out.println("prepei na eisai 0 alla eisai : " + lodge.getReviewsIndexes().get(0));
             Review R1 = db.getReview(lodge.getReviewsIndexes().get(0));
@@ -209,6 +238,20 @@ public class LodgeScreen extends JFrame {
 
         this.addReviewButton.addActionListener(e -> {
             new ReviewProducer(db, lodge);
+        });
+
+        this.editButton.addActionListener(e -> {
+            new LodgeProducer(db, db.getCurrentUser(), lodge);
+        });
+
+        this.deleteButton.addActionListener(e -> {
+            db.deleteLodge(lodge,lodge.getOwner());
+            this.dispose();
+        });
+
+        this.backButton.addActionListener(e -> {
+            new SearchScreen(db);
+            this.dispose();
         });
 
     }
