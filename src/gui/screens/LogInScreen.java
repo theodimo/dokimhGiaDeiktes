@@ -63,7 +63,7 @@ public class LogInScreen extends SignTemplate {
             new SignUpScreen(api);
             dispose();
         });
-        this.buttonsPanel.add(backButton);
+
 
 
         logInButton.addActionListener(e -> {
@@ -88,7 +88,9 @@ public class LogInScreen extends SignTemplate {
             }
 
         });
+
         this.buttonsPanel.add(logInButton);
+        this.buttonsPanel.add(backButton);
 
         this.getRootPane().setDefaultButton(logInButton); //this will automatically listen to the "Enter" key
                                                           //and trigger the action listener of the given button

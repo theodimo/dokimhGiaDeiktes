@@ -74,7 +74,6 @@ public class SearchScreen extends JFrame {
             minimizedLodgesContainer.removeAll();
 
             searchedLodges = db.performSearch(searchBar.getText().toLowerCase());
-            //System.out.println("these are the searches now" + searchedLodges);
 
             if(searchedLodges.isEmpty()) {
                 JLabel noResultsLabel = new JLabel("Sorry, we couldn't find anything to match '" + searchBar.getText() + "'");
@@ -117,14 +116,6 @@ public class SearchScreen extends JFrame {
 
         viewEntriesButton = new Button2("View Entries", 100, 50);
         viewEntriesButton.addActionListener(e -> {
-            System.out.println("Index of lodges:");
-            for (int i = 0; i < this.db.getLodgesCount(); i++) {
-                System.out.println(this.db.getLodge(i).getIndex());
-            }
-            System.out.println("index tou current user");
-            for (Integer index: this.currentUser.getLodgeIndexes()) {
-                System.out.println(index);
-            }
             new ViewEntries(this.db, this.currentUser);
             this.dispose();
         });

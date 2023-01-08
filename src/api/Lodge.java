@@ -123,9 +123,7 @@ public class Lodge extends StringEditor implements java.io.Serializable, Element
         this.totalRating = rating;
     }
     public void updateTotalRating(Database db){
-        System.out.println("total rating updated and gone from " + this.totalRating);
         this.totalRating = (float) (round(calculateTotalRating(db, this.reviewsIndexes) * 10.0) / 10.0);
-        System.out.println("to " + this.totalRating);
     }
 
     public float calculateTotalRating(Database db, ArrayList<Integer> reviewsIndexes){

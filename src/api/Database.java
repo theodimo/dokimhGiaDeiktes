@@ -63,12 +63,6 @@ public class Database extends StringEditor {
 
         //create AVL. It will be used for the searching
         this.createAVL();
-
-
-        this.printData();
-
-        System.out.println("neo programma");
-        this.printReviewData();
     }
 
     //getters
@@ -282,8 +276,6 @@ public class Database extends StringEditor {
         reviewedLodge.addReviewIndex(newReview.getIndex(), this); //add the position of the review to the lodge's reviews indexes
         this.saveLodges();
 
-        //System.out.println("I have created a review");
-        //this.printReviewData();
 
         return newReview;
     }
@@ -299,10 +291,7 @@ public class Database extends StringEditor {
         //firstly, we want the lodges to have an ascending index with step 1. By removing a lodge, we should decrease the
         //index of all lodges with bigger index, in order to maintain the order
 
-        System.out.println("before deleting:");
-        for (Lodge lodge: this.lodges) {
-            System.out.println(lodge.getIndex() + " -> " + lodge.getName());
-        }
+
         int deletedIndex = lodgeForDeleting.getIndex();
         for (int i = deletedIndex + 1; i < this.lodges.size(); i++) {
             this.lodges.get(i).decreaseIndex();
@@ -311,10 +300,6 @@ public class Database extends StringEditor {
         //then, delete the lodge from the lodges property
         this.lodges.remove(lodgeForDeleting);
 
-        System.out.println("after deleting:");
-        for (Lodge lodge: this.lodges) {
-            System.out.println(lodge.getIndex() + " -> " + lodge.getName());
-        }
 
         //remove the index of the lodge from owner's lodgeIndexes
         owner.removeLodgeIndex(deletedIndex);
@@ -341,13 +326,6 @@ public class Database extends StringEditor {
         //firstly, we want the lodges to have an ascending index with step 1. By removing a lodge, we should decrease the
         //index of all lodges with bigger index, in order to maintain the order
 
-        System.out.println("prin thn diagrafh");
-        this.printReviewData();
-
-        System.out.println("before deleting:");
-        for (Review review: this.reviews) {
-            System.out.println(review.getIndex() + " -> " + review.getText());
-        }
         int deletedIndex = reviewForDeleting.getIndex();
         for (int i = deletedIndex + 1; i < this.reviews.size(); i++) {
             this.reviews.get(i).decreaseIndex();
@@ -356,34 +334,16 @@ public class Database extends StringEditor {
         //then, delete the lodge from the lodges property
         this.reviews.remove(reviewForDeleting);
 
-        System.out.println("after deleting:");
-        for (Review review: this.reviews) {
-            System.out.println(review.getIndex() + " -> " + review.getText());
-        }
-
-        System.out.println("meta th diagrafh");
-        this.printReviewData();
 
         //remove the index of the review from owner's and lodge's reviewIndexes
         author.removeReviewIndex(deletedIndex);
         reviewedLodge.removeReviewIndex(deletedIndex);
         reviewedLodge.updateTotalRating(this);
 
-
-
-        //furthermore, decrease the indexes of all owner's lodges that have index higher that deletedIndex, for every user
-        //to understand it better lets say that User1 and User2 have lodges at indexes:
-        //User1 -> 0, 1
-        //User2 -> 2
-        //if User1 deletes his first lodge, we want the new data to be:
-        //User1 -> 0
-        //User2 -> 1
-        //cause the lodges had indexes 0 1 2 and after the deletion they have 0 1
         for (User user: this.users) {
             user.decreaseReviewsIndexes(deletedIndex);
         }
 
-        //auto den kserw an leitourgei
         for (Lodge lodge : this.lodges) {
             lodge.decreaseReviewsIndexes(deletedIndex);
         }
@@ -394,8 +354,6 @@ public class Database extends StringEditor {
         this.saveUsers();
         this.saveLodges();
 
-        System.out.println("telos diagrafhs");
-        this.printReviewData();
     }
 
     /**

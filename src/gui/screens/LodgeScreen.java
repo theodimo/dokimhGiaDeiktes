@@ -203,7 +203,6 @@ public class LodgeScreen extends JFrame {
             this.reviewsPanel.add(noReviewsLabel, BorderLayout.CENTER);
         }else {
 
-            System.out.println("prepei na eisai 0 alla eisai : " + lodge.getReviewsIndexes().get(0));
             Review R1 = db.getReview(lodge.getReviewsIndexes().get(0));
 
             ReviewUi r1 = new ReviewUi(db, R1, this.lodge, 1000, 120);
@@ -228,8 +227,7 @@ public class LodgeScreen extends JFrame {
 
         this.seeMoreReviewsButton.addActionListener(e -> {
             ArrayList<Review> reviews = new ArrayList<>();
-            System.out.println("eee");
-            System.out.println(this.lodge.getReviewsIndexes());
+
             for (Integer index: this.lodge.getReviewsIndexes()) {
                 reviews.add(db.getReview(index));
             }

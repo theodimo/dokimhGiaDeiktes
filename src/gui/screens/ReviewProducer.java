@@ -82,7 +82,6 @@ public class ReviewProducer extends JDialog {
             int finalI = i+1;
             ratingButton.addActionListener(e -> {
                 this.rating = finalI;
-                System.out.println("the rating is " + this.rating);
             });
 
             ratingButtons.add(ratingButton);

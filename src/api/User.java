@@ -125,7 +125,6 @@ public class User implements java.io.Serializable, Element<User> {
     }
 
     public ArrayList<Integer> getReviewsIndexes() {
-        System.out.println("THA SE GAMHSW");
         return this.reviewsIndexes;
     }
 

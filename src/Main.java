@@ -73,8 +73,6 @@ public class Main {
         }
 
         User newUser = new User(name, surname, username, password, type);
-        System.out.println("You successfully created your account! Your data: ");
-        newUser.printUserData();
         return newUser;
     }
 

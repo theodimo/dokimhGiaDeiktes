@@ -83,7 +83,21 @@ public class MinimizedLodge extends JPanel {
         deleteButton.style(buttonsColor, buttonsColor, accentColor1, mainFont);
         deleteButton.setIcon(trashCan);
         deleteButton.setBorder(new EmptyBorder(0, 0, 0, 0));
-        deleteButton.setFocusable(false);
+        deleteButton.setFocusable(false);//add listener to delete the lodge
+        deleteButton.addActionListener(e -> {
+            //delete the lodge from the database
+            this.db.deleteLodge(lodge, currentUser);
+
+            //build again the avl tree because we don't longer want the words of the deleted lodge to be there
+            this.db.createAVL();
+
+            //when deleting a lodge, make sure to remove its minimizedLodge from entriesPanel
+            //entriesPanel.remove(lodge);
+
+            //refresh the frame
+            revalidate();
+            repaint();
+        });
 
         nameAndLocationPanel.add(lodgeName,BorderLayout.NORTH);
         nameAndLocationPanel.add(lodgeLocation,BorderLayout.SOUTH);

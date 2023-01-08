@@ -201,7 +201,6 @@ public class LodgeProducer extends JFrame {
                 //if they are valid, create the lodge
                 this.db.createLodge(currentUser, name, type, address, city, Integer.parseInt(zipcode), description, selectedAccommodations);
 
-                this.db.printData();
                 this.dispose();
             } else {
                 //if they are invalid, show the messages of the fields whose values are invalid
@@ -290,7 +289,6 @@ public class LodgeProducer extends JFrame {
                 lodge.setAccommodations(selectedAccommodations);
 
                 //save the changes to the file. The db is a pointer so the property Lodges of our database changed too
-                System.out.println("Current number of lodges: " + this.db.getLodgesCount());
                 this.db.saveLodges();
                 this.db.createAVL();
 
