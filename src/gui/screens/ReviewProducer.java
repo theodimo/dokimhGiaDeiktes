@@ -91,17 +91,9 @@ public class ReviewProducer extends JDialog {
         submitButton.addActionListener(e -> {
             if(getSelectedRating() != 0 && ( !Objects.equals(textArea.getText(), "") && !Objects.equals(textArea.getText(), defaultMessage) ) ) {
                 this.reviewText = textArea.getText();
+                User author = db.getCurrentUser();
 
-                User owner = db.getCurrentUser();
-                Review newReview = db.createReview(lodge, owner, reviewText, this.rating, java.time.LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))); //create the review                User owner = db.getCurrentUser();
-                db.saveReviews();
-
-                owner.addReviewIndex(newReview.getIndex()); //add the position of the review to the user's review positions
-                db.saveUsers();
-
-
-                lodge.addReviewIndex(newReview.getIndex(), db); //add the position of the review to the lodge's reviews indexes
-                db.saveLodges();
+                db.createReview(lodge, author, reviewText, this.rating, java.time.LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))); //create the review                User owner = db.getCurrentUser();
 
                 this.dispose();
             }

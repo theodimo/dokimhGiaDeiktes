@@ -24,6 +24,7 @@ public class LogInScreen extends SignTemplate {
     public LogInScreen() {
         super("Log In", 400, 600 + 48);
         Database api = new Database();
+        //api.initializationOfData();
 
         //initializing the components
         usernameField = new TitledTextField("Username","tzikaman","This username doesn't exist",false);

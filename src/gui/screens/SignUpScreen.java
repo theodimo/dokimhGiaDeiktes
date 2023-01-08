@@ -97,8 +97,6 @@ public class SignUpScreen extends SignTemplate{
                     if(api.validateSignUpCredentials(username,password,validatePassword)){
                         api.createUser(name,surname,username,password,selectedUserType);
 
-                        User user = api.getUser(api.validateSignInCredentials(username,password));
-                        api.setCurrentUser(user);
                         new SearchScreen(api);
                         dispose();
                     }

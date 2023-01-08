@@ -202,9 +202,7 @@ public class LodgeProducer extends JFrame {
 
             if (titleValidation && addressValidation && cityValidation && zipCodeValidation == 0 && descriptionValidation) {
                 //if they are valid, create the lodge
-                Lodge newLodge = this.db.createLodge(currentUser, name, type, address, city, Integer.parseInt(zipcode), description, selectedAccommodations);
-                currentUser.addLodgeIndex(newLodge.getIndex());
-                this.db.saveUsers();
+                this.db.createLodge(currentUser, name, type, address, city, Integer.parseInt(zipcode), description, selectedAccommodations);
 
                 this.db.printData();
                 this.dispose();
