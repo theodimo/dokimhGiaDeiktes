@@ -78,7 +78,7 @@ public class ViewEntries extends JFrame {
 
         JLabel totalReviewsPanel = new JLabel();
         JLabel overallRatingPanel = new JLabel();
-        if(currentUser.getUsername().equals("provider")){
+        if(currentUser.getType().equals("provider")){
             totalReviewsPanel.setText("Total Reviews Received: " + currentUser.getReviewsReceived());
             totalReviewsPanel.setFont(mainFont);
             totalReviewsPanel.setForeground(accentColor2);
