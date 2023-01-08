@@ -33,8 +33,8 @@ public class LogInScreen extends SignTemplate {
         //api.initializationOfData();
 
         //initializing the components
-        usernameField = new TitledTextField("Username","tzikaman","This username doesn't exist",false);
-        passwordField = new TitledTextField("Password","1234","Wrong password",true);
+        usernameField = new TitledTextField("Username","username","This username doesn't exist",false);
+        passwordField = new TitledTextField("Password","password","Wrong password",true);
 
         backButton = new Button2("Create Account",buttonsWidth,buttonsHeight);
         logInButton = new Button2("Log In",buttonsWidth,buttonsHeight);
