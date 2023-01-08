@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-import static gui.bootstrap.Fonts.smallFont;
+import static gui.bootstrap.Fonts.*;
 
 public class TitledTextArea extends JPanel {
     //properties
@@ -69,6 +69,7 @@ public class TitledTextArea extends JPanel {
         this.area.style(secondaryColor, accentColor1, accentColor2, accentColor1, font);
 
         this.titleLabel.setForeground(accentColor2);
+        this.titleLabel.setFont(mainFont);
         this.errorLabel.setForeground(primaryColor);
         this.errorLabel.setFont(smallFont);
 

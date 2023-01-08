@@ -3,10 +3,12 @@ package gui.screens;
 import api.Database;
 import api.User;
 import gui.components.Button;
+import gui.components.Button2;
 import gui.components.TitledTextField;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 import static gui.bootstrap.Colors.*;
@@ -31,8 +33,8 @@ public class SignUpScreen extends SignTemplate{
     TitledTextField passwordField;
     TitledTextField validatePasswordField;
     JComboBox<String> userType;
-    Button signUpButton;
-    Button backButton;
+    Button2 signUpButton;
+    Button2 backButton;
 
         public SignUpScreen(Database api) {
             super("Sign Up", 650, 600 + 48);
@@ -42,6 +44,8 @@ public class SignUpScreen extends SignTemplate{
             usernameField = new TitledTextField("Username","Username","This username already exists",false);
             passwordField = new TitledTextField("Password","Password","",true);
             validatePasswordField = new TitledTextField("Validate Password","Validate Password","Not valid password",true);
+            signUpButton = new Button2("Sign Up",buttonsWidth,buttonsHeight);
+            backButton = new Button2("Back",buttonsWidth,buttonsHeight);
 
             String[] choices = {"simple", "provider"};
             userType = new JComboBox<>(choices);
@@ -58,10 +62,13 @@ public class SignUpScreen extends SignTemplate{
             usernameField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
             passwordField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
             validatePasswordField.style(primaryColor, secondaryColor, accentColor2, accentColor1);
+            signUpButton.style(accentColor2, primaryColor, accentColor1, mainFont);
+            signUpButton.setBorder(new LineBorder(accentColor1, 2));
+            signUpButton.setFocusable(false);
+            backButton.style(accentColor2, primaryColor, accentColor1, mainFont);
+            backButton.setBorder(new LineBorder(accentColor1, 2));
+            backButton.setFocusable(false);
 
-
-            signUpButton = new Button("Sign Up",buttonsWidth,buttonsHeight,secondaryColor,accentColor1);
-            backButton = new Button("Back",buttonsWidth,buttonsHeight,secondaryColor,accentColor1);
 
             //add components
             this.fieldsPanel.add(nameField);

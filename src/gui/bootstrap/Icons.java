@@ -9,7 +9,7 @@ public class Icons {
     public static ImageIcon trashCan = new ImageIcon("src/gui/bootstrap/trashCan.png");
     public static ImageIcon review = new ImageIcon("src/gui/bootstrap/review.png");
     public static ImageIcon maximize = new ImageIcon("src/gui/bootstrap/maximize.png");
-    public ImageIcon house = new ImageIcon();
+    public static ImageIcon logOut = new ImageIcon("src/gui/bootstrap/exit.png");
 
     public static HashMap<String, String> accommodationIcons = new HashMap<>() {
         {

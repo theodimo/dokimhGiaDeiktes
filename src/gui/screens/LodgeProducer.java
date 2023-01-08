@@ -84,11 +84,11 @@ public class LodgeProducer extends JFrame {
         this.accommodationBoxesPanel = new gui.components.Panel((int) (this.accommodationsPanel.getPreferredSize().getWidth() * 0.3), 150, secondaryColor, "preferredSize");
         this.selectedAccommodationsPanel = new Panel((int) (this.accommodationsPanel.getPreferredSize().getWidth() * 0.7), 145, secondaryColor, "preferredSize");
 
-        this.titleField = new TitledTextField("Title", "", "Title should consist from 6 to 20 characters!", false);
-        this.addressField = new TitledTextField("Address", "", "Address should have 10 to 20 characters", false);
-        this.cityField = new TitledTextField("City", "", "City should consist from 4 to 16 characters", false);
+        this.titleField = new TitledTextField("Title", "", "Title should consist from 1 to 30 characters!", false);
+        this.addressField = new TitledTextField("Address", "", "Address should have 1 to 30 characters", false);
+        this.cityField = new TitledTextField("City", "", "City should consist from 1 to 30 characters", false);
         this.zipCodeField = new TitledTextField("Zip Code", "", "Zip Code should be a 5 digit number", false);
-        this.descriptionField = new TitledTextArea((int) (this.width * 0.9), 160, "Description", "", "Description should be at lease 50 characters long",250);
+        this.descriptionField = new TitledTextArea((int) (this.width * 0.9), 160, "Description", "", "Description should be at lease 1 character long",250);
 
         this.createButton = new Button2("Create Lodge", 200, 50);
         this.addAccommodationButton = new Button2("Add", 120,30);
@@ -103,7 +103,8 @@ public class LodgeProducer extends JFrame {
 
         JScrollPane scrollable = new JScrollPane(this.selectedAccommodationsPanel,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+        );
 
         //layouts
         this.fieldsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10));
@@ -116,6 +117,8 @@ public class LodgeProducer extends JFrame {
         //styling
         this.typeBox.style(secondaryColor, accentColor2, secondaryColor, secondaryColor, mainFont);
         this.createButton.style(accentColor3, secondaryColor, accentColor1, inputLabel);
+        this.createButton.setFocusable(false);
+        this.getRootPane().setDefaultButton(this.createButton);
         this.addAccommodationButton.style(accentColor3, secondaryColor, accentColor1, inputLabel);
         this.accommodationTitlesBox.style(accentColor2, accentColor1, accentColor2, accentColor2, mainFont);
         this.accommodationsBox.style(accentColor2, accentColor1, accentColor1, accentColor1, mainFont);

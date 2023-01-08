@@ -187,7 +187,7 @@ public class Database extends StringEditor {
      * @return
      */
     public boolean validateLodgeTitle(String title) {
-        return title.length() >= 6 && title.length() <= 20;
+        return title.length() >= 1 && title.length() <= 30;
     }
 
     /**
@@ -197,7 +197,7 @@ public class Database extends StringEditor {
      * @return
      */
     public boolean validateLodgeAddress(String address) {
-        return address.length() >= 10 && address.length() <= 20;
+        return address.length() >= 1 && address.length() <= 30;
     }
 
     /**
@@ -207,7 +207,7 @@ public class Database extends StringEditor {
      * @return
      */
     public boolean validateLodgeCity(String city) {
-        return city.length() >= 4 && city.length() <= 16;
+        return city.length() >= 1 && city.length() <= 30;
     }
 
     /**
@@ -235,7 +235,7 @@ public class Database extends StringEditor {
      * @return
      */
     public boolean validateLodgeDescription(String text) {
-        return text.length() >= 50;
+        return text.length() >= 1;
     }
 
 

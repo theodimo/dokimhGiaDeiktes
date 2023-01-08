@@ -16,6 +16,7 @@ import java.util.Objects;
 
 import static gui.bootstrap.Colors.*;
 import static gui.bootstrap.Fonts.*;
+import static gui.bootstrap.Icons.*;
 
 public class SearchScreen extends JFrame {
     User currentUser;
@@ -129,6 +130,8 @@ public class SearchScreen extends JFrame {
         });
 
         logoutButton = new Button2("Log out", 100,50);
+        logoutButton.setIcon(logOut);
+        logoutButton.setHorizontalTextPosition(SwingConstants.LEFT);
         logoutButton.addActionListener(e -> {
             new LogInScreen();
             this.dispose();

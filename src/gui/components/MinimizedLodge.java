@@ -54,7 +54,10 @@ public class MinimizedLodge extends JPanel {
         maximizeButton.setFocusable(false);
         maximizeButton.addActionListener(e -> {
             new LodgeScreen(db, lodge);
-            //this.dispose();
+
+            //close the current frame
+            JFrame frame = (JFrame) SwingUtilities.getRoot(this);
+            frame.dispose();
         });
 
 
