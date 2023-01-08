@@ -9,11 +9,9 @@ import api.User;
 import static gui.bootstrap.Colors.*;
 import gui.components.*;
 import gui.components.Panel;
-import gui.components.TextField;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static gui.bootstrap.Fonts.*;
@@ -134,6 +132,10 @@ public class LodgeProducer extends JFrame {
         this.accommodationTitlesBox.setBackground(primaryColor);
         this.accommodationsBox.setBorder(new EmptyBorder(0, 0, 0, 0));
         this.accommodationTitlesBox.setBorder(new EmptyBorder(0, 0, 0, 0));
+
+        this.addAccommodationButton.setFocusable(false);
+
+        scrollable.getVerticalScrollBar().setBackground(primaryColor);
 
 
         //components addition

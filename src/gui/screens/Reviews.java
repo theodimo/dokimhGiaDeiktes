@@ -26,7 +26,7 @@ public class Reviews extends ScrollableDialog implements ScrollableDialogInterfa
 
         for (Review review: this.reviews) {
             //create the component
-            ReviewUi reviewComponent = new ReviewUi(db, review, reviewedLodge, 400, 180);
+            ReviewUi reviewComponent = new ReviewUi(db, review, reviewedLodge, 400, 240);
             //style the component
             reviewComponent.style(primaryColor, secondaryColor, accentColor3, new Color(96, 96, 96), accentColor2, accentColor3, inputLabel, smallFont, mainFont, inputLabel);
             //add the component
@@ -34,7 +34,7 @@ public class Reviews extends ScrollableDialog implements ScrollableDialogInterfa
         }
 
         //resize the main panel
-        this.resizeMainPanel(3);
+        this.resizeMainPanel(this.reviews.size());
 
         this.revalidate();
         this.repaint();
