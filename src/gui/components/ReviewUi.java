@@ -11,6 +11,7 @@ import api.User;
 import gui.screens.ReviewProducer;
 
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import static gui.bootstrap.Colors.*;
@@ -66,6 +67,8 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         this.deleteButton.style(accentColor2, secondaryColor, accentColor1, mainFont);
         this.editButton.setIcon(pencil);
         this.deleteButton.setIcon(trashCan);
+        this.editButton.setFocusable(false);
+        this.deleteButton.setFocusable(false);
 
 
         //components adding

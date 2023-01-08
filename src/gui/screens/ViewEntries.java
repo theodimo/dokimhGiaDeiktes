@@ -2,9 +2,11 @@ package gui.screens;
 
 import api.Database;
 import api.Lodge;
+import api.Review;
 import api.User;
 import gui.components.Button2;
 import gui.components.MinimizedLodge;
+import gui.components.ReviewUi;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -19,14 +21,24 @@ public class ViewEntries extends JFrame {
     Database db;
     int verticalGap = 40;
     int heightOfMinimizedLodge = 60;
+    int heightOfReviewUis = 120;
 
-    private ArrayList<MinimizedLodge> entries;
+    private ArrayList<MinimizedLodge> lodgeEntries;
+    private ArrayList<ReviewUi> reviewEntries;
     private User currentUser;
     public ViewEntries(Database db, User currentUser){
         this.db = db;
         this.currentUser = currentUser;
-        this.entries = new ArrayList<>();
-        this.entries = this.convertToMinimized(currentUser.getLodgeIndexes());
+
+        if(currentUser.getType().equals("provider")) {
+            this.lodgeEntries = new ArrayList<>();
+            this.lodgeEntries = this.convertToMinimized(currentUser.getLodgeIndexes());
+        }
+        else {
+            this.reviewEntries = new ArrayList<>();
+            this.reviewEntries = this.convertToReviewUI(currentUser.getReviewsIndexes());
+            System.out.println("den prepei na eisai adeio" + reviewEntries + currentUser.getReviewsIndexes());
+        }
 
         //Panels initialization
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEADING,50,50));
@@ -64,13 +76,23 @@ public class ViewEntries extends JFrame {
         userNameLabel.setFont(bigFont);
         userNameLabel.setForeground(accentColor3);
 
-        JLabel totalReviewsPanel = new JLabel("Total Reviews: " + currentUser.getTotalReviewCount());
-        totalReviewsPanel.setFont(mainFont);
-        totalReviewsPanel.setForeground(accentColor2);
+        JLabel totalReviewsPanel = new JLabel();
+        JLabel overallRatingPanel = new JLabel();
+        if(currentUser.getUsername().equals("provider")){
+            totalReviewsPanel.setText("Total Reviews Received: " + currentUser.getTotalReviewCount());
+            totalReviewsPanel.setFont(mainFont);
+            totalReviewsPanel.setForeground(accentColor2);
 
-        JLabel overallRatingPanel = new JLabel("Overall Rating: " + currentUser.getOverallRating());
-        overallRatingPanel.setFont(mainFont);
-        overallRatingPanel.setForeground(accentColor2);
+            overallRatingPanel.setText("Overall Rating: " + currentUser.getOverallRating());
+            overallRatingPanel.setFont(mainFont);
+            overallRatingPanel.setForeground(accentColor2);
+        }
+        else {
+            totalReviewsPanel.setText("Total Reviews Received: " );
+            totalReviewsPanel.setFont(mainFont);
+            totalReviewsPanel.setForeground(accentColor2);
+        }
+
 
         Button2 newEntryButton = new Button2("+ New Entry", 100, 50);
         newEntryButton.style(accentColor2, primaryColor, accentColor1, mainFont);
@@ -96,55 +118,72 @@ public class ViewEntries extends JFrame {
 
         userInfoPanel.add(userNameLabel);
         userInfoPanel.add(totalReviewsPanel);
-        userInfoPanel.add(overallRatingPanel);
-
 
         buttonsPanel.add(backButton);
-        buttonsPanel.add(newEntryButton);
 
-        for (MinimizedLodge lodgeToAdd : entries) {
-            //add listener to delete the lodge
-            lodgeToAdd.deleteButton.addActionListener(e -> {
-                System.out.println("klithika");
-                //delete the lodge from the database
-                this.db.deleteLodge(lodgeToAdd.getLodge(), currentUser);
+        if(currentUser.getType().equals("provider")) {
+            //add the new entry button only for the providers and the overall rating that they received
+            userInfoPanel.add(overallRatingPanel);
+            buttonsPanel.add(newEntryButton);
 
-                //build again the avl tree because we don't longer want the words of the deleted lodge to be there
-                this.db.createAVL();
+            for (MinimizedLodge lodgeToAdd : lodgeEntries) {
+                //add listener to delete the lodge
+                lodgeToAdd.deleteButton.addActionListener(e -> {
+                    System.out.println("klithika");
+                    //delete the lodge from the database
+                    this.db.deleteLodge(lodgeToAdd.getLodge(), currentUser);
 
-                //when deleting a lodge, make sure to remove its minimizedLodge from entriesPanel
-                entriesPanel.remove(lodgeToAdd);
+                    //build again the avl tree because we don't longer want the words of the deleted lodge to be there
+                    this.db.createAVL();
 
-                this.db.printData();
+                    //when deleting a lodge, make sure to remove its minimizedLodge from entriesPanel
+                    entriesPanel.remove(lodgeToAdd);
 
-                //refresh the frame
-                revalidate();
-                repaint();
-            });
-            entriesPanel.add(lodgeToAdd);
+                    this.db.printData();
+
+                    //refresh the frame
+                    revalidate();
+                    repaint();
+                });
+                entriesPanel.add(lodgeToAdd);
+            }
+
+            //resize the entriesPanel based on the number of minimizedLodges added
+            //we want to compute the new height of the entriesPanel
+            int totalMinimizedLodges = lodgeEntries.size();
+            int totalHeight = (totalMinimizedLodges + 1) * this.verticalGap; //for x components, there are x+1 gaps around them
+            totalHeight += totalMinimizedLodges * this.heightOfMinimizedLodge;
+
+            int oldWidth = (int) entriesPanel.getPreferredSize().getWidth();
+            entriesPanel.setPreferredSize(new Dimension(oldWidth, totalHeight));
+
+        }
+        else {
+            for (ReviewUi reviewToAdd : reviewEntries) {
+                entriesPanel.add(reviewToAdd);
+            }
+
+            //resize the entriesPanel based on the number of ReviewUis added
+            //we want to compute the new height of the entriesPanel
+            int totalReviewUis = reviewEntries.size();
+            int totalHeight = (totalReviewUis + 1) * this.verticalGap; //for x components, there are x+1 gaps around them
+            totalHeight += totalReviewUis * this.heightOfReviewUis;
+
+            int oldWidth = (int) entriesPanel.getPreferredSize().getWidth();
+            entriesPanel.setPreferredSize(new Dimension(oldWidth, totalHeight));
+
         }
 
-        //resize the entriesPanel based on the number of minimizedLodges added
-        //we want to compute the new height of the entriesPanel
-        int totalMinimizedLodges = entries.size();
-        int totalHeight = (totalMinimizedLodges + 1) * this.verticalGap; //for x components, there are x+1 gaps around them
-        totalHeight += totalMinimizedLodges * this.heightOfMinimizedLodge;
-
-        int oldWidth = (int) entriesPanel.getPreferredSize().getWidth();
-        entriesPanel.setPreferredSize(new Dimension(oldWidth, totalHeight));
-
         this.setTitle("View Entries");
-        this.setSize(new Dimension(1080,720 + 48));
+        this.setSize(new Dimension(1080, 720 + 48));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
 
-
     private ArrayList<MinimizedLodge> convertToMinimized(ArrayList<Integer> lodgesIndexes){
         ArrayList<MinimizedLodge> minimizedLodges = new ArrayList<>();
-
 
         for (Integer index: lodgesIndexes) {
             Lodge tempLodge = this.db.getLodge(index);
@@ -154,6 +193,25 @@ public class ViewEntries extends JFrame {
         }
 
         return minimizedLodges;
+    }
+
+    private ArrayList<ReviewUi> convertToReviewUI(ArrayList<Integer> reviewsIndexes) {
+        ArrayList<ReviewUi> reviewUis = new ArrayList<>();
+
+        for (Integer index: reviewsIndexes) {
+            //ta bazw edw ta xrwmata kai ama thes bgalta
+            Color dark = Color.BLACK;
+            Color gray = new Color(96,96,96);
+            Color accentColor = new Color(212, 241, 244);
+
+            Review tempReview = this.db.getReview(index);
+            ReviewUi tempReviewUi = new ReviewUi(this.db, tempReview, tempReview.getReviewedLodge(), 800, 120);
+            tempReviewUi.style(primaryColor, secondaryColor, dark, gray, accentColor, dark, inputLabel, smallFont, mainFont, inputLabel);
+
+            reviewUis.add(tempReviewUi);
+        }
+
+        return reviewUis;
     }
 
     public static void main(String[] args){
