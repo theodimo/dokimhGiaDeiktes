@@ -32,11 +32,15 @@ public class ViewEntries extends JFrame {
 
         if(currentUser.getType().equals("provider")) {
             this.lodgeEntries = new ArrayList<>();
-            this.lodgeEntries = this.convertToMinimized(currentUser.getLodgeIndexes());
+            this.lodgeEntries = this.convertToMinimized(currentUser.getLodges());
+            System.out.println("O xrhsths " + currentUser.getUsername() +" exei spitia me names: ");
+            for (Lodge lodge: currentUser.getLodges()) {
+                System.out.println(lodge.getName());
+            }
         }
         else {
             this.reviewEntries = new ArrayList<>();
-            this.reviewEntries = this.convertToReviewUI(currentUser.getReviewsIndexes());
+            this.reviewEntries = this.convertToReviewUI(currentUser.getReviews());
         }
 
         //Panels initialization
@@ -167,11 +171,10 @@ public class ViewEntries extends JFrame {
     }
 
 
-    private ArrayList<MinimizedLodge> convertToMinimized(ArrayList<Integer> lodgesIndexes){
+    private ArrayList<MinimizedLodge> convertToMinimized(ArrayList<Lodge> lodges){
         ArrayList<MinimizedLodge> minimizedLodges = new ArrayList<>();
 
-        for (Integer index: lodgesIndexes) {
-            Lodge tempLodge = this.db.getLodge(index);
+        for (Lodge tempLodge: lodges) {
             MinimizedLodge tempMinimized = new MinimizedLodge(this.db,800,this.heightOfMinimizedLodge,tempLodge,this.currentUser,secondaryColor,accentColor2,accentColor3,primaryColor);
 
             minimizedLodges.add(tempMinimized);
@@ -180,18 +183,14 @@ public class ViewEntries extends JFrame {
         return minimizedLodges;
     }
 
-    private ArrayList<ReviewUi> convertToReviewUI(ArrayList<Integer> reviewsIndexes) {
+    private ArrayList<ReviewUi> convertToReviewUI(ArrayList<Review> reviews) {
         ArrayList<ReviewUi> reviewUis = new ArrayList<>();
 
-        for (Integer index: reviewsIndexes) {
+        for (Review tempReview: reviews) {
             //ta bazw edw ta xrwmata kai ama thes bgalta
-            Color dark = Color.BLACK;
-            Color gray = new Color(96,96,96);
-            Color accentColor = new Color(212, 241, 244);
 
-            Review tempReview = this.db.getReview(index);
             ReviewUi tempReviewUi = new ReviewUi(this.db, tempReview, tempReview.getReviewedLodge(), 800, 120);
-            tempReviewUi.style(primaryColor, secondaryColor, dark, gray, accentColor, dark, inputLabel, smallFont, mainFont, inputLabel);
+            tempReviewUi.style(primaryColor, secondaryColor, accentColor3, new Color(96,96,96), accentColor2, accentColor1, inputLabel, smallFont, mainFont, inputLabel);
 
             reviewUis.add(tempReviewUi);
         }

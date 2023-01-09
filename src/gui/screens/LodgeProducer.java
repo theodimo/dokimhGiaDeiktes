@@ -84,9 +84,9 @@ public class LodgeProducer extends JFrame {
         this.accommodationBoxesPanel = new gui.components.Panel((int) (this.accommodationsPanel.getPreferredSize().getWidth() * 0.3), 150, secondaryColor, "preferredSize");
         this.selectedAccommodationsPanel = new Panel((int) (this.accommodationsPanel.getPreferredSize().getWidth() * 0.7), 145, secondaryColor, "preferredSize");
 
-        this.titleField = new TitledTextField("Title", "", "Title should consist from 1 to 30 characters!", false);
-        this.addressField = new TitledTextField("Address", "", "Address should have 1 to 30 characters", false);
-        this.cityField = new TitledTextField("City", "", "City should consist from 1 to 30 characters", false);
+        this.titleField = new TitledTextField("Title", "", "Title should consist from 6 to 30 characters!", false);
+        this.addressField = new TitledTextField("Address", "", "Address should have 8 to 30 characters", false);
+        this.cityField = new TitledTextField("City", "", "City should consist from 4 to 26 characters", false);
         this.zipCodeField = new TitledTextField("Zip Code", "", "Zip Code should be a 5 digit number", false);
         this.descriptionField = new TitledTextArea((int) (this.width * 0.9), 160, "Description", "", "Description should be at lease 1 character long",250);
 
@@ -290,7 +290,7 @@ public class LodgeProducer extends JFrame {
 
                 //save the changes to the file. The db is a pointer so the property Lodges of our database changed too
                 this.db.saveLodges();
-                this.db.createAVL();
+                this.db.createAVL(); //create again the avl in order to include the new words of the lodge
 
                 this.dispose();
 
@@ -300,10 +300,6 @@ public class LodgeProducer extends JFrame {
             }
 
         });
-
-        //refresh the frame
-        //this.revalidate();
-        //this.repaint();
     }
 
 

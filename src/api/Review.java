@@ -4,7 +4,7 @@ import api.User;
 
 import java.io.Serializable;
 
-public class Review implements java.io.Serializable, Element<Review> {
+public class Review implements java.io.Serializable {
     //properties
     private Lodge reviewedLodge;
     private User author; //the user that wrote this particular review
@@ -13,17 +13,15 @@ public class Review implements java.io.Serializable, Element<Review> {
 
     private String date; //the creation date of the review
 
-    private int index; //the position of this review in the reviews Arraylist in the Database class
 
     //constructor
-    public Review(Lodge reviewedLodge, User author, String text, int rating, String date, int index) {
+    public Review(Lodge reviewedLodge, User author, String text, int rating, String date) {
         //initialization
         this.reviewedLodge = reviewedLodge;
         this.author = author;
         this.text = text;
         this.rating = rating;
         this.date = date;
-        this.index = index;
     }
 
     //getters
@@ -59,17 +57,14 @@ public class Review implements java.io.Serializable, Element<Review> {
         return this.date;
     }
 
-    public int getIndex() {
-        return this.index;
-    }
 
-    public void decreaseIndex() {
-        this.index -= 1;
-    }
 
+
+    /**
     @Override
     public Review getCopy() {
         Review newReview = new Review(this.reviewedLodge, this.author, this.text, this.rating, this.date, this.index);
         return newReview;
     }
+    */
 }

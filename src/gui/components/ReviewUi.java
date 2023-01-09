@@ -68,7 +68,7 @@ public class ReviewUi extends JPanel implements ScrollableElement {
         this.credentialsPanel.setLayout(null);
         this.mainPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
         this.ratingPanel.setLayout(new BorderLayout());
-        this.leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        this.leftPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
         this.rightPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 5));
 
         //styling

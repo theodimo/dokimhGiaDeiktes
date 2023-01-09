@@ -89,6 +89,11 @@ public class MinimizedLodge extends JPanel {
             //delete the lodge from the database
             this.db.deleteLodge(lodge, currentUser);
 
+            System.out.println("meta thn klhsh ths synarthshs");
+            for (Lodge lodge2: currentUser.getLodges()) {
+                System.out.println("exw to spiti " + lodge2.getName() );
+            }
+
             //build again the avl tree because we don't longer want the words of the deleted lodge to be there
             this.db.createAVL();
 

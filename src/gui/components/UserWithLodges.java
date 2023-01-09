@@ -32,7 +32,7 @@ public class UserWithLodges extends JPanel implements ScrollableElement {
         this.owner = owner;
         this.width = width;;
         this.verticalGap = 10;
-        this.totalLodges = owner.getLodgeIndexes().size();
+        this.totalLodges = owner.getLodges().size();
 
         //components initialization
         this.namePanel = new Panel(this.width, 30, primaryColor, "preferredSize");
@@ -51,8 +51,7 @@ public class UserWithLodges extends JPanel implements ScrollableElement {
         this.setBorder(new LineBorder(accentColor2, 2));
 
         //creating the minimizedLodges
-        for (Integer id: this.owner.getLodgeIndexes()) {
-            Lodge lodge = db.getLodge(id);
+        for (Lodge lodge: this.owner.getLodges()) {
             MinimizedLodge minimizedLodge = new MinimizedLodge(db, this.width - 40, 60, lodge, db.getCurrentUser(), secondaryColor, accentColor1, accentColor2, primaryColor);
 
             this.mainPanel.add(minimizedLodge);

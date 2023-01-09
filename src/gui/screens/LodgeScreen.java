@@ -196,14 +196,14 @@ public class LodgeScreen extends JFrame {
 
         this.reviewsPanel.add(this.reviewsLabel, BorderLayout.NORTH);
 
-        if(lodge.getReviewsIndexes().isEmpty()){
+        if(lodge.getReviews().size() == 0){
             JLabel noReviewsLabel = new JLabel("There are no reviews yet");
             noReviewsLabel.setFont(mainFont);
             noReviewsLabel.setForeground(Color.white);
             this.reviewsPanel.add(noReviewsLabel, BorderLayout.CENTER);
         }else {
 
-            Review R1 = db.getReview(lodge.getReviewsIndexes().get(0));
+            Review R1 = lodge.getReview(0);
 
             ReviewUi r1 = new ReviewUi(db, R1, this.lodge, 1000, 120);
 
@@ -228,8 +228,8 @@ public class LodgeScreen extends JFrame {
         this.seeMoreReviewsButton.addActionListener(e -> {
             ArrayList<Review> reviews = new ArrayList<>();
 
-            for (Integer index: this.lodge.getReviewsIndexes()) {
-                reviews.add(db.getReview(index));
+            for (Review rev: this.lodge.getReviews()) {
+                reviews.add(rev);
             }
             new Reviews(db, this.lodge, reviews);
         });

@@ -92,11 +92,13 @@ public class ReviewProducer extends JDialog {
         submitButton.style(accentColor2, secondaryColor, accentColor1, mainFont);
 
         submitButton.addActionListener(e -> {
+            System.out.println("klithike to event tou prwtou");
             if(getSelectedRating() != 0 && ( !Objects.equals(textArea.getText(), "") && !Objects.equals(textArea.getText(), defaultMessage) ) ) {
                 this.reviewText = textArea.getText();
                 User author = db.getCurrentUser();
 
-                db.createReview(lodge, author, reviewText, this.rating, java.time.LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))); //create the review                User owner = db.getCurrentUser();
+                db.createReview(lodge, author, reviewText, this.rating, java.time.LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))); //create the review
+                db.printReviewData();
 
                 this.dispose();
             }
@@ -155,6 +157,7 @@ public class ReviewProducer extends JDialog {
 
             if(!Objects.equals(textArea.getText(), "") && !Objects.equals(textArea.getText(), defaultMessage) ){
                 //updating the review on the Database
+
                 review.setText(this.textArea.getText());
                 review.setRating(this.getSelectedRating());
 

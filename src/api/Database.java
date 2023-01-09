@@ -1,6 +1,7 @@
 package api;
 
 import java.io.*;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,10 +30,14 @@ public class Database extends StringEditor {
         //fetch users
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/database/Users.dat"));
-            ArrayList<User> oldUsers = (ArrayList<User>) in.readObject();
+
+            /*ArrayList<User> oldUsers = (ArrayList<User>) in.readObject();
             for (User user : oldUsers) {
                 this.users.add(user.getCopy());
             }
+            */
+            this.users = (ArrayList<User>) in.readObject();
+
             in.close();
         } catch (Exception e) {
             System.out.println("error fortwnontas ta users");
@@ -42,10 +47,13 @@ public class Database extends StringEditor {
         //fetch lodges
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/database/Lodges.dat"));
+            /*
             ArrayList<Lodge> oldLodges = (ArrayList<Lodge>) in.readObject();
             for (Lodge lodge : oldLodges) {
                 this.lodges.add(lodge.getCopy());
             }
+             */
+            this.lodges = (ArrayList<Lodge>) in.readObject();
             in.close();
         } catch (Exception e) {
             System.out.println("error fortwnontas ta lodges");
@@ -55,13 +63,37 @@ public class Database extends StringEditor {
         //fetch reviews
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/database/Reviews.dat"));
+            /*
             ArrayList<Review> oldReviews = (ArrayList<Review>) in.readObject();
             for (Review review : oldReviews) {
                 this.reviews.add(review.getCopy());
             }
+             */
+            this.reviews = (ArrayList<Review>) in.readObject();
+
             in.close();
         } catch (Exception e) {
             System.out.println(e);
+        }
+        System.out.println(this.lodges.size());
+
+
+
+        for (Lodge lodge: this.lodges) {
+            System.out.println("Eimai to spiti me name: " + lodge.getName() + " kai exw idiokthth ton: " + lodge.getOwner().getUsername());
+            System.out.println("O opoios exei spitia me names: ");
+            for (Lodge l: lodge.getOwner().getLodges()) {
+                System.out.println(l.getName());
+            }
+        }
+
+        System.out.println("---------------------");
+        for (User user: this.users) {
+            System.out.println("Eimai o " + user.getName() + " kai exw ta spitia me names: ");
+            for (Lodge lodge: user.getLodges()) {
+                System.out.println(lodge.getName());
+            }
+
         }
 
         //create AVL. It will be used for the searching
@@ -289,6 +321,8 @@ public class Database extends StringEditor {
         Lodge newLodge = new Lodge(owner, name, type, address, city, zipCode, description, Accommodations, this.lodges.size());
         this.lodges.add(newLodge);
 
+        owner.addLodge(newLodge);
+
         this.saveLodges();
 
         //put the words of the new lodge to the avl tree
@@ -297,8 +331,6 @@ public class Database extends StringEditor {
             AVLnode newNode = new AVLnode(word, this.lodges.size() - 1);
             myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), newNode));
         }
-
-        owner.addLodgeIndex(newLodge.getIndex());
         this.saveUsers();
 
         return newLodge;
@@ -316,15 +348,17 @@ public class Database extends StringEditor {
      * @return   the created review
      */
     public Review createReview(Lodge reviewedLodge, User author, String reviewText, int rating, String date) {
-        Review newReview = new Review(reviewedLodge, author, reviewText, rating, date, this.reviews.size());
+        Review newReview = new Review(reviewedLodge, author, reviewText, rating, date);
         this.reviews.add(newReview);
 
+        //add the review at the arrayList of its author
+        author.addReview(newReview);
+
+        //add the review at the lodge for which it was made
+        reviewedLodge.addReview(newReview, this);
+
         this.saveReviews();
-
-        author.addReviewIndex(newReview.getIndex()); //add the position of the review to the user's review positions
         this.saveUsers();
-
-        reviewedLodge.addReviewIndex(newReview.getIndex(), this); //add the position of the review to the lodge's reviews indexes
         this.saveLodges();
 
 
@@ -339,32 +373,17 @@ public class Database extends StringEditor {
      * @param owner            the user who owns the lodge
      */
     public void deleteLodge(Lodge lodgeForDeleting, User owner) {
-        //firstly, we want the lodges to have an ascending index with step 1. By removing a lodge, we should decrease the
-        //index of all lodges with bigger index, in order to maintain the order
-
-
-        int deletedIndex = lodgeForDeleting.getIndex();
-        for (int i = deletedIndex + 1; i < this.lodges.size(); i++) {
-            this.lodges.get(i).decreaseIndex();
-        }
-
         //then, delete the lodge from the lodges property
         this.lodges.remove(lodgeForDeleting);
 
-
-        //remove the index of the lodge from owner's lodgeIndexes
-        owner.removeLodgeIndex(deletedIndex);
-
-        //furthermore, decrease the indexes of all owner's lodges that have index higher that deletedIndex, for every user
-        //to understand it better lets say that User1 and User2 have lodges at indexes:
-        //User1 -> 0, 1
-        //User2 -> 2
-        //if User1 deletes his first lodge, we want the new data to be:
-        //User1 -> 0
-        //User2 -> 1
-        //cause the lodges had indexes 0 1 2 and after the deletion they have 0 1
-        for (User user : this.users) {
-            user.decreaseLodgeIndexes(deletedIndex);
+        System.out.println("prin thn allagh: ");
+        for (Lodge lodge: owner.getLodges()) {
+            System.out.println("exw to spiti: " + lodge.getName());
+        }
+        owner.removeLodge(lodgeForDeleting);
+        System.out.println("meta thn allagh");
+        for (Lodge lodge: owner.getLodges()) {
+            System.out.println("exw to spiti: " + lodge.getName());
         }
 
 
@@ -384,27 +403,15 @@ public class Database extends StringEditor {
         //firstly, we want the lodges to have an ascending index with step 1. By removing a lodge, we should decrease the
         //index of all lodges with bigger index, in order to maintain the order
 
-        int deletedIndex = reviewForDeleting.getIndex();
-        for (int i = deletedIndex + 1; i < this.reviews.size(); i++) {
-            this.reviews.get(i).decreaseIndex();
-        }
+
 
         //then, delete the lodge from the lodges property
         this.reviews.remove(reviewForDeleting);
 
 
         //remove the index of the review from owner's and lodge's reviewIndexes
-        author.removeReviewIndex(deletedIndex);
-        reviewedLodge.removeReviewIndex(deletedIndex);
         reviewedLodge.updateTotalRating(this);
 
-        for (User user : this.users) {
-            user.decreaseReviewsIndexes(deletedIndex);
-        }
-
-        for (Lodge lodge : this.lodges) {
-            lodge.decreaseReviewsIndexes(deletedIndex);
-        }
 
 
         //save the changes to database files
@@ -533,7 +540,6 @@ public class Database extends StringEditor {
         for (User user : this.users) {
             System.out.println(user.getName() + " " + user.getSurname());
             System.out.println("me indexes: ");
-            System.out.println(user.getLodgeIndexes());
         }
         System.out.println("Lodges");
         System.out.println("Ola ta indexes apo ta lodges:");
@@ -550,14 +556,10 @@ public class Database extends StringEditor {
         for (User user : this.users) {
             System.out.println(user.getName() + " " + user.getSurname());
             System.out.println("Me Review indexes: ");
-            System.out.println(user.getReviewsIndexes());
         }
 
         System.out.println("Reviews:");
         System.out.println("Ola ta indexes apo ta reviews:");
-        for (Review review : this.reviews) {
-            System.out.println(review.getIndex() + "-> " + review.getAuthor().getUsername() + " " + review.getRating() + "/5" + " " + review.getText());
-        }
 
         System.out.println("**************");
     }
