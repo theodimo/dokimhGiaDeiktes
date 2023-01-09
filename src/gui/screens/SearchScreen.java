@@ -124,7 +124,7 @@ public class SearchScreen extends JFrame {
         logoutButton.setIcon(logOut);
         logoutButton.setHorizontalTextPosition(SwingConstants.LEFT);
         logoutButton.addActionListener(e -> {
-            new LogInScreen();
+            new LogInScreen(this.db);
             this.dispose();
         });
 
@@ -196,10 +196,5 @@ public class SearchScreen extends JFrame {
         }
 
         return minimizedLodges;
-    }
-
-    public static void main(String[] args) {
-
-        //new SearchScreen(new User("Dimitris", "Tzikas", "tzikaman", "1234", "provider"));
     }
 }

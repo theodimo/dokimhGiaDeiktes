@@ -36,7 +36,7 @@ public class SignUpScreen extends SignTemplate{
     Button2 signUpButton;
     Button2 backButton;
 
-        public SignUpScreen(Database api) {
+        public SignUpScreen(Database db) {
             super("Sign Up", 650, 600 + 48);
 
             nameField = new TitledTextField("Name","Name","",false);
@@ -83,7 +83,7 @@ public class SignUpScreen extends SignTemplate{
 
             backButton.addActionListener(e -> {
                 //goes back to Log In Screen
-                new LogInScreen();
+                new LogInScreen(db);
                 dispose();
             });
             this.buttonsPanel.add(backButton);
@@ -98,13 +98,13 @@ public class SignUpScreen extends SignTemplate{
                 String selectedUserType = (String) userType.getSelectedItem();
 
                 //checks weather the credentials are valid and proceeds to the Search Screen
-                if(api.validateUsername(username) == -1){
+                if(db.validateUsername(username) == -1){
                     usernameField.showErrorMessage(false);
 
-                    if(api.validateSignUpCredentials(username,password,validatePassword)){
-                        api.createUser(name,surname,username,password,selectedUserType);
+                    if(db.validateSignUpCredentials(username,password,validatePassword)){
+                        db.createUser(name,surname,username,password,selectedUserType);
 
-                        new SearchScreen(api);
+                        new SearchScreen(db);
                         dispose();
                     }
                     else {

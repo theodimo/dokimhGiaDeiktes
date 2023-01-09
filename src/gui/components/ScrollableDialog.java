@@ -77,8 +77,4 @@ public abstract class ScrollableDialog extends JDialog {
             this.dispose();
         });
     }
-
-    public static void main(String[] args) {
-        //new ScrollableDialog("Accommodations", "What this lodge provides");
-    }
 }

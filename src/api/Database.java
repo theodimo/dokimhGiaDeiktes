@@ -27,11 +27,11 @@ public class Database extends StringEditor {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/database/Users.dat"));
             ArrayList<User> oldUsers = (ArrayList<User>) in.readObject();
-            for (User user: oldUsers) {
+            for (User user : oldUsers) {
                 this.users.add(user.getCopy());
             }
             in.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("error fortwnontas ta users");
             System.out.println(e);
         }
@@ -40,11 +40,11 @@ public class Database extends StringEditor {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/database/Lodges.dat"));
             ArrayList<Lodge> oldLodges = (ArrayList<Lodge>) in.readObject();
-            for (Lodge lodge: oldLodges) {
+            for (Lodge lodge : oldLodges) {
                 this.lodges.add(lodge.getCopy());
             }
             in.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("error fortwnontas ta lodges");
             System.out.println(e);
         }
@@ -53,11 +53,11 @@ public class Database extends StringEditor {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream("src/database/Reviews.dat"));
             ArrayList<Review> oldReviews = (ArrayList<Review>) in.readObject();
-            for (Review review: oldReviews) {
+            for (Review review : oldReviews) {
                 this.reviews.add(review.getCopy());
             }
             in.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
 
@@ -66,8 +66,10 @@ public class Database extends StringEditor {
     }
 
     //getters
+
     /**
      * Returns the user at the position: index
+     *
      * @param index the position of the user in the database
      * @return the user
      */
@@ -77,6 +79,7 @@ public class Database extends StringEditor {
 
     /**
      * Returns the lodge at the position: index
+     *
      * @param index the position of the lodge in the database
      * @return the lodge
      */
@@ -86,6 +89,7 @@ public class Database extends StringEditor {
 
     /**
      * Returns the review at the position: index
+     *
      * @param index the position of the review in the database
      * @return the review
      */
@@ -112,10 +116,11 @@ public class Database extends StringEditor {
     }
 
 
-
     //functions
-     /**
+
+    /**
      * Checks if a user with the given username exists in the database
+     *
      * @param username: The name of the user we want to check his existence
      * @return An integer that represents the position of the user in the database. If user does not exist, return -1
      */
@@ -134,8 +139,9 @@ public class Database extends StringEditor {
         return foundPosition;
     }
 
-     /**
+    /**
      * Checks if there is a user registered with the given credentials in the database.
+     *
      * @param username: The name of the user we want to check about his existence
      * @param password: The password of the user we want to check about his existence
      * @return an integer that represents the position of the potential user in the database. If user does not exist
@@ -147,7 +153,7 @@ public class Database extends StringEditor {
         int pos = this.validateUsername(username);
         if (pos != -1) {
             //if the user exists, validate his password
-            if (Objects.equals(this.users.get(pos).getPassword() , password)) {
+            if (Objects.equals(this.users.get(pos).getPassword(), password)) {
                 foundPosition = pos;
             }
         }
@@ -155,11 +161,12 @@ public class Database extends StringEditor {
     }
 
 
-     /**
+    /**
      * Checks if a new account with the given credentials can be created. An account can be created, if there isn't already
      * a user that has the same username with the given username, and if the user typed correctly the password he wants to have.
-     * @param username: The username of the possibly new user.
-     * @param password: The password of the possibly new user.
+     *
+     * @param username:        The username of the possibly new user.
+     * @param password:        The password of the possibly new user.
      * @param confirmPassword: The confirmation of the password of the possibly new user.
      * @return True if the validation is successfull, false otherwise.
      */
@@ -177,6 +184,7 @@ public class Database extends StringEditor {
     /**
      * Checks if the title of the lodge that is going to be created, is validated.
      * A title is validated if it consists from 6 to 20 characters
+     *
      * @param title
      * @return
      */
@@ -187,6 +195,7 @@ public class Database extends StringEditor {
     /**
      * Checks if the address of the lodge that is going to be created, is validated.
      * An address is validated if it consists from 10 to 20 characters
+     *
      * @param address
      * @return
      */
@@ -197,6 +206,7 @@ public class Database extends StringEditor {
     /**
      * Checks if the city of the lodge that is going to be created, is validated
      * A city is validated if it consists from 4 to 16 characters
+     *
      * @param city
      * @return
      */
@@ -207,17 +217,19 @@ public class Database extends StringEditor {
     /**
      * Checks if the zipCode of the lodge that is going to be created, is validated
      * A zipCode is validated if it consists of 5 numeric digits
+     *
      * @param zipCode
      * @return 0 if zipCode is validated,
-     *        -1 if zipCode's length is different from 5,
-     *         1 if it doesn't consist of numeric digits
+     * -1 if zipCode's length is different from 5,
+     * 1 if it doesn't consist of numeric digits
      */
     public int validateLodgeZipCode(String zipCode) {
         if (zipCode.length() == 5 && zipCode.matches("[0-9]+")) {
             return 0;
         } else if (zipCode.length() != 5) {
             return -1;
-        } {
+        }
+        {
             return 1;
         }
     }
@@ -225,6 +237,7 @@ public class Database extends StringEditor {
     /**
      * Checks if the description of the lodge that is going to be created, is validated
      * A description is validated if it is at least 50 characters long
+     *
      * @param text
      * @return
      */
@@ -239,13 +252,13 @@ public class Database extends StringEditor {
 
         this.saveUsers();
 
-        User user = this.getUser(this.validateSignInCredentials(username,password));
+        User user = this.getUser(this.validateSignInCredentials(username, password));
         this.setCurrentUser(user);
 
         return newUser;
     }
 
-    public Lodge createLodge(User owner,String name, String type, String address, String city, int zipCode, String description, HashMap<String,String[]> Accommodations) {
+    public Lodge createLodge(User owner, String name, String type, String address, String city, int zipCode, String description, HashMap<String, String[]> Accommodations) {
         Lodge newLodge = new Lodge(owner, name, type, address, city, zipCode, description, Accommodations, this.lodges.size());
         this.lodges.add(newLodge);
 
@@ -253,7 +266,7 @@ public class Database extends StringEditor {
 
         //put the words of the new lodge to the avl tree
         ArrayList<String> words = newLodge.getAllWords();
-        for (String word: words) {
+        for (String word : words) {
             AVLnode newNode = new AVLnode(word, this.lodges.size() - 1);
             myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), newNode));
         }
@@ -264,7 +277,7 @@ public class Database extends StringEditor {
         return newLodge;
     }
 
-    public Review createReview(Lodge reviewedLodge, User author,String reviewText, int rating, String date) {
+    public Review createReview(Lodge reviewedLodge, User author, String reviewText, int rating, String date) {
         Review newReview = new Review(reviewedLodge, author, reviewText, rating, date, this.reviews.size());
         this.reviews.add(newReview);
 
@@ -281,13 +294,13 @@ public class Database extends StringEditor {
     }
 
 
-
     /**
      * Deletes the lodge from the local object database and from the files
+     *
      * @param lodgeForDeleting
      * @param owner
      */
-    public void deleteLodge(Lodge lodgeForDeleting, User owner){
+    public void deleteLodge(Lodge lodgeForDeleting, User owner) {
         //firstly, we want the lodges to have an ascending index with step 1. By removing a lodge, we should decrease the
         //index of all lodges with bigger index, in order to maintain the order
 
@@ -312,7 +325,7 @@ public class Database extends StringEditor {
         //User1 -> 0
         //User2 -> 1
         //cause the lodges had indexes 0 1 2 and after the deletion they have 0 1
-        for (User user: this.users) {
+        for (User user : this.users) {
             user.decreaseLodgeIndexes(deletedIndex);
         }
 
@@ -322,7 +335,7 @@ public class Database extends StringEditor {
         this.saveUsers();
     }
 
-    public void deleteReview(Review reviewForDeleting, User author, Lodge reviewedLodge){
+    public void deleteReview(Review reviewForDeleting, User author, Lodge reviewedLodge) {
         //firstly, we want the lodges to have an ascending index with step 1. By removing a lodge, we should decrease the
         //index of all lodges with bigger index, in order to maintain the order
 
@@ -340,7 +353,7 @@ public class Database extends StringEditor {
         reviewedLodge.removeReviewIndex(deletedIndex);
         reviewedLodge.updateTotalRating(this);
 
-        for (User user: this.users) {
+        for (User user : this.users) {
             user.decreaseReviewsIndexes(deletedIndex);
         }
 
@@ -363,7 +376,7 @@ public class Database extends StringEditor {
      * @param text: the text that we need to perform the search for
      * @return a HashSet of the ids of the Lodges that match the given text
      */
-    public HashSet<Integer> performSearch(String text){
+    public HashSet<Integer> performSearch(String text) {
         ArrayList<String> WordsForSearching = this.decompose(text);
         HashSet<Integer> resultIds = new HashSet<>();
 
@@ -377,15 +390,15 @@ public class Database extends StringEditor {
         return resultIds;
     }
 
-     /**
+    /**
      * Saves the object "this.lodges" inside database at the file Lodges.dat
      */
     public void saveLodges() {
         try {
-            ObjectOutputStream out =  new ObjectOutputStream(new FileOutputStream("src/database/Lodges.dat", false));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/database/Lodges.dat", false));
             out.writeObject(this.lodges);
             out.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("error kanontas save ta lodges");
             System.out.println(e);
         }
@@ -396,10 +409,10 @@ public class Database extends StringEditor {
      */
     public void saveUsers() {
         try {
-            ObjectOutputStream out =  new ObjectOutputStream(new FileOutputStream("src/database/Users.dat", false));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/database/Users.dat", false));
             out.writeObject(this.users);
             out.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("error kanontas save ta ussers");
             System.out.println(e);
         }
@@ -418,7 +431,7 @@ public class Database extends StringEditor {
         }
     }
 
-     /**
+    /**
      * Creates the avl tree. The nodes of avl will be words that describe a lodge. These words exist in lodge's properties, ie
      * title, address, city, description etc
      */
@@ -426,9 +439,9 @@ public class Database extends StringEditor {
         this.myAVL = new AVL();
         int i = 0;
         ArrayList<String> words;
-        for (Lodge lodge: this.lodges) {
+        for (Lodge lodge : this.lodges) {
             words = lodge.getAllWords();
-            for (String word: words) {
+            for (String word : words) {
                 AVLnode newNode = new AVLnode(word, i);
                 myAVL.setRoot(myAVL.insertNode(myAVL.getRoot(), newNode));
             }
@@ -459,10 +472,10 @@ public class Database extends StringEditor {
 
     public void clearFiles() {
         try {
-            ObjectOutputStream out =  new ObjectOutputStream(new FileOutputStream("src/database/Lodges.dat", false));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("src/database/Lodges.dat", false));
             out.writeObject(null);
             out.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println("error kanontas save ta lodges");
             System.out.println(e);
         }
@@ -471,14 +484,14 @@ public class Database extends StringEditor {
     public void printData() {
         System.out.println("----------------");
         System.out.println("Users:");
-        for (User user: this.users) {
+        for (User user : this.users) {
             System.out.println(user.getName() + " " + user.getSurname());
             System.out.println("me indexes: ");
             System.out.println(user.getLodgeIndexes());
         }
         System.out.println("Lodges");
         System.out.println("Ola ta indexes apo ta lodges:");
-        for (Lodge lodge: this.lodges) {
+        for (Lodge lodge : this.lodges) {
             System.out.println(lodge.getIndex() + "-> " + lodge.getOwner().getName() + " " + lodge.getOwner().getSurname());
         }
         System.out.println("----------------");
@@ -488,7 +501,7 @@ public class Database extends StringEditor {
         System.out.println("**************");
 
         System.out.println("Users:");
-        for (User user: this.users) {
+        for (User user : this.users) {
             System.out.println(user.getName() + " " + user.getSurname());
             System.out.println("Me Review indexes: ");
             System.out.println(user.getReviewsIndexes());
@@ -503,27 +516,23 @@ public class Database extends StringEditor {
         System.out.println("**************");
     }
 
-    public void initializationOfData(){
+    public void initializationOfData() {
 
         User user1 = this.createUser("Dimitris", "Tzikas", "tzikaman", "1234", "provider");
         User user2 = this.createUser("Maria", "Orfanaki", "marouli", "1234", "simple");
         User user3 = this.createUser("Dimos", "Theocharis", "thanatopios", "1234", "provider");
         User user4 = this.createUser("Thanasis", "Maurotsoukalos", "gamatos", "1234", "simple");
 
-        HashMap<String,String[]> hashMap = new HashMap<>();
-        Lodge lodge1 = this.createLodge(user1,"spitaki","Hotel","siatistis 6","larisa", 41335, "mpla",hashMap);
-        Lodge lodge2 = this.createLodge(user1,"spiti","Apartment","siatistis 6","larisa", 41335, "mpla",hashMap);
-        Lodge lodge3 = this.createLodge(user3,"spitarona","Maisonette","siatistis 6","larisa", 41335, "mpla",hashMap);
+        HashMap<String, String[]> hashMap = new HashMap<>();
+        Lodge lodge1 = this.createLodge(user1, "spitaki", "Hotel", "siatistis 6", "larisa", 41335, "mpla", hashMap);
+        Lodge lodge2 = this.createLodge(user1, "spiti", "Apartment", "siatistis 6", "larisa", 41335, "mpla", hashMap);
+        Lodge lodge3 = this.createLodge(user3, "spitarona", "Maisonette", "siatistis 6", "larisa", 41335, "mpla", hashMap);
 
-        this.createReview(lodge1,user2,"my 1st review", 5, "1/1/2000");
-        this.createReview(lodge2,user4,"my first review", 3, "1/1/2000");
-        this.createReview(lodge3,user4,"my second review", 1, "1/1/2000");
-        this.createReview(lodge1,user2,"my 2nd review", 4, "1/1/2000");
+        this.createReview(lodge1, user2, "my 1st review", 5, "1/1/2000");
+        this.createReview(lodge2, user4, "my first review", 3, "1/1/2000");
+        this.createReview(lodge3, user4, "my second review", 1, "1/1/2000");
+        this.createReview(lodge1, user2, "my 2nd review", 4, "1/1/2000");
 
     }
 
-    public static void main(String[] args) {
-        Database db = new Database();
-    }
 }
-

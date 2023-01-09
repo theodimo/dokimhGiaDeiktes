@@ -197,9 +197,6 @@ public class ViewEntries extends JFrame {
         return reviewUis;
     }
 
-    public static void main(String[] args){
-        //new ViewEntries(null);
-    }
 }
 
 

@@ -27,9 +27,9 @@ public class LogInScreen extends SignTemplate {
     private final TitledTextField passwordField;
     private Button2 logInButton;
     private Button2 backButton;
-    public LogInScreen() {
+    public LogInScreen(Database db) {
         super("Log In", 400, 600 + 48);
-        Database api = new Database();
+        Database api = db;
         //api.initializationOfData();
 
         //initializing the components
@@ -96,11 +96,6 @@ public class LogInScreen extends SignTemplate {
                                                           //and trigger the action listener of the given button
 
         this.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-
-        LogInScreen p = new LogInScreen();
     }
 
 }
