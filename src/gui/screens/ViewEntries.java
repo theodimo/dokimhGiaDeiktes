@@ -76,20 +76,22 @@ public class ViewEntries extends JFrame {
         userNameLabel.setForeground(accentColor3);
 
         JLabel totalReviewsPanel = new JLabel();
-        JLabel overallRatingPanel = new JLabel();
-        if(currentUser.getType().equals("provider")){
-            totalReviewsPanel.setText("Total Reviews Received: " + currentUser.getReviewsReceived());
-            totalReviewsPanel.setFont(mainFont);
-            totalReviewsPanel.setForeground(accentColor2);
+        totalReviewsPanel.setFont(mainFont);
+        totalReviewsPanel.setForeground(accentColor2);
 
-            overallRatingPanel.setText("Overall Rating: " + currentUser.getOverallRating());
-            overallRatingPanel.setFont(mainFont);
-            overallRatingPanel.setForeground(accentColor2);
+        JLabel overallRatingPanel = new JLabel();
+        overallRatingPanel.setFont(mainFont);
+        overallRatingPanel.setForeground(accentColor2);
+
+
+        if(currentUser.getType().equals("provider")){
+            totalReviewsPanel.setText("Total Reviews Received: " + currentUser.getReviewsReceived(this.db));
+            overallRatingPanel.setText("Overall Rating Received: " + currentUser.getOverallRatingReceived(this.db));
+
         }
         else {
             totalReviewsPanel.setText("Total Reviews Made: " + currentUser.getReviewsMade());
-            totalReviewsPanel.setFont(mainFont);
-            totalReviewsPanel.setForeground(accentColor2);
+            overallRatingPanel.setText("Overall Rating Made: " + currentUser.getOverallRatingMade(this.db));
         }
 
 
@@ -117,12 +119,12 @@ public class ViewEntries extends JFrame {
 
         userInfoPanel.add(userNameLabel);
         userInfoPanel.add(totalReviewsPanel);
+        userInfoPanel.add(overallRatingPanel);
 
         buttonsPanel.add(backButton);
 
         if(currentUser.getType().equals("provider")) {
             //add the new entry button only for the providers and the overall rating that they received
-            userInfoPanel.add(overallRatingPanel);
             buttonsPanel.add(newEntryButton);
 
             for (MinimizedLodge lodgeToAdd : lodgeEntries) {

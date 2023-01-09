@@ -55,12 +55,11 @@ public class User implements java.io.Serializable, Element<User> {
     public String getType() {
         return this.type;
     }
+
     public int getReviewsMade(){
         return this.reviewsIndexes.size();
     }
-    public int getReviewsReceived(){
-        Database db = new Database();
-
+    public int getReviewsReceived(Database db){
         int sum = 0;
         for (int i : this.lodgeIndexes) {
             sum += db.getLodge(i).getReviewsIndexes().size();
@@ -68,18 +67,34 @@ public class User implements java.io.Serializable, Element<User> {
 
         return sum;
     }
-    public float getOverallRating(){
-
-        Database db = new Database();
-
+    public float getOverallRatingReceived(Database db){
         float ratingSum = 0;
         int count = 0;
+
         for (int i : this.lodgeIndexes) {
             ratingSum += db.getLodge(i).getTotalRating();
             count++;
         }
 
-        return (float) (round((ratingSum / count) * 10.0) / 10.0);
+        if(count != 0)
+            return (float) (round((ratingSum / count) * 10.0) / 10.0);
+        else
+            return 0;
+    }
+
+    public float getOverallRatingMade(Database db){
+        float ratingSum = 0;
+        int count = 0;
+
+        for (int i : this.reviewsIndexes) {
+            ratingSum += db.getReview(i).getRating();
+            count++;
+        }
+
+        if(count != 0)
+            return (float) (round( (ratingSum / count) * 10.0 ) / 10.0);
+        else
+            return 0;
     }
 
     //Functions

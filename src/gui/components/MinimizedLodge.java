@@ -43,7 +43,8 @@ public class MinimizedLodge extends JPanel {
 
         JLabel lodgeType = createNewLabel(lodge.getType(), mainFont, 100, 60, backgroundColor, foregroundColor);
 
-        JLabel lodgeRating = createNewLabel(lodge.getTotalRating() + " (" + lodge.getTotalReviews() + ")", mainFont, 100, 60, backgroundColor, foregroundColor);
+        JLabel lodgeRating = createNewLabel(lodge.getTotalRating() + " (" + lodge.getTotalReviews() + ")", mainFont, 100, 60,
+                backgroundColor, lodge.getTotalRating() >= 2 ? (lodge.getTotalRating() >= 4 ? Color.green : Color.yellow) : Color.red);
 
         JLabel lodgeId = createNewLabel(String.valueOf(lodge.getIndex()), mainFont, 50, 60, backgroundColor,foregroundColor);
 
