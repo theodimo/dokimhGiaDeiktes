@@ -17,6 +17,9 @@ public class Database extends StringEditor {
 
     private User currentUser;
 
+    /**
+     * In the constructor, we fetch the users, lodges and reviews from the files
+     */
     public Database() {
         //initialization of the objects
         this.users = new ArrayList<>();
@@ -183,35 +186,35 @@ public class Database extends StringEditor {
 
     /**
      * Checks if the title of the lodge that is going to be created, is validated.
-     * A title is validated if it consists from 6 to 20 characters
+     * A title is validated if it consists from 6 to 30 characters
      *
      * @param title
      * @return
      */
     public boolean validateLodgeTitle(String title) {
-        return title.length() >= 1 && title.length() <= 30;
+        return title.length() >= 6 && title.length() <= 30;
     }
 
     /**
      * Checks if the address of the lodge that is going to be created, is validated.
-     * An address is validated if it consists from 10 to 20 characters
+     * An address is validated if it consists from 8 to 30 characters
      *
      * @param address
      * @return
      */
     public boolean validateLodgeAddress(String address) {
-        return address.length() >= 1 && address.length() <= 30;
+        return address.length() >= 8 && address.length() <= 30;
     }
 
     /**
      * Checks if the city of the lodge that is going to be created, is validated
-     * A city is validated if it consists from 4 to 16 characters
+     * A city is validated if it consists from 4 to 26 characters
      *
      * @param city
      * @return
      */
     public boolean validateLodgeCity(String city) {
-        return city.length() >= 1 && city.length() <= 30;
+        return city.length() >= 4 && city.length() <= 26;
     }
 
     /**
@@ -236,16 +239,26 @@ public class Database extends StringEditor {
 
     /**
      * Checks if the description of the lodge that is going to be created, is validated
-     * A description is validated if it is at least 50 characters long
+     * A description is validated if it is at least 30 characters long
      *
      * @param text
      * @return
      */
     public boolean validateLodgeDescription(String text) {
-        return text.length() >= 1;
+        return text.length() >= 30;
     }
 
 
+    /**
+     * Create a new User with the given data. After creation, save the users to the binary file
+     * @param name        the name of the user
+     * @param surname     the surnam of the user
+     * @param username    the username of the user. He uses it to login in the app
+     * @param password    the password of the user
+     * @param type        what profile user created. There are 2 options: a) "provider" -> able to create lodges
+     *                                                                    b) "simple" -> able to create reviews
+     * @return the created user
+     */
     public User createUser(String name, String surname, String username, String password, String type) {
         User newUser = new User(name, surname, username, password, type);
         this.users.add(newUser);
@@ -258,6 +271,20 @@ public class Database extends StringEditor {
         return newUser;
     }
 
+
+    /**
+     * Create a new Lodge with the given data. After creation, save the users to the binary file, insert all words of
+     * the new lodge to avl, add its index to the indexes of the owner, and save the users.
+     * @param owner             the user that owns the lodge
+     * @param name              the name/title of the lodge
+     * @param type              the type of the lodge. Lodges can be apartments, maisonettes, hotels
+     * @param address           the address of the lodge
+     * @param city              the city of the lodge
+     * @param zipCode           the zipcode of the area where lodge is located
+     * @param description       a short text that describes the lodge providing important information (like its area)
+     * @param Accommodations    a hashMap with the accommodations that the lodge provide. We split accommodations into accommodations categories (or titles).
+     * @return   the created lodge
+     */
     public Lodge createLodge(User owner, String name, String type, String address, String city, int zipCode, String description, HashMap<String, String[]> Accommodations) {
         Lodge newLodge = new Lodge(owner, name, type, address, city, zipCode, description, Accommodations, this.lodges.size());
         this.lodges.add(newLodge);
@@ -277,6 +304,17 @@ public class Database extends StringEditor {
         return newLodge;
     }
 
+
+    /**
+     * Creates a new Review with the given data. A review consists of a number (rating) and a text about bad/good comments
+     * for the lodge
+     * @param reviewedLodge the lodge that the review was made for
+     * @param author        the user that submits the review
+     * @param reviewText    the text of the review (bad/good comments about reviewedLodge)
+     * @param rating        an integer up to 5 that author believes the reviewedLodge worths
+     * @param date          the date that the reviews was made
+     * @return   the created review
+     */
     public Review createReview(Lodge reviewedLodge, User author, String reviewText, int rating, String date) {
         Review newReview = new Review(reviewedLodge, author, reviewText, rating, date, this.reviews.size());
         this.reviews.add(newReview);
@@ -297,8 +335,8 @@ public class Database extends StringEditor {
     /**
      * Deletes the lodge from the local object database and from the files
      *
-     * @param lodgeForDeleting
-     * @param owner
+     * @param lodgeForDeleting the lodge that is going to be deleted
+     * @param owner            the user who owns the lodge
      */
     public void deleteLodge(Lodge lodgeForDeleting, User owner) {
         //firstly, we want the lodges to have an ascending index with step 1. By removing a lodge, we should decrease the
@@ -335,6 +373,13 @@ public class Database extends StringEditor {
         this.saveUsers();
     }
 
+
+    /**
+     * Deletes the lodge from the local object database and from the files
+     * @param reviewForDeleting the review that is going to be deleted
+     * @param author            the User that wrote submitted the reviewForDeleting
+     * @param reviewedLodge     the Lodge for which the reviewForDeleting was made
+     */
     public void deleteReview(Review reviewForDeleting, User author, Lodge reviewedLodge) {
         //firstly, we want the lodges to have an ascending index with step 1. By removing a lodge, we should decrease the
         //index of all lodges with bigger index, in order to maintain the order
@@ -390,6 +435,7 @@ public class Database extends StringEditor {
         return resultIds;
     }
 
+
     /**
      * Saves the object "this.lodges" inside database at the file Lodges.dat
      */
@@ -432,8 +478,8 @@ public class Database extends StringEditor {
     }
 
     /**
-     * Creates the avl tree. The nodes of avl will be words that describe a lodge. These words exist in lodge's properties, ie
-     * title, address, city, description etc
+     * Creates the avl tree. The nodes of avl will be words that describe a lodge. These words exist in lodge's properties,
+     * ie title, type, address, city, zipcode, description and its accommodations
      */
     public void createAVL() {
         this.myAVL = new AVL();
